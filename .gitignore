@@ -1,0 +1,18 @@
+﻿# AWS credentials — NEVER commit these
+*.csv
+*.pem
+*.ppk
+.aws/credentials
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Python (used in Lambda projects later)
+__pycache__/
+*.pyc
+.env
