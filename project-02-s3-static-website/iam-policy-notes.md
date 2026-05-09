@@ -1,6 +1,6 @@
 ## Project 2 — S3 Bucket Policy (Public Read)
 
-Attached to: S3 bucket (aws-portfolio-yourname-2024)
+Attached to: S3 bucket (aws-sample-webiste-2026)
 Effect: Allows anyone on the internet to read objects from this bucket.
 Use case: Static website hosting — needed so browsers can fetch HTML/CSS/JS.
 
