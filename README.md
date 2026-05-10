@@ -27,7 +27,9 @@ how I fixed it, and what I learned.
 
 ## 🗺️ Roadmap Overview
 
-<img width="1442" height="1840" alt="image" src="https://github.com/user-attachments/assets/6b08d752-7cf1-472d-9efa-fb886a509a9b" />
+<img width="1220" height="1550" alt="image" src="https://github.com/user-attachments/assets/6b08d752-7cf1-472d-9efa-fb886a509a9b" />
+
+
 
 
 | # | Project | Tier | Services | Status |
