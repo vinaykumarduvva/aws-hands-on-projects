@@ -763,24 +763,6 @@ aws iam get-role --role-name s3-replication-role
 
 ---
 
-## Resume Bullets
-
-- Configured S3 versioning to maintain full object history enabling
-  point-in-time recovery — demonstrated restoring accidentally deleted
-  files by identifying and removing delete markers via AWS CLI
-- Designed and implemented a multi-tier S3 lifecycle policy automating
-  transitions from Standard → Standard-IA (day 30) → Glacier (day 90)
-  with automatic expiration at day 365, achieving up to 95% storage
-  cost reduction on aging data
-- Built Cross-Region Replication between us-east-1 and us-west-2 using
-  a least-privilege IAM replication role, establishing automated disaster
-  recovery with ~30 second replication latency verified via CLI
-- Managed the complete S3 data protection stack — versioning, lifecycle
-  automation, and cross-region DR — using both AWS Console and AWS CLI
-  v2 on Windows PowerShell
-
----
-
 ## Next Project
 
 **Project 5 — Custom VPC: Subnets, Internet Gateway,**
