@@ -36,7 +36,7 @@ how I fixed it, and what I learned.
 | 01 | [AWS Account Setup & IAM Foundations](https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/tree/main/project-01-iam-setup) | 🟢 Beginner | IAM, CloudWatch, SNS, CLI | ✅ Done |
 | 02 | [Static Website on S3 + CloudFront](https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/tree/main/project-02-s3-static-website) | 🟢 Beginner | S3, CloudFront, Route 53 | ✅ Done |
 | 03 | [Launch EC2 & Connect via SSH](project-3-Launch-EC2-Connect-via-SSH) | 🟢 Beginner | EC2, VPC, SG, SSM, IAM | ✅ Done |
-| 04 | S3 Versioning, Lifecycle & Replication | 🟢 Beginner | S3 | ⏳ Upcoming |
+| 04 | [S3 Versioning, Lifecycle & Replication](project-04-s3-versioning) | 🟢 Beginner | S3 | ✅ Done |
 | 05 | Custom VPC: Subnets, IGW, NAT | 🟢 Beginner | VPC, EC2 | ⏳ Upcoming |
 | 06 | RDS MySQL + EC2 Two-Tier App | 🟢 Beginner | RDS, EC2, VPC | ⏳ Upcoming |
 | 07 | CloudWatch Alarms + SNS Alerts | 🟢 Beginner | CloudWatch, SNS | ⏳ Upcoming |
