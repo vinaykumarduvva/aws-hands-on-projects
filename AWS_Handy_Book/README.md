@@ -5,6 +5,7 @@ Welcome to the **AWS Cloud Foundations Reference Guide**! This document serves a
 ---
 
 ## 🧭 Directory Map
+- [📖 Curated Service Reference Book (Compute & Storage)](REFERENCE_BOOK.md)
 - [1. What is AWS?](#1-what-is-aws-)
   - [🛡️ The Shared Responsibility Model](#️-the-shared-responsibility-model)
   - [🗂️ AWS Core Service Categories](#️-aws-core-service-categories) (Complete list in [SERVICES_OVERVIEW.md](SERVICES_OVERVIEW.md))
