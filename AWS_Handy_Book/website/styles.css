@@ -1097,6 +1097,48 @@ code, pre { font-family: var(--font-mono); }
 .no-results .emoji { font-size: 3rem; margin-bottom: 12px; }
 .no-results p { font-size: 1rem; }
 
+/* ===== UTILITIES & COMPONENTS ===== */
+.mt-48 { margin-top: 48px; }
+.mt-32 { margin-top: 32px; }
+.bg-secondary { background: var(--bg-secondary); }
+.text-success { color: #16a34a; }
+.text-accent { color: var(--accent-primary); }
+.text-horror { color: var(--accent-horror); }
+
+.subsection-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.subsection-description {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.publisher-name {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.publisher-role {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .footer-grid {

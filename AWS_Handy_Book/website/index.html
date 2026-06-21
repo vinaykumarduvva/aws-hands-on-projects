@@ -23,21 +23,21 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#hero" class="active">Home</a></li>
         <li><a href="#foundations">Foundations</a></li>
-        <li><a href="#regions">Regions & AZs</a></li>
+        <li><a href="#regions">Regions &amp; AZs</a></li>
         <li><a href="#services-overview">Overview</a></li>
         <li><a href="#reference">Reference Book</a></li>
         <li><a href="#footer">Contact</a></li>
       </ul>
 
       <div class="nav-right">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
           <span class="toggle-icons">
             <span>☀️</span>
             <span>🌙</span>
           </span>
           <span class="toggle-thumb"></span>
         </button>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Open menu">
+        <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Open menu">
           ☰
         </button>
       </div>
@@ -72,7 +72,7 @@
         </div>
         <div class="stat">
           <div class="stat-number" id="counterExamples">0</div>
-          <div class="stat-label">CLI & IaC Examples</div>
+          <div class="stat-label">CLI &amp; IaC Examples</div>
         </div>
       </div>
     </div>
@@ -111,9 +111,9 @@
     </div>
 
     <!-- Shared Responsibility Model -->
-    <div class="reveal" style="margin-top: 48px;">
-      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; text-align: center;">🛡️ The Shared Responsibility Model</h3>
-      <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px; max-width: 700px; margin-left: auto; margin-right: auto;">Security is a joint effort. AWS secures the infrastructure <em>OF</em> the cloud; you secure everything you build <em>IN</em> the cloud.</p>
+    <div class="reveal mt-48">
+      <h3 class="subsection-title">🛡️ The Shared Responsibility Model</h3>
+      <p class="subsection-description">Security is a joint effort. AWS secures the infrastructure <em>OF</em> the cloud; you secure everything you build <em>IN</em> the cloud.</p>
       <table class="responsibility-table">
         <thead>
           <tr>
@@ -153,8 +153,8 @@
     </div>
 
     <!-- How to Access AWS -->
-    <div class="reveal" style="margin-top: 48px;">
-      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; text-align: center;">🕹️ How to Access AWS</h3>
+    <div class="reveal mt-48">
+      <h3 class="subsection-title">🕹️ How to Access AWS</h3>
       <div class="access-grid stagger">
         <div class="access-card">
           <div class="access-icon">🖥️</div>
@@ -181,10 +181,10 @@
   </section>
 
   <!-- ===== SECTION: REGIONS & AZs ===== -->
-  <section class="section" id="regions" style="background: var(--bg-secondary);">
+  <section class="section bg-secondary" id="regions">
     <div class="section-header reveal">
       <p class="horror-subtitle">🌍 The Global Terror Network 🌍</p>
-      <h2 class="horror-header glitch" data-text="Regions & AZs">Regions & AZs</h2>
+      <h2 class="horror-header glitch" data-text="Regions &amp; AZs">Regions &amp; AZs</h2>
       <div class="section-divider"></div>
       <p>AWS's global infrastructure of Regions, Availability Zones, and Edge Locations.</p>
     </div>
@@ -208,7 +208,7 @@
     </div>
 
     <!-- Resource Scope -->
-    <div class="info-cards reveal" style="margin-top: 32px;">
+    <div class="info-cards reveal mt-32">
       <div class="info-card">
         <h4>🌍 Global Scope</h4>
         <p>IAM, Route 53, CloudFront — accessible everywhere, not tied to a single region.</p>
@@ -236,8 +236,8 @@
     </div>
 
     <!-- HA vs DR -->
-    <div class="reveal" style="margin-top: 48px;">
-      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; text-align: center;">⚡ High Availability vs. Disaster Recovery</h3>
+    <div class="reveal mt-48">
+      <h3 class="subsection-title">⚡ High Availability vs. Disaster Recovery</h3>
       <table class="comparison-table">
         <thead>
           <tr>
@@ -257,13 +257,13 @@
     </div>
 
     <!-- Data Transfer Costs -->
-    <div class="data-callout reveal" style="margin-top: 32px;">
+    <div class="data-callout reveal mt-32">
       <h4>💰 Data Transfer Costs — Rules of Thumb</h4>
       <ul>
-        <li><strong>Inbound Data</strong> is always <strong style="color: #16a34a;">FREE</strong> (data coming into AWS).</li>
-        <li><strong>Intra-AZ Data</strong> is <strong style="color: #16a34a;">FREE</strong> when using private IPs (same AZ communication).</li>
-        <li><strong>Inter-AZ Data</strong> is <strong style="color: var(--accent-primary);">CHARGED</strong> ($0.01/GB each direction, different AZs).</li>
-        <li><strong>Outbound Data</strong> (to internet) is the <strong style="color: var(--accent-horror);">MOST EXPENSIVE</strong> charge.</li>
+        <li><strong>Inbound Data</strong> is always <strong class="text-success">FREE</strong> (data coming into AWS).</li>
+        <li><strong>Intra-AZ Data</strong> is <strong class="text-success">FREE</strong> when using private IPs (same AZ communication).</li>
+        <li><strong>Inter-AZ Data</strong> is <strong class="text-accent">CHARGED</strong> ($0.01/GB each direction, different AZs).</li>
+        <li><strong>Outbound Data</strong> (to internet) is the <strong class="text-horror">MOST EXPENSIVE</strong> charge.</li>
       </ul>
     </div>
   </section>
@@ -283,7 +283,7 @@
   </section>
 
   <!-- ===== SECTION: REFERENCE BOOK ===== -->
-  <section class="section" id="reference" style="background: var(--bg-secondary);">
+  <section class="section bg-secondary" id="reference">
     <div class="section-header reveal">
       <p class="horror-subtitle">📖 The Forbidden Tome 📖</p>
       <h2 class="horror-header glitch" data-text="Reference Book">Reference Book</h2>
@@ -298,20 +298,20 @@
     </div>
 
     <!-- Filter Pills -->
-    <div class="reveal" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 32px;">
-      <button class="category-pill active" data-filter="all" onclick="filterByDifficulty('all', this)">
+    <div class="reveal filter-container">
+      <button type="button" class="category-pill active" data-filter="all" onclick="filterByDifficulty('all', this)">
         <span class="cat-icon">📋</span> All Services
         <span class="cat-count" id="countAll">71</span>
       </button>
-      <button class="category-pill" data-filter="beginner" onclick="filterByDifficulty('beginner', this)">
+      <button type="button" class="category-pill" data-filter="beginner" onclick="filterByDifficulty('beginner', this)">
         <span class="cat-icon">🟢</span> Beginner
         <span class="cat-count" id="countBeginner">0</span>
       </button>
-      <button class="category-pill" data-filter="intermediate" onclick="filterByDifficulty('intermediate', this)">
+      <button type="button" class="category-pill" data-filter="intermediate" onclick="filterByDifficulty('intermediate', this)">
         <span class="cat-icon">🟡</span> Intermediate
         <span class="cat-count" id="countIntermediate">0</span>
       </button>
-      <button class="category-pill" data-filter="advanced" onclick="filterByDifficulty('advanced', this)">
+      <button type="button" class="category-pill" data-filter="advanced" onclick="filterByDifficulty('advanced', this)">
         <span class="cat-icon">🔴</span> Advanced
         <span class="cat-count" id="countAdvanced">0</span>
       </button>
@@ -332,8 +332,8 @@
         <div class="publisher-info">
           <div class="publisher-avatar">VK</div>
           <div>
-            <strong style="font-size: 0.88rem; color: var(--text-primary);">Vinay Kumar</strong><br>
-            <span style="font-size: 0.78rem; color: var(--text-tertiary);">Cloud Engineer & Developer</span>
+            <strong class="publisher-name">Vinay Kumar</strong><br>
+            <span class="publisher-role">Cloud Engineer &amp; Developer</span>
           </div>
         </div>
       </div>
@@ -343,7 +343,7 @@
         <ul class="footer-links">
           <li><a href="#hero">🏠 Home</a></li>
           <li><a href="#foundations">📚 Foundations</a></li>
-          <li><a href="#regions">🗺️ Regions & AZs</a></li>
+          <li><a href="#regions">🗺️ Regions &amp; AZs</a></li>
           <li><a href="#services-overview">📊 Services Overview</a></li>
           <li><a href="#reference">📖 Reference Book</a></li>
         </ul>
@@ -374,7 +374,7 @@
   </footer>
 
   <!-- ===== BACK TO TOP ===== -->
-  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
 
   <!-- ===== SCRIPTS ===== -->
   <script src="data.js"></script>
