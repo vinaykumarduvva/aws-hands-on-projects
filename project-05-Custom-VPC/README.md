@@ -63,6 +63,11 @@ custom VPC exactly like this one.
 
 ---
 
+## 🗺️ Architecture / Resource Map
+![VPC Resource Map](./resource-map.png)
+
+---
+
 ## AWS Services Used
 
 | Service | Purpose | Cost |
