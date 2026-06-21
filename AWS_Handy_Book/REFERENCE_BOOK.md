@@ -2284,3 +2284,713 @@ Use Glue Crawler to catalog a sample S3 dataset, then run a basic SELECT query a
 
 ### 🚀 Next Step
 Connect QuickSight to a sample Athena table and build a basic bar chart dashboard with a filter control.
+
+<br clear="right" />
+
+## 53. Glue
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Requires understanding of data lakes, ETL pipelines, Apache Spark, and cataloging.
+
+> 💡 **Definition:** AWS Glue is a fully managed serverless ETL (Extract, Transform, and Load) service that makes it simple and cost-effective to categorize your data, clean it, enrich it, and move it reliably between various data stores and streams.
+
+### ⚙️ Core Capabilities & Uses
+*   Discover and catalog metadata using AWS Glue Crawlers.
+*   Centralize metadata repository with AWS Glue Data Catalog.
+*   Generate ETL code automatically (Python or Scala) to transform and load data.
+*   Run serverless Apache Spark or Python shell jobs.
+
+### 🎯 Common Scenarios
+*   Building a data lake on Amazon S3.
+*   Preparing data for analytics using Amazon Athena or Amazon Redshift.
+*   Automating data transformation pipelines.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws glue start-crawler --name my-s3-data-crawler
+    ```
+*   **Architecture / Workflow Outline:**
+    S3 (Raw Data) ➔ Glue Crawler ➔ Glue Data Catalog ➔ Glue ETL Job ➔ S3 (Clean Data) ➔ Athena.
+
+### ⚠️ Key Concepts & Considerations
+*   Pricing is based on Data Processing Units (DPUs) per hour.
+*   Cold start times can occur for Spark-based jobs.
+*   AWS Glue Data Catalog acts as a centralized metadata repository across AWS services.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon S3, Amazon Athena, Amazon EMR.
+*   **Prerequisite:** Knowledge of Python, PySpark, or Scala is highly recommended.
+
+### 🚀 Next Step
+Create an AWS Glue Crawler to automatically infer the schema of a CSV file stored in an S3 bucket.
+
+---
+
+## 54. EMR (Elastic MapReduce)
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Requires big data framework knowledge (Hadoop, Spark) and cluster management.
+
+> 💡 **Definition:** Amazon EMR is a cloud big data platform for processing vast amounts of data using open-source tools such as Apache Spark, Apache Hive, Apache HBase, Apache Flink, Apache Hudi, and Presto.
+
+### ⚙️ Core Capabilities & Uses
+*   Quickly provision and scale big data clusters.
+*   Process large-scale datasets using Hadoop or Spark ecosystems.
+*   Decouple compute and storage by using Amazon S3 (EMRFS) for data storage.
+*   Transient clusters that automatically terminate after job completion to save costs.
+
+### 🎯 Common Scenarios
+*   Large-scale log analysis and machine learning tasks.
+*   Financial simulation and bioinformatics processing.
+*   ETL processing using open-source big data frameworks.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws emr create-cluster --name "Spark Cluster" --release-label emr-6.3.0 --applications Name=Spark
+    ```
+*   **Architecture / Workflow Outline:**
+    S3 (Data Source) ➔ EMR Cluster (Spark Nodes) ➔ Processing ➔ S3 (Results).
+
+### ⚠️ Key Concepts & Considerations
+*   Spot Instances are highly recommended for Task Nodes to reduce costs.
+*   EMR Serverless removes the need to manage cluster infrastructure.
+*   EMR instances run on EC2; understanding EC2 purchasing options is crucial.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon S3, AWS Glue, Amazon EC2.
+*   **Prerequisite:** Familiarity with big data processing frameworks like Apache Spark or Hadoop.
+
+### 🚀 Next Step
+Launch a small EMR cluster with Spark installed and run a sample word-count job.
+
+---
+
+## 55. Kinesis
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Streaming architecture concepts are complex and require understanding of shards, partition keys, and consumers.
+
+> 💡 **Definition:** Amazon Kinesis makes it easy to collect, process, and analyze real-time, streaming data so you can get timely insights and react quickly to new information.
+
+### ⚙️ Core Capabilities & Uses
+*   **Kinesis Data Streams:** Ingest and store real-time data streams for custom processing.
+*   **Kinesis Data Firehose:** Reliably load streaming data into data lakes, data stores, and analytics services.
+*   **Kinesis Data Analytics:** Analyze streaming data with SQL or Apache Flink.
+*   **Kinesis Video Streams:** Stream video from connected devices to AWS for analytics and ML.
+
+### 🎯 Common Scenarios
+*   Real-time log and event data ingestion from millions of devices.
+*   Real-time dashboards and alerting systems.
+*   Streaming IoT device telemetry to a data lake.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws kinesis create-stream --stream-name my-data-stream --shard-count 1
+    ```
+*   **Architecture / Workflow Outline:**
+    IoT Devices ➔ Kinesis Data Stream ➔ AWS Lambda (Processor) ➔ Amazon DynamoDB.
+
+### ⚠️ Key Concepts & Considerations
+*   Capacity is managed via Shards; provisioning the right number of shards is critical for performance.
+*   Data retention is typically 24 hours by default but can be extended up to 365 days.
+*   Kinesis Firehose does not require shard management (fully managed).
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** AWS Lambda, Amazon S3, Amazon Redshift.
+*   **Prerequisite:** Understanding of real-time streaming vs. batch processing.
+
+### 🚀 Next Step
+Create a Kinesis Data Stream and use a Python script (Boto3) to produce random records into the stream.
+
+---
+
+## Category: Machine Learning & AI
+<img src="./images/aws_machine_learning.png" alt="Machine Learning & AI" width="150" align="right" style="margin-left: 20px; float: right;" />
+<br clear="right" />
+
+## 56. SageMaker
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Requires background in data science, model training, and ML operations (MLOps).
+
+> 💡 **Definition:** Amazon SageMaker is a fully managed service that provides every developer and data scientist with the ability to build, train, and deploy machine learning (ML) models quickly.
+
+### ⚙️ Core Capabilities & Uses
+*   Integrated Jupyter notebooks for easy access to data sources for exploration.
+*   Built-in high-performance algorithms optimized for the cloud.
+*   One-click deployment to automatically scaling endpoints for model hosting.
+*   SageMaker Studio provides a fully integrated development environment (IDE) for ML.
+
+### 🎯 Common Scenarios
+*   End-to-end machine learning lifecycle management.
+*   Training deep learning models on large datasets using GPU instances.
+*   Deploying ML models for real-time inference in production web applications.
+
+### 💻 Quick Examples
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_sagemaker_notebook_instance" "ni" {
+      name          = "my-notebook-instance"
+      role_arn      = aws_iam_role.sagemaker_role.arn
+      instance_type = "ml.t2.medium"
+    }
+    ```
+*   **Architecture / Workflow Outline:**
+    S3 (Training Data) ➔ SageMaker Notebook ➔ SageMaker Training Job ➔ SageMaker Endpoint (Inference).
+
+### ⚠️ Key Concepts & Considerations
+*   Costs can escalate quickly if notebook instances or training jobs with GPUs are left running.
+*   SageMaker endpoints are billed per hour of uptime; consider Serverless Inference for intermittent workloads.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon S3, AWS Glue.
+*   **Prerequisite:** Python programming, statistics, and machine learning fundamentals.
+
+### 🚀 Next Step
+Launch a SageMaker Notebook instance and run a sample XGBoost algorithm tutorial provided by AWS.
+
+---
+
+## 57. Comprehend
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** An API-driven AI service that does not require ML training, but requires integration knowledge.
+
+> 💡 **Definition:** Amazon Comprehend is a natural-language processing (NLP) service that uses machine learning to uncover valuable insights and connections in text.
+
+### ⚙️ Core Capabilities & Uses
+*   Identify language, extract key phrases, places, people, and brands.
+*   Determine sentiment (positive, negative, neutral, mixed) from text.
+*   Automatically organize a collection of text files by topic.
+*   Custom Entity Recognition to train Comprehend to identify domain-specific terms.
+
+### 🎯 Common Scenarios
+*   Analyzing customer feedback and reviews for sentiment.
+*   Extracting insights from unstructured data like legal documents or medical records.
+*   Automating support ticket routing based on text content.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws comprehend detect-sentiment --text "I absolutely love using AWS services!" --language-code en
+    ```
+*   **Architecture / Workflow Outline:**
+    User Review ➔ API Gateway ➔ Lambda ➔ Comprehend (Sentiment Analysis) ➔ DynamoDB.
+
+### ⚠️ Key Concepts & Considerations
+*   Billed per unit of text (1 unit = 100 characters).
+*   No ML experience required; it uses pre-trained models provided by AWS.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** AWS Lambda, Amazon S3.
+*   **Prerequisite:** Basic programming to call REST APIs or use AWS SDKs.
+
+### 🚀 Next Step
+Use the AWS Console or CLI to perform sentiment analysis on a paragraph of text.
+
+---
+
+## 58. Rekognition
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Simple to use via API, but integrating image processing into apps takes moderate effort.
+
+> 💡 **Definition:** Amazon Rekognition makes it easy to add image and video analysis to your applications using proven, highly scalable, deep learning technology.
+
+### ⚙️ Core Capabilities & Uses
+*   Identify objects, people, text, scenes, and activities in images and videos.
+*   Detect inappropriate content.
+*   Highly accurate facial analysis and facial search capabilities.
+*   Custom Labels to identify objects and scenes specific to your business needs.
+
+### 🎯 Common Scenarios
+*   Automated image and video moderation for user-generated content.
+*   Face-based user verification systems.
+*   Extracting text from images (Optical Character Recognition - OCR).
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws rekognition detect-labels --image '{"S3Object":{"Bucket":"my-bucket","Name":"photo.jpg"}}'
+    ```
+*   **Architecture / Workflow Outline:**
+    Image Upload to S3 ➔ Event triggers Lambda ➔ Rekognition API call ➔ Save labels to Database.
+
+### ⚠️ Key Concepts & Considerations
+*   Privacy and ethical considerations are extremely important when using facial recognition features.
+*   Images must be stored in S3 or provided as base64-encoded bytes in the API call.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon S3, AWS Lambda.
+*   **Prerequisite:** Understanding of working with images and APIs.
+
+### 🚀 Next Step
+Upload an image with several objects to an S3 bucket and use the Rekognition console to detect labels.
+
+---
+
+## 59. Polly
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Extremely straightforward text-to-speech API.
+
+> 💡 **Definition:** Amazon Polly is a service that turns text into lifelike speech, allowing you to create applications that talk, and build entirely new categories of speech-enabled products.
+
+### ⚙️ Core Capabilities & Uses
+*   Convert text into spoken audio in dozens of lifelike voices across many languages.
+*   Support for Neural Text-to-Speech (NTTS) for higher quality voices.
+*   Customize speech output using Speech Synthesis Markup Language (SSML).
+
+### 🎯 Common Scenarios
+*   Creating audiobooks or reading articles aloud on a website.
+*   Voice responses for automated contact center systems (IVR).
+*   Accessibility features for visually impaired users.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws polly synthesize-speech --text "Hello, welcome to AWS." --voice-id Joanna --output-format mp3 hello.mp3
+    ```
+*   **Architecture / Workflow Outline:**
+    Text Content ➔ Polly API ➔ Returns MP3 audio stream to the client application.
+
+### ⚠️ Key Concepts & Considerations
+*   SSML allows for precise control over pronunciation, volume, pitch, and speed.
+*   Very inexpensive for standard usage (billed per 1 million characters).
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon Connect, Amazon S3.
+*   **Prerequisite:** None.
+
+### 🚀 Next Step
+Use the AWS Console to synthesize speech from a sentence and download the resulting MP3 file.
+
+---
+
+## 60. Transcribe
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Straightforward audio-to-text API.
+
+> 💡 **Definition:** Amazon Transcribe automatically converts speech to text using deep learning processes called automatic speech recognition (ASR).
+
+### ⚙️ Core Capabilities & Uses
+*   Batch transcription of audio files stored in Amazon S3.
+*   Real-time streaming transcription.
+*   Identify multiple speakers (speaker diarization).
+*   Custom vocabularies to improve accuracy for domain-specific terminology.
+
+### 🎯 Common Scenarios
+*   Creating subtitles or transcripts for video content.
+*   Transcribing customer service calls for analysis.
+*   Taking automated meeting notes.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws transcribe start-transcription-job --transcription-job-name MyJob --media MediaFileUri=s3://my-bucket/audio.mp3 --language-code en-US
+    ```
+*   **Architecture / Workflow Outline:**
+    Audio File in S3 ➔ Start Transcribe Job ➔ Job Completion Event ➔ Transcribed JSON saved to S3.
+
+### ⚠️ Key Concepts & Considerations
+*   Audio quality significantly impacts transcription accuracy.
+*   The output is a detailed JSON file containing word-by-word timestamps and confidence scores.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon S3, Amazon Comprehend.
+*   **Prerequisite:** Familiarity with audio file formats.
+
+### 🚀 Next Step
+Upload a short MP3 voice recording to S3 and run an asynchronous transcription job using the AWS Console.
+
+---
+
+## 61. Bedrock
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Simplifies working with Generative AI, but understanding prompts and foundation models requires some background.
+
+> 💡 **Definition:** Amazon Bedrock is a fully managed service that makes foundation models (FMs) from Amazon and leading AI startups available via an API, so you can choose the best model for your generative AI use case.
+
+### ⚙️ Core Capabilities & Uses
+*   Access multiple Foundation Models (e.g., Claude, Llama 2, Titan) via a single API.
+*   Privately customize models using your own data without exposing it to public models.
+*   Fully serverless, so there is no infrastructure to manage or deploy.
+
+### 🎯 Common Scenarios
+*   Building generative AI chatbots and virtual assistants.
+*   Text generation, summarization, and creative writing.
+*   Image generation from text descriptions.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws bedrock-runtime invoke-model --model-id anthropic.claude-v2 --body '{"prompt":"Human: Hi\n\nAssistant:","max_tokens_to_sample":300}' response.json
+    ```
+*   **Architecture / Workflow Outline:**
+    User Application ➔ Bedrock API (Invoke Model) ➔ Selected Foundation Model ➔ Generative Response.
+
+### ⚠️ Key Concepts & Considerations
+*   Your data is not used to train the base models; privacy is maintained.
+*   Pricing depends on the specific model chosen and the number of input/output tokens.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon SageMaker, AWS Lambda.
+*   **Prerequisite:** Understanding of prompts, tokens, and generative AI concepts.
+
+### 🚀 Next Step
+Request access to a Foundation Model in the Bedrock console and test it in the playground with a simple prompt.
+
+---
+
+## Category: Application Integration
+<img src="./images/aws_app_integration.png" alt="Application Integration" width="150" align="right" style="margin-left: 20px; float: right;" />
+<br clear="right" />
+
+## 62. SQS (Simple Queue Service)
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Fundamental building block for decoupled architectures.
+
+> 💡 **Definition:** Amazon SQS is a fully managed message queuing service that enables you to decouple and scale microservices, distributed systems, and serverless applications.
+
+### ⚙️ Core Capabilities & Uses
+*   Send, store, and receive messages between software components.
+*   Standard Queues (maximum throughput, at-least-once delivery, best-effort ordering).
+*   FIFO Queues (First-In-First-Out delivery, exactly-once processing).
+*   Dead-Letter Queues (DLQ) to isolate messages that can't be processed for analysis.
+
+### 🎯 Common Scenarios
+*   Decoupling a web frontend from a backend processing system.
+*   Buffering requests during traffic spikes to prevent system overload.
+*   Asynchronous task processing (e.g., image resizing, email sending).
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws sqs send-message --queue-url https://sqs.us-east-1.amazonaws.com/123/MyQueue --message-body "Process Task A"
+    ```
+*   **Architecture / Workflow Outline:**
+    Web App (Producer) ➔ SQS Queue (Buffer) ➔ EC2/Lambda (Consumer).
+
+### ⚠️ Key Concepts & Considerations
+*   Consumers must actively "poll" the queue to retrieve messages.
+*   Visibility Timeout prevents other consumers from receiving a message while it's being processed.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon SNS, AWS Lambda, Amazon EC2.
+*   **Prerequisite:** Basic understanding of asynchronous processing.
+
+### 🚀 Next Step
+Create a Standard Queue, send a message using the Console, and then poll the queue to retrieve the message.
+
+---
+
+## 63. SNS (Simple Notification Service)
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Simple Pub/Sub messaging concept.
+
+> 💡 **Definition:** Amazon SNS is a fully managed pub/sub messaging and mobile notifications service for coordinating the delivery of messages to subscribing endpoints and clients.
+
+### ⚙️ Core Capabilities & Uses
+*   Push-based message delivery.
+*   Create "Topics" that publishers can send messages to.
+*   Multiple subscriber types: SQS, Lambda, HTTP/S, Email, SMS.
+*   Fan-out architecture: One message to a topic is delivered to multiple queues/endpoints simultaneously.
+
+### 🎯 Common Scenarios
+*   Sending automated email or SMS alerts to administrators.
+*   Fanning out a single event (like an S3 upload) to multiple independent processing systems.
+*   System health alerts triggered by CloudWatch alarms.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws sns publish --topic-arn arn:aws:sns:us-east-1:123:MyTopic --message "Server CPU is high!"
+    ```
+*   **Architecture / Workflow Outline:**
+    CloudWatch Alarm ➔ SNS Topic ➔ Subscribed Email Address + SQS Queue.
+
+### ⚠️ Key Concepts & Considerations
+*   Unlike SQS (which is pull-based), SNS is push-based. Messages are not stored; if a subscriber is unavailable, the message may be lost (unless delivered to an SQS queue).
+*   Combining SNS and SQS (Fanout Pattern) is one of the most common AWS architectural patterns.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon SQS, AWS CloudWatch.
+*   **Prerequisite:** None.
+
+### 🚀 Next Step
+Create an SNS topic, subscribe your email address to it, and publish a test message.
+
+---
+
+## 64. EventBridge
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Evolves beyond SNS to handle complex event routing, filtering, and scheduling.
+
+> 💡 **Definition:** Amazon EventBridge is a serverless event bus that makes it easier to build event-driven applications at scale using events generated from your applications, integrated Software-as-a-Service (SaaS) applications, and AWS services.
+
+### ⚙️ Core Capabilities & Uses
+*   Route events between AWS services, custom apps, and third-party SaaS applications (like Zendesk or Datadog).
+*   Set up rules to filter events and route them to specific targets (Lambda, SQS, SNS, etc.).
+*   Schedule automated actions using cron-like expressions.
+
+### 🎯 Common Scenarios
+*   Triggering a Lambda function when an EC2 instance changes state.
+*   Running a scheduled task every day at 2:00 AM.
+*   Integrating third-party SaaS event streams securely into your AWS environment.
+
+### 💻 Quick Examples
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_cloudwatch_event_rule" "daily_backup" {
+      name                = "daily-backup"
+      schedule_expression = "cron(0 2 * * ? *)"
+    }
+    ```
+*   **Architecture / Workflow Outline:**
+    AWS Service Event (e.g., EC2 stop) ➔ EventBridge Rule ➔ Lambda Function (Notification).
+
+### ⚠️ Key Concepts & Considerations
+*   EventBridge is the modern evolution of CloudWatch Events.
+*   Rules use JSON-based event patterns to match specific attributes in an event payload.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** AWS Lambda, Amazon SNS.
+*   **Prerequisite:** Understanding of event-driven architecture and JSON.
+
+### 🚀 Next Step
+Create an EventBridge rule that triggers based on a specific schedule (e.g., every 5 minutes) to invoke a Lambda function.
+
+---
+
+## 65. Step Functions
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Designing state machines requires understanding workflows and JSON-based language (ASL).
+
+> 💡 **Definition:** AWS Step Functions is a serverless orchestration service that lets you combine AWS Lambda functions and other AWS services to build business-critical applications through visual workflows.
+
+### ⚙️ Core Capabilities & Uses
+*   Coordinate multiple AWS services into serverless workflows (State Machines).
+*   Handle errors, retries, timeouts, and parallel execution logic automatically.
+*   Maintain the state of the application execution across multiple steps.
+*   Visual workflow studio allows drag-and-drop creation.
+
+### 🎯 Common Scenarios
+*   Complex ETL pipelines requiring multiple sequential steps and error handling.
+*   E-commerce order fulfillment processes (Inventory Check ➔ Payment ➔ Shipping).
+*   Human-in-the-loop workflows (wait for manual approval before proceeding).
+
+### 💻 Quick Examples
+*   **Architecture / Workflow Outline:**
+    Start ➔ Task A (Lambda) ➔ Choice (If Success ➔ Task B; If Fail ➔ Task C) ➔ End.
+
+### ⚠️ Key Concepts & Considerations
+*   Standard workflows run for up to 1 year; Express workflows run for up to 5 minutes (for high-throughput).
+*   Workflows are defined using Amazon States Language (ASL), which is JSON-based.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** AWS Lambda, Amazon EventBridge.
+*   **Prerequisite:** Understanding of microservices and state machines.
+
+### 🚀 Next Step
+Use the Step Functions Workflow Studio in the console to create a basic state machine with a Choice state.
+
+---
+
+## Category: Migration & Transfer
+<img src="./images/aws_migration.png" alt="Migration & Transfer" width="150" align="right" style="margin-left: 20px; float: right;" />
+<br clear="right" />
+
+## 66. DMS (Database Migration Service)
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Requires database administration knowledge to configure source/target endpoints properly.
+
+> 💡 **Definition:** AWS Database Migration Service (DMS) helps you migrate databases to AWS quickly and securely. The source database remains fully operational during the migration, minimizing downtime.
+
+### ⚙️ Core Capabilities & Uses
+*   Migrate data between homogeneous (e.g., Oracle to Oracle) or heterogeneous (e.g., Oracle to PostgreSQL) databases.
+*   Continuous data replication (Change Data Capture - CDC) to keep source and target in sync.
+*   AWS Schema Conversion Tool (SCT) assists in converting database schemas and code for heterogeneous migrations.
+
+### 🎯 Common Scenarios
+*   Migrating an on-premises database to Amazon RDS or Aurora.
+*   Replicating data continuously from a transactional database to a data warehouse (Redshift).
+
+### 💻 Quick Examples
+*   **Architecture / Workflow Outline:**
+    On-Premises Database ➔ DMS Replication Instance ➔ Amazon RDS (Target).
+
+### ⚠️ Key Concepts & Considerations
+*   You provision a DMS Replication Instance to perform the actual data movement.
+*   DMS primarily moves data; SCT is required to convert the schema and stored procedures.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon RDS, Amazon Redshift.
+*   **Prerequisite:** Relational database administration and networking.
+
+### 🚀 Next Step
+Read the documentation on the AWS Schema Conversion Tool to understand how to prepare a database for migration.
+
+---
+
+## 67. Snowball / Snowmobile
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Conceptualizing physical data transfer is straightforward.
+
+> 💡 **Definition:** AWS Snow Family comprises highly secure, portable devices to collect and process data at the edge, and migrate data into and out of AWS without using the internet.
+
+### ⚙️ Core Capabilities & Uses
+*   **Snowcone:** Small, rugged device (8 TB) for edge computing and transfer.
+*   **Snowball Edge:** Petabyte-scale data transport with on-board storage and compute.
+*   **Snowmobile:** An Exabyte-scale data transfer service in a 45-foot long ruggedized shipping container pulled by a semi-trailer truck.
+
+### 🎯 Common Scenarios
+*   Migrating massive amounts of data (Petabytes) where transferring over the internet would take years.
+*   Collecting data in remote locations with no internet connectivity (ships, mines).
+
+### 💻 Quick Examples
+*   **Architecture / Workflow Outline:**
+    Order device from AWS ➔ Connect to local network ➔ Copy Data ➔ Ship back to AWS ➔ AWS uploads to S3.
+
+### ⚠️ Key Concepts & Considerations
+*   Always calculate the time to transfer over your current internet connection vs. the physical transit time of a Snowball device.
+*   Data is heavily encrypted during transit.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon S3.
+*   **Prerequisite:** None.
+
+### 🚀 Next Step
+Use an online AWS calculator to determine how long it would take to upload 100 TB of data over a 1 Gbps connection.
+
+---
+
+## 68. Application Migration Service (MGN)
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Replaces older CloudEndure tool; requires understanding of OS replication and cutover processes.
+
+> 💡 **Definition:** AWS Application Migration Service (AWS MGN) is the primary migration service recommended for lift-and-shift migrations to AWS, automating the replication of source servers to AWS.
+
+### ⚙️ Core Capabilities & Uses
+*   Continuous block-level replication of source servers to AWS.
+*   Supports physical servers, VMware/Hyper-V virtual machines, and instances in other clouds.
+*   Automated provisioning of test and cutover instances.
+
+### 🎯 Common Scenarios
+*   Mass "Lift-and-Shift" (rehost) migration of a data center to AWS EC2.
+*   Migrating legacy applications where source code modifications are not possible.
+
+### 💻 Quick Examples
+*   **Architecture / Workflow Outline:**
+    On-Premises Server (Agent installed) ➔ Continuous Replication ➔ MGN Replication Server ➔ EC2 Instance (Cutover).
+
+### ⚠️ Key Concepts & Considerations
+*   Minimizes downtime because replication happens continuously in the background before the final "cutover" event.
+*   The replication server runs on low-cost EC2 instances in a staging area to save money until the final launch.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon EC2.
+*   **Prerequisite:** System administration and networking concepts.
+
+### 🚀 Next Step
+Review the MGN documentation on the replication agent installation process.
+
+---
+
+## Category: Cost Management
+<img src="./images/aws_cost_management.png" alt="Cost Management" width="150" align="right" style="margin-left: 20px; float: right;" />
+<br clear="right" />
+
+## 69. Cost Explorer
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** A visual tool available in the console, essential for everyone using AWS.
+
+> 💡 **Definition:** AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time.
+
+### ⚙️ Core Capabilities & Uses
+*   View historical AWS spending (up to the last 12 months).
+*   Forecast future costs based on historical trends.
+*   Filter and group costs by Service, Region, Linked Account, or Tags.
+
+### 🎯 Common Scenarios
+*   Investigating a sudden spike in the monthly AWS bill.
+*   Generating monthly cost reports for the finance team.
+*   Analyzing spending patterns to identify areas for optimization.
+
+### 💻 Quick Examples
+*   **Architecture / Workflow Outline:**
+    AWS Billing ➔ Cost Explorer Dashboard ➔ Visual Reports and CSV exports.
+
+### ⚠️ Key Concepts & Considerations
+*   Tagging resources (e.g., "Project: Marketing") is crucial for getting granular insights in Cost Explorer.
+*   Data is updated at least once every 24 hours.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** AWS Budgets, Cost Allocation Tags.
+*   **Prerequisite:** None.
+
+### 🚀 Next Step
+Open Cost Explorer in your AWS account and group your costs for the last 3 months by "Service".
+
+---
+
+## 70. Budgets
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Straightforward configuration for preventing bill shock.
+
+> 💡 **Definition:** AWS Budgets gives you the ability to set custom budgets that alert you when your costs or usage exceed (or are forecasted to exceed) your budgeted amount.
+
+### ⚙️ Core Capabilities & Uses
+*   Create cost budgets, usage budgets, or reservation budgets.
+*   Send alerts via email or Amazon SNS when thresholds are crossed.
+*   AWS Budget Actions can automate responses (e.g., applying an IAM policy that denies resource creation if budget is exceeded).
+
+### 🎯 Common Scenarios
+*   Preventing "bill shock" by setting a $10/month budget on a personal learning account.
+*   Alerting a team if their specific project cost exceeds their allocated quarterly budget.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws budgets create-budget --account-id 123456789012 --budget file://budget.json --notifications-with-subscribers file://alerts.json
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Budgets evaluate dynamically; a forecast alert can trigger before the cost is actually incurred.
+*   Creating your first two budgets is free; subsequent budgets have a small daily cost.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** AWS Cost Explorer, Amazon SNS.
+*   **Prerequisite:** None.
+
+### 🚀 Next Step
+Create a $10 Monthly Cost Budget in your AWS account with an email alert set at 80% of actual spend.
+
+---
+
+## 71. Compute Optimizer
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Simple to enable and provides clear, actionable recommendations.
+
+> 💡 **Definition:** AWS Compute Optimizer recommends optimal AWS resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics.
+
+### ⚙️ Core Capabilities & Uses
+*   Provides right-sizing recommendations for EC2 instances, EBS volumes, Auto Scaling Groups, and Lambda functions.
+*   Highlights instances that are over-provisioned (wasting money) or under-provisioned (bottlenecking performance).
+*   Analyzes 14 days of CloudWatch metrics by default to generate recommendations.
+
+### 🎯 Common Scenarios
+*   Identifying EC2 instances that can be downgraded to a smaller instance type to save costs.
+*   Optimizing the memory configuration of a Lambda function.
+
+### 💻 Quick Examples
+*   **CLI Command / Command Line:**
+    ```bash
+    aws compute-optimizer get-ec2-instance-recommendations
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Compute Optimizer must be explicitly enabled (opt-in) for your account before it starts gathering data.
+*   It looks at CPU, memory (if agent is installed), storage IOPS, and network metrics.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Amazon EC2, AWS Lambda, Amazon CloudWatch.
+*   **Prerequisite:** None.
+
+### 🚀 Next Step
+Enable Compute Optimizer in the AWS Console and wait 24-48 hours for it to analyze your account and provide recommendations.
