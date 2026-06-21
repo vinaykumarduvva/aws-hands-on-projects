@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AWS Handy Book — A comprehensive, interactive reference guide covering 71 AWS services across 12 categories. From Beginner to Advanced, learn cloud computing with CLI commands, architecture outlines, and Infrastructure as Code examples.">
+  <meta name="keywords" content="AWS, Amazon Web Services, Cloud Computing, Reference Guide, EC2, S3, Lambda, IAM, VPC">
+  <meta name="author" content="Vinay Kumar">
+  <title>AWS Handy Book — Cloud Services Reference Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">☁️</span>
+        <span>AWS Handy Book</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="active">Home</a></li>
+        <li><a href="#foundations">Foundations</a></li>
+        <li><a href="#regions">Regions & AZs</a></li>
+        <li><a href="#services-overview">Overview</a></li>
+        <li><a href="#reference">Reference Book</a></li>
+        <li><a href="#footer">Contact</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="toggle-icons">
+            <span>☀️</span>
+            <span>🌙</span>
+          </span>
+          <span class="toggle-thumb"></span>
+        </button>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Open menu">
+          ☰
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        Open-Source Reference Guide — Updated 2026
+      </div>
+      <h1>
+        The Ultimate<br>
+        <span class="text-gradient glitch" data-text="AWS Reference Book">AWS Reference Book</span>
+      </h1>
+      <p>Master 71 AWS services across 12 categories — from cloud foundations to advanced architectures. Interactive, searchable, and built for both beginners and pros.</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number" id="counterServices">0</div>
+          <div class="stat-label">Services</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="counterCategories">0</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="counterLevels">3</div>
+          <div class="stat-label">Difficulty Levels</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="counterExamples">0</div>
+          <div class="stat-label">CLI & IaC Examples</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: FOUNDATIONS ===== -->
+  <section class="section" id="foundations">
+    <div class="section-header reveal">
+      <p class="horror-subtitle">☠️ Dare to learn the cloud ☠️</p>
+      <h2 class="horror-header glitch" data-text="Cloud Foundations">Cloud Foundations</h2>
+      <div class="section-divider"></div>
+      <p>Core concepts every cloud practitioner must understand before launching a single resource.</p>
+    </div>
+
+    <div class="foundation-grid stagger reveal">
+      <div class="foundation-card">
+        <div class="card-icon">🌐</div>
+        <h3>What is AWS?</h3>
+        <p><strong>Amazon Web Services (AWS)</strong> is a secure cloud computing platform providing on-demand access to computing power, database storage, content delivery, and other IT infrastructure services over the internet, billed on a pay-as-you-go basis.</p>
+      </div>
+      <div class="foundation-card">
+        <div class="card-icon">💡</div>
+        <h3>On-Demand Self-Service</h3>
+        <p>Provision resources programmatically via the Console, CLI, SDK, or Infrastructure-as-Code — no manual procurement or hardware waiting times required.</p>
+      </div>
+      <div class="foundation-card">
+        <div class="card-icon">💰</div>
+        <h3>Pay-as-you-go Pricing</h3>
+        <p>Pay only for what you consume. No large upfront capital expenditure (CapEx) — shift to operational expenditure (OpEx). Scale costs linearly with usage.</p>
+      </div>
+      <div class="foundation-card">
+        <div class="card-icon">📈</div>
+        <h3>Rapid Elasticity</h3>
+        <p>Scale resources up/down (vertical) or out/in (horizontal) dynamically to meet application demand. AWS handles capacity so you don't over-provision.</p>
+      </div>
+    </div>
+
+    <!-- Shared Responsibility Model -->
+    <div class="reveal" style="margin-top: 48px;">
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; text-align: center;">🛡️ The Shared Responsibility Model</h3>
+      <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px; max-width: 700px; margin-left: auto; margin-right: auto;">Security is a joint effort. AWS secures the infrastructure <em>OF</em> the cloud; you secure everything you build <em>IN</em> the cloud.</p>
+      <table class="responsibility-table">
+        <thead>
+          <tr>
+            <th>Responsibility</th>
+            <th>🔒 AWS (Security OF the Cloud)</th>
+            <th>👤 Customer (Security IN the Cloud)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Physical Assets</strong></td>
+            <td>Security of hardware, servers, cables, and data centers.</td>
+            <td>N/A (Abstracted away)</td>
+          </tr>
+          <tr>
+            <td><strong>Infrastructure</strong></td>
+            <td>Virtualization hypervisor, network hardware, underlying OS.</td>
+            <td>VPC design, firewall rules (Security Groups).</td>
+          </tr>
+          <tr>
+            <td><strong>Data Protection</strong></td>
+            <td>Service durability, replication (e.g., S3's 11 nines).</td>
+            <td>Data encryption (in transit/at rest), Bucket Policies, KMS Keys.</td>
+          </tr>
+          <tr>
+            <td><strong>Access Control</strong></td>
+            <td>Physical access control to facilities, IAM system uptime.</td>
+            <td>Setting up IAM Users, Groups, Roles, Policies, MFA.</td>
+          </tr>
+          <tr>
+            <td><strong>Operating System</strong></td>
+            <td>Hypervisor OS patching.</td>
+            <td>Guest OS configuration (patching EC2 instances).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- How to Access AWS -->
+    <div class="reveal" style="margin-top: 48px;">
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; text-align: center;">🕹️ How to Access AWS</h3>
+      <div class="access-grid stagger">
+        <div class="access-card">
+          <div class="access-icon">🖥️</div>
+          <h4>Management Console</h4>
+          <p>Web-based graphical interface. Great for beginners, visual explorers, and quick configuration changes.</p>
+        </div>
+        <div class="access-card">
+          <div class="access-icon">⌨️</div>
+          <h4>AWS CLI</h4>
+          <p>Command-line tool to manage AWS services from your terminal. Supports shell scripting for automation.</p>
+        </div>
+        <div class="access-card">
+          <div class="access-icon">🧩</div>
+          <h4>AWS SDKs</h4>
+          <p>APIs for programming languages (Python boto3, Node.js, Java, Go) to build applications that interact with AWS.</p>
+        </div>
+        <div class="access-card">
+          <div class="access-icon">📝</div>
+          <h4>Infrastructure as Code</h4>
+          <p>Declarative template-based deployment using CloudFormation or Terraform for safe, repeatable infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: REGIONS & AZs ===== -->
+  <section class="section" id="regions" style="background: var(--bg-secondary);">
+    <div class="section-header reveal">
+      <p class="horror-subtitle">🌍 The Global Terror Network 🌍</p>
+      <h2 class="horror-header glitch" data-text="Regions & AZs">Regions & AZs</h2>
+      <div class="section-divider"></div>
+      <p>AWS's global infrastructure of Regions, Availability Zones, and Edge Locations.</p>
+    </div>
+
+    <div class="foundation-grid stagger reveal">
+      <div class="foundation-card">
+        <div class="card-icon">🗺️</div>
+        <h3>What is a Region?</h3>
+        <p>A separate physical geographic area containing multiple isolated data centers. Each Region is fully independent and isolated from other Regions.</p>
+      </div>
+      <div class="foundation-card">
+        <div class="card-icon">🏢</div>
+        <h3>Availability Zones (AZs)</h3>
+        <p>One or more discrete data centers within a Region, with independent power, cooling, and networking. AZs are physically separated (miles apart) to limit blast radius.</p>
+      </div>
+      <div class="foundation-card">
+        <div class="card-icon">🌐</div>
+        <h3>Edge Locations</h3>
+        <p>Points of Presence (PoPs) used by CloudFront (CDN) and Route 53 (DNS) to cache content close to end-users globally, reducing latency.</p>
+      </div>
+    </div>
+
+    <!-- Resource Scope -->
+    <div class="info-cards reveal" style="margin-top: 32px;">
+      <div class="info-card">
+        <h4>🌍 Global Scope</h4>
+        <p>IAM, Route 53, CloudFront — accessible everywhere, not tied to a single region.</p>
+      </div>
+      <div class="info-card">
+        <h4>🗺️ Regional Scope</h4>
+        <p>S3 Buckets, VPCs, ALB, DynamoDB Tables — live in a specific region.</p>
+      </div>
+      <div class="info-card">
+        <h4>📍 Zonal Scope</h4>
+        <p>EC2 Instances, EBS Volumes, Subnets — tied to a specific Availability Zone.</p>
+      </div>
+      <div class="info-card">
+        <h4>📡 Local Zones</h4>
+        <p>Extensions of a Region that place services close to large population and IT centers.</p>
+      </div>
+      <div class="info-card">
+        <h4>📶 Wavelength Zones</h4>
+        <p>AWS compute embedded within 5G networks for ultra-low-latency mobile applications.</p>
+      </div>
+      <div class="info-card">
+        <h4>🏠 Outposts</h4>
+        <p>Hybrid cloud: run native AWS infrastructure on-premises in your own data center.</p>
+      </div>
+    </div>
+
+    <!-- HA vs DR -->
+    <div class="reveal" style="margin-top: 48px;">
+      <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; text-align: center;">⚡ High Availability vs. Disaster Recovery</h3>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Aspect</th>
+            <th>⚡ High Availability (HA)</th>
+            <th>🌪️ Disaster Recovery (DR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Strategy</strong></td><td>Span across multiple AZs within one Region</td><td>Replicate across multiple Regions globally</td></tr>
+          <tr><td><strong>Failure Target</strong></td><td>Data center power/hardware failures</td><td>Full-region natural disaster or fiber outage</td></tr>
+          <tr><td><strong>Complexity</strong></td><td>Low-to-moderate; built-in Multi-AZ options</td><td>High; requires cross-region replication</td></tr>
+          <tr><td><strong>Latency</strong></td><td>Low (sub-ms synchronous)</td><td>Higher (asynchronous across continents)</td></tr>
+          <tr><td><strong>AWS Examples</strong></td><td>RDS Multi-AZ, ASG in multiple subnets</td><td>S3 CRR, Route 53 Active-Passive routing</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Data Transfer Costs -->
+    <div class="data-callout reveal" style="margin-top: 32px;">
+      <h4>💰 Data Transfer Costs — Rules of Thumb</h4>
+      <ul>
+        <li><strong>Inbound Data</strong> is always <strong style="color: #16a34a;">FREE</strong> (data coming into AWS).</li>
+        <li><strong>Intra-AZ Data</strong> is <strong style="color: #16a34a;">FREE</strong> when using private IPs (same AZ communication).</li>
+        <li><strong>Inter-AZ Data</strong> is <strong style="color: var(--accent-primary);">CHARGED</strong> ($0.01/GB each direction, different AZs).</li>
+        <li><strong>Outbound Data</strong> (to internet) is the <strong style="color: var(--accent-horror);">MOST EXPENSIVE</strong> charge.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: SERVICES OVERVIEW ===== -->
+  <section class="section" id="services-overview">
+    <div class="section-header reveal">
+      <p class="horror-subtitle">⚔️ The Arsenal of Cloud ⚔️</p>
+      <h2 class="horror-header glitch" data-text="Services Overview">Services Overview</h2>
+      <div class="section-divider"></div>
+      <p>Navigate the full AWS service catalog — 12 categories, 71 services.</p>
+    </div>
+
+    <div class="category-nav stagger reveal" id="categoryNav">
+      <!-- Generated by JS -->
+    </div>
+  </section>
+
+  <!-- ===== SECTION: REFERENCE BOOK ===== -->
+  <section class="section" id="reference" style="background: var(--bg-secondary);">
+    <div class="section-header reveal">
+      <p class="horror-subtitle">📖 The Forbidden Tome 📖</p>
+      <h2 class="horror-header glitch" data-text="Reference Book">Reference Book</h2>
+      <div class="section-divider"></div>
+      <p>Deep-dive into every AWS service — definitions, CLI commands, Terraform configs, architecture patterns, and study notes.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-container reveal">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search 71 services by name, category, or keyword..." autocomplete="off">
+    </div>
+
+    <!-- Filter Pills -->
+    <div class="reveal" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 32px;">
+      <button class="category-pill active" data-filter="all" onclick="filterByDifficulty('all', this)">
+        <span class="cat-icon">📋</span> All Services
+        <span class="cat-count" id="countAll">71</span>
+      </button>
+      <button class="category-pill" data-filter="beginner" onclick="filterByDifficulty('beginner', this)">
+        <span class="cat-icon">🟢</span> Beginner
+        <span class="cat-count" id="countBeginner">0</span>
+      </button>
+      <button class="category-pill" data-filter="intermediate" onclick="filterByDifficulty('intermediate', this)">
+        <span class="cat-icon">🟡</span> Intermediate
+        <span class="cat-count" id="countIntermediate">0</span>
+      </button>
+      <button class="category-pill" data-filter="advanced" onclick="filterByDifficulty('advanced', this)">
+        <span class="cat-icon">🔴</span> Advanced
+        <span class="cat-count" id="countAdvanced">0</span>
+      </button>
+    </div>
+
+    <!-- Services Container -->
+    <div id="servicesContainer">
+      <!-- Generated by JS -->
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" id="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>☁️ AWS Handy Book</h3>
+        <p>A comprehensive, interactive reference guide for mastering Amazon Web Services — from cloud foundations to advanced architectures. Built for learners, architects, and certification candidates.</p>
+        <div class="publisher-info">
+          <div class="publisher-avatar">VK</div>
+          <div>
+            <strong style="font-size: 0.88rem; color: var(--text-primary);">Vinay Kumar</strong><br>
+            <span style="font-size: 0.78rem; color: var(--text-tertiary);">Cloud Engineer & Developer</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#hero">🏠 Home</a></li>
+          <li><a href="#foundations">📚 Foundations</a></li>
+          <li><a href="#regions">🗺️ Regions & AZs</a></li>
+          <li><a href="#services-overview">📊 Services Overview</a></li>
+          <li><a href="#reference">📖 Reference Book</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/vinay1515" target="_blank">🐙 GitHub Profile</a></li>
+          <li><a href="mailto:vinaykumar@example.com">📧 Email</a></li>
+          <li><a href="https://linkedin.com/in/vinaykumar" target="_blank">💼 LinkedIn</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-project">
+        <h4>🚀 AWS Hands-On Projects</h4>
+        <p>This reference guide is part of a larger collection of beginner-level AWS hands-on projects. Explore practical, step-by-step cloud labs and real-world architectures to reinforce your learning.</p>
+        <a href="https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects" target="_blank" class="github-link">
+          ⭐ View on GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Vinay Kumar. Built with ❤️ for the AWS Community.</span>
+      <span>Last updated: June 2026 · 71 Services · 12 Categories</span>
+    </div>
+  </footer>
+
+  <!-- ===== BACK TO TOP ===== -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
