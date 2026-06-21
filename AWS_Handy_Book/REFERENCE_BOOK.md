@@ -31,6 +31,24 @@ Use this guide to master key cloud architectures, CLI commands, Infrastructure a
 14. [Storage Gateway 🔴](#14-storage-gateway)
 15. [FSx 🔴](#15-fsx)
 
+### 🗄️ [Database Services](#category-database)
+16. [RDS (Relational Database Service) 🟢](#16-rds-relational-database-service)
+17. [DynamoDB 🟡](#17-dynamodb)
+18. [ElastiCache 🟡](#18-elasticache)
+19. [DocumentDB 🔴](#19-documentdb)
+20. [Aurora 🔴](#20-aurora)
+21. [Redshift 🔴](#21-redshift)
+22. [Neptune 🔴](#22-neptune)
+
+### 🌐 [Networking & Content Delivery](#category-networking--content-delivery)
+23. [VPC (Virtual Private Cloud) 🟢](#23-vpc-virtual-private-cloud)
+24. [Elastic Load Balancing (ELB) 🟢](#24-elastic-load-balancing-elb)
+25. [Route 53 🟢](#25-route-53)
+26. [CloudFront 🟡](#26-cloudfront)
+27. [API Gateway 🟡](#27-api-gateway)
+28. [Direct Connect 🔴](#28-direct-connect)
+29. [Transit Gateway 🔴](#29-transit-gateway)
+
 ---
 
 # Category: Compute
@@ -656,3 +674,610 @@ Review AWS's gateway-type decision guide (File vs Volume vs Tape) to map it agai
 
 ### 🚀 Next Step
 Identify which FSx variant matches a specific workload (e.g., Windows file shares vs. HPC) and review its dedicated getting-started guide.
+
+---
+
+# Category: Database
+
+## 16. RDS (Relational Database Service)
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Builds on familiar relational database concepts (SQL, schemas) and removes most infrastructure management from day one.
+
+> 💡 **Definition:** RDS is a managed relational database service supporting multiple engines (MySQL, PostgreSQL, MariaDB, SQL Server, Oracle), automating provisioning, patching, and backups.
+
+### ⚙️ Core Capabilities & Uses
+*   Launch managed instances of common relational database engines.
+*   Automated backups, snapshots, and point-in-time recovery.
+*   Multi-AZ deployments for high availability (synchronous standby replica).
+*   Read replicas for scaling read-heavy workloads.
+
+### 🎯 Common Scenarios
+*   Standard transactional applications (e-commerce, CRM, internal tools).
+*   Migrating on-premises relational databases to a managed cloud service.
+*   Applications requiring SQL compatibility with minimal database administration overhead.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a DB instance:**
+    ```bash
+    aws rds create-db-instance --db-instance-identifier mydb --db-instance-class db.t3.micro --engine mysql --master-username admin --master-user-password mypassword --allocated-storage 20
+    ```
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_db_instance" "default" {
+      engine            = "mysql"
+      instance_class    = "db.t3.micro"
+      allocated_storage = 20
+      username          = "admin"
+      password          = "changeme123"
+    }
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Multi-AZ improves availability but does not by itself scale read performance (use read replicas for that).
+*   Patching and maintenance windows are managed by AWS but still require scheduling awareness.
+*   Storage auto-scaling avoids manual resizing but adds cost as data grows.
+*   No OS-level access — AWS manages the underlying instance.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** VPC (networking/subnet groups), IAM (database authentication option), CloudWatch (monitoring).
+*   **Prerequisites:** Basic SQL and relational database concepts recommended.
+
+### 🚀 Next Step
+Launch a free-tier RDS MySQL instance and connect to it using a standard SQL client.
+
+---
+
+## 17. DynamoDB
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Requires a shift in thinking from relational schema design to NoSQL access-pattern-driven data modeling.
+
+> 💡 **Definition:** DynamoDB is a fully managed, serverless NoSQL key-value and document database designed for high-throughput, low-latency applications at any scale.
+
+### ⚙️ Core Capabilities & Uses
+*   Stores data as items in tables, identified by a primary key (partition key, optional sort key).
+*   Single-digit millisecond performance at virtually unlimited scale.
+*   On-demand or provisioned capacity modes for cost/performance tuning.
+*   Supports global tables (multi-region replication), streams, and TTL (automatic item expiration).
+
+### 🎯 Common Scenarios
+*   High-traffic web/mobile application backends.
+*   Session storage, shopping carts, real-time leaderboards.
+*   Event-driven architectures using DynamoDB Streams to trigger Lambda.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a table:**
+    ```bash
+    aws dynamodb create-table --table-name Users --attribute-definitions AttributeName=UserId,AttributeType=S --key-schema AttributeName=UserId,KeyType=HASH --billing-mode PAY_PER_REQUEST
+    ```
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_dynamodb_table" "users" {
+      name         = "Users"
+      billing_mode = "PAY_PER_REQUEST"
+      hash_key     = "UserId"
+      attribute {
+        name = "UserId"
+        type = "S"
+      }
+    }
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Data modeling must be designed around known access patterns upfront (unlike flexible relational queries).
+*   Secondary indexes (GSI/LSI) are needed to query on non-key attributes efficiently.
+*   On-demand billing simplifies cost management; provisioned mode is cheaper for predictable, steady traffic.
+*   No native JOIN support — denormalization is a common design pattern.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** IAM (table access policies), Lambda (common compute pairing via Streams), API Gateway.
+*   **Prerequisites:** NoSQL data modeling concepts strongly recommended before designing tables.
+
+### 🚀 Next Step
+Create a simple DynamoDB table and practice writing/querying items using the AWS CLI or SDK.
+
+---
+
+## 18. ElastiCache
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Requires understanding caching strategy (cache-aside, TTLs, invalidation) on top of basic Redis/Memcached knowledge.
+
+> 💡 **Definition:** ElastiCache is a managed in-memory data store service supporting Redis and Memcached engines, used to cache data and reduce latency for read-heavy applications.
+
+### ⚙️ Core Capabilities & Uses
+*   Deploy managed Redis or Memcached clusters.
+*   Sub-millisecond read/write latency for cached data.
+*   Redis supports persistence, replication, and pub/sub messaging; Memcached is simpler, multi-threaded caching only.
+*   Automatic failover (Redis with Multi-AZ) for high availability.
+
+### 🎯 Common Scenarios
+*   Caching frequent database query results to reduce load on RDS/DynamoDB.
+*   Session storage for web applications.
+*   Real-time leaderboards, counters, or pub/sub messaging (Redis-specific features).
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a cache cluster:**
+    ```bash
+    aws elasticache create-cache-cluster --cache-cluster-id my-cache --engine redis --cache-node-type cache.t3.micro --num-cache-nodes 1
+    ```
+*   **Architecture Outline:** Application ➔ check ElastiCache (cache-aside pattern) ➔ on cache miss, query RDS ➔ write result back to cache.
+
+### ⚠️ Key Concepts & Considerations
+*   Choosing Redis vs. Memcached depends on feature needs (persistence, data structures vs. simple key-value speed).
+*   Cache invalidation strategy is a real design challenge — stale data risk if not handled properly.
+*   In-memory storage means data loss risk on node failure (mitigated by Redis replication/persistence options).
+*   Pricing is based on node type and number of nodes, similar to EC2 instance billing.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Typically paired with RDS or DynamoDB as the source-of-truth database.
+*   **Prerequisites:** Basic Redis or Memcached familiarity helpful.
+
+### 🚀 Next Step
+Set up a small Redis cluster and implement a basic cache-aside pattern in front of an existing database query.
+
+---
+
+## 19. DocumentDB
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Requires MongoDB/document-database expertise plus awareness of DocumentDB's compatibility nuances versus native MongoDB.
+
+> 💡 **Definition:** DocumentDB is a managed document database service that is compatible with MongoDB APIs, designed for storing and querying JSON-like documents at scale.
+
+### ⚙️ Core Capabilities & Uses
+*   MongoDB-compatible API (3.6, 4.0, 5.0 compatibility depending on version).
+*   Automatic storage scaling and replication across multiple AZs.
+*   Up to 15 read replicas for read-heavy scaling.
+*   Continuous backup with point-in-time restore.
+
+### 🎯 Common Scenarios
+*   Migrating existing MongoDB workloads to a managed AWS service.
+*   Content management systems or catalogs using flexible document schemas.
+*   Applications requiring JSON document storage with MongoDB driver compatibility.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a DB cluster:**
+    ```bash
+    aws docdb create-db-cluster --db-cluster-identifier my-docdb --engine docdb --master-username admin --master-user-password mypassword
+    ```
+*   **Architecture Outline:** Application using a MongoDB driver ↔ DocumentDB cluster endpoint (drop-in compatible connection string in many cases).
+
+### ⚠️ Key Concepts & Considerations
+*   Not a 100% feature match with native MongoDB — some MongoDB features/versions are unsupported, requiring compatibility testing.
+*   Storage auto-scales in increments; compute (instance) sizing must still be managed manually.
+*   Always encrypted at rest; cannot be disabled.
+*   Pricing involves instance cost, storage, I/O, and backup — more complex than single EC2-hosted MongoDB.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** VPC, IAM, CloudWatch for networking, access, and monitoring.
+*   **Prerequisites:** MongoDB/document database concepts and query language required.
+
+### 🚀 Next Step
+Review AWS's MongoDB-to-DocumentDB compatibility documentation before migrating an existing collection.
+
+---
+
+## 20. Aurora
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Builds on RDS knowledge but adds Aurora-specific architecture (distributed storage, cluster endpoints, Aurora Serverless) that requires deeper understanding to use effectively.
+
+> 💡 **Definition:** Aurora is AWS's proprietary relational database engine, compatible with MySQL and PostgreSQL, offering higher performance and availability than standard RDS through a distributed, cloud-native storage architecture.
+
+### ⚙️ Core Capabilities & Uses
+*   MySQL- and PostgreSQL-compatible engines with significantly higher throughput claims than standard RDS.
+*   Storage automatically scales up to 128 TB, decoupled from compute.
+*   Aurora Serverless: automatically scales compute capacity based on demand.
+*   Up to 15 low-latency read replicas sharing the same underlying storage.
+
+### 🎯 Common Scenarios
+*   High-throughput production applications needing relational database performance at scale.
+*   Applications with unpredictable or spiky traffic (using Aurora Serverless).
+*   Multi-region applications using Aurora Global Database for low-latency global reads.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create an Aurora cluster:**
+    ```bash
+    aws rds create-db-cluster --db-cluster-identifier my-aurora-cluster --engine aurora-mysql --master-username admin --master-user-password mypassword
+    ```
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_rds_cluster" "aurora" {
+      engine          = "aurora-mysql"
+      master_username = "admin"
+      master_password = "changeme123"
+    }
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Cluster architecture (writer + reader endpoints) differs conceptually from single-instance RDS.
+*   Aurora Serverless v2 scales capacity in fine-grained increments but still requires understanding scaling units (ACUs).
+*   Generally costs more per hour than equivalent standard RDS instances, justified by performance/availability gains.
+*   Global Database adds cross-region replication complexity for disaster recovery or global read scaling.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** VPC, IAM, CloudWatch; understanding of read/write splitting at the application layer.
+*   **Prerequisites:** Solid RDS and relational database fundamentals required first.
+
+### 🚀 Next Step
+Compare a standard RDS MySQL instance against an Aurora MySQL cluster's reader/writer endpoint structure in the console.
+
+---
+
+## 21. Redshift
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Requires data warehousing concepts (columnar storage, distribution keys, query optimization) distinct from typical transactional database knowledge.
+
+> 💡 **Definition:** Redshift is a managed data warehouse service designed for large-scale analytical queries (OLAP) across structured and semi-structured data using columnar storage and massively parallel processing.
+
+### ⚙️ Core Capabilities & Uses
+*   Columnar storage and parallel query execution optimized for analytical workloads.
+*   Redshift Spectrum: query data directly in S3 without loading it into the warehouse.
+*   Integrates with BI tools (QuickSight, Tableau) via standard SQL/JDBC/ODBC.
+*   Concurrency scaling and Redshift Serverless for variable workloads.
+
+### 🎯 Common Scenarios
+*   Business intelligence and reporting across large historical datasets.
+*   Combining data from multiple sources (S3, RDS, etc.) for analytics.
+*   Running complex aggregate queries that would be slow on transactional databases.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a cluster:**
+    ```bash
+    aws redshift create-cluster --cluster-identifier my-cluster --node-type dc2.large --master-username admin --master-user-password mypassword --number-of-nodes 2
+    ```
+*   **Architecture Outline:** S3 data lake ➔ Glue ETL job ➔ Redshift cluster ➔ QuickSight dashboard.
+
+### ⚠️ Key Concepts & Considerations
+*   Distribution keys and sort keys significantly affect query performance — require deliberate schema design.
+*   Not designed for high-frequency transactional (OLTP) workloads — optimized for large batch reads/aggregations.
+*   Pricing based on node type/count (or Redshift Serverless capacity units for on-demand usage).
+*   Vacuum/analyze maintenance operations may be needed to sustain query performance over time.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** S3 (data source), Glue (ETL), QuickSight (visualization).
+*   **Prerequisites:** Strong SQL and data warehousing concepts required.
+
+### 🚀 Next Step
+Load a sample dataset into a small Redshift cluster and compare query performance with and without a properly chosen sort key.
+
+---
+
+## 22. Neptune
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Requires graph database theory (nodes, edges, traversal query languages) that most engineers haven't encountered in typical relational/NoSQL work.
+
+> 💡 **Definition:** Neptune is a managed graph database service optimized for storing and querying highly connected data using graph models (property graph or RDF) and query languages like Gremlin, openCypher, or SPARQL.
+
+### ⚙️ Core Capabilities & Uses
+*   Stores data as nodes, edges, and properties optimized for relationship-heavy queries.
+*   Supports multiple graph query languages (Gremlin, openCypher, SPARQL).
+*   High availability with up to 15 read replicas across AZs.
+*   Designed for billions of relationships with millisecond-latency traversal queries.
+
+### 🎯 Common Scenarios
+*   Social networking applications (friend/follower graphs).
+*   Fraud detection systems analyzing transaction relationship patterns.
+*   Knowledge graphs and recommendation engines.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a cluster:**
+    ```bash
+    aws neptune create-db-cluster --db-cluster-identifier my-neptune-cluster --engine neptune
+    ```
+*   **Gremlin Query Example (Pseudocode):**
+    ```javascript
+    g.V().has('name','Alice').out('friends').values('name')
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Requires graph data modeling skills — fundamentally different from relational normalization or NoSQL document design.
+*   Choice of query language (Gremlin vs. SPARQL) depends on use case (property graph vs. RDF/semantic web).
+*   Not suited for simple key-value or tabular data — graph databases solve specific relationship-heavy problems.
+*   Cluster architecture and read replica scaling resemble Aurora's distributed storage model.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** VPC, IAM for networking and access control.
+*   **Prerequisites:** Graph theory and a graph query language (Gremlin, SPARQL, or Cypher) required beforehand.
+
+### 🚀 Next Step
+Work through AWS's Neptune Gremlin tutorial to model a small social graph and run basic traversal queries.
+
+---
+
+# Category: Networking & Content Delivery
+
+## 23. VPC (Virtual Private Cloud)
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Every AWS resource lives inside a VPC, making it an early, unavoidable concept, though deeper routing/peering topics grow more advanced.
+
+> 💡 **Definition:** VPC is an isolated virtual network within AWS where resources are launched, allowing full control over IP addressing, subnets, routing, and connectivity.
+
+### ⚙️ Core Capabilities & Uses
+*   Define IP address ranges (CIDR blocks) and subnets (public/private).
+*   Configure route tables, internet gateways, and NAT gateways for connectivity.
+*   Security groups (instance-level) and network ACLs (subnet-level) for traffic control.
+*   VPC peering and endpoints for connecting to other VPCs or AWS services privately.
+
+### 🎯 Common Scenarios
+*   Isolating application tiers (web, application, database) into separate subnets.
+*   Controlling inbound/outbound internet access for resources.
+*   Establishing private connectivity between AWS resources and on-premises networks.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a VPC:**
+    ```bash
+    aws ec2 create-vpc --cidr-block 10.0.0.0/16
+    ```
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_vpc" "main" {
+      cidr_block = "10.0.0.0/16"
+    }
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   A default VPC exists in every account/region; production setups typically use custom VPCs.
+*   Public subnets route through an Internet Gateway; private subnets typically use a NAT Gateway for outbound-only access.
+*   Security groups are stateful (return traffic auto-allowed); NACLs are stateless (must allow both directions).
+*   CIDR block planning matters — overlapping ranges block VPC peering.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** EC2, RDS, and nearly all AWS services rely on VPC for networking.
+*   **Prerequisites:** Basic networking knowledge (IP addressing, subnets, routing) strongly recommended.
+
+### 🚀 Next Step
+Create a custom VPC with one public and one private subnet, and launch an EC2 instance into the public subnet.
+
+---
+
+## 24. Elastic Load Balancing (ELB)
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** Conceptually maps to a familiar idea (distributing traffic across servers) and is commonly learned alongside EC2/Auto Scaling.
+
+> 💡 **Definition:** ELB automatically distributes incoming application traffic across multiple targets (EC2 instances, containers, IP addresses) to improve availability and fault tolerance.
+
+### ⚙️ Core Capabilities & Uses
+*   Application Load Balancer (ALB): Layer 7, supports HTTP/HTTPS routing rules, path/host-based routing.
+*   Network Load Balancer (NLB): Layer 4, ultra-low latency, handles millions of requests/sec.
+*   Gateway Load Balancer (GWLB): for deploying third-party virtual appliances transparently.
+*   Health checks automatically remove unhealthy targets from rotation.
+
+### 🎯 Common Scenarios
+*   Distributing web traffic across an Auto Scaling Group of EC2 instances.
+*   Routing API traffic to different backend services based on URL path.
+*   High-throughput, low-latency TCP/UDP workloads (NLB).
+
+### 💻 Quick Examples
+*   **AWS CLI command to create an ALB:**
+    ```bash
+    aws elbv2 create-load-balancer --name my-alb --subnets subnet-abc subnet-def --type application
+    ```
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_lb" "app" {
+      name               = "my-alb"
+      load_balancer_type = "application"
+      subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id]
+    }
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Choosing ALB vs. NLB depends on protocol needs (HTTP-aware routing vs. raw TCP/UDP performance).
+*   Health check configuration directly affects failover behavior and availability.
+*   Pricing includes hourly cost plus Load Balancer Capacity Units (LCUs) based on traffic processed.
+*   Must span at least two AZs for high availability.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** EC2 (or ECS/Lambda) as targets, VPC (subnets), Auto Scaling.
+*   **Prerequisites:** Basic understanding of HTTP and TCP/IP helpful.
+
+### 🚀 Next Step
+Create an Application Load Balancer in front of two EC2 instances and verify traffic distribution.
+
+---
+
+## 25. Route 53
+*   **Difficulty:** 🟢 Beginner
+*   **Level Rationale:** DNS is a widely understood concept, and basic record management requires minimal AWS-specific knowledge.
+
+> 💡 **Definition:** Route 53 is a scalable DNS and domain registration service that routes end-user requests to AWS or external resources based on configurable routing policies.
+
+### ⚙️ Core Capabilities & Uses
+*   Domain registration and DNS record management (A, CNAME, MX, etc.).
+*   Health checks and DNS failover for high availability.
+*   Routing policies: simple, weighted, latency-based, geolocation, failover.
+*   Private hosted zones for internal DNS resolution within a VPC.
+
+### 🎯 Common Scenarios
+*   Pointing a custom domain to a website or application (e.g., to CloudFront or an ALB).
+*   Implementing DNS-based failover between primary and backup environments.
+*   Routing users to the lowest-latency regional endpoint of a multi-region application.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a hosted zone:**
+    ```bash
+    aws route53 create-hosted-zone --name example.com --caller-reference 2026-01-01-001
+    ```
+*   **Architecture Outline:** User ➔ Route 53 (DNS lookup) ➔ CloudFront distribution ➔ S3/ALB origin.
+
+### ⚠️ Key Concepts & Considerations
+*   Hosted zones incur a small monthly cost regardless of query volume.
+*   Alias records (AWS-specific) allow pointing directly to AWS resources without an extra DNS lookup, unlike standard CNAMEs.
+*   Routing policies (latency, geolocation, weighted) require multiple records configured deliberately.
+*   DNS propagation/TTL settings affect how quickly changes take effect globally.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** CloudFront, ELB, S3 (common routing targets).
+*   **Prerequisites:** Basic DNS knowledge (A/CNAME records, TTL) recommended.
+
+### 🚀 Next Step
+Register or use an existing domain, create a hosted zone, and point an A record (alias) to an S3 static website or ALB.
+
+---
+
+## 26. CloudFront
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Requires understanding CDN caching behavior, origin configuration, and cache invalidation — concepts beyond basic service provisioning.
+
+> 💡 **Definition:** CloudFront is a content delivery network (CDN) that caches and delivers content from edge locations close to end users, reducing latency for static and dynamic content.
+
+### ⚙️ Core Capabilities & Uses
+*   Caches content at globally distributed edge locations.
+*   Supports static (S3) and dynamic (ALB, custom origin) content origins.
+*   Integrates with AWS WAF for edge-level security filtering.
+*   Signed URLs/cookies for restricting access to private content.
+
+### 🎯 Common Scenarios
+*   Accelerating delivery of static website assets (images, JS, CSS).
+*   Video/media streaming distribution.
+*   Reducing load on origin servers by caching API or dynamic content where appropriate.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a distribution:**
+    ```bash
+    aws cloudfront create-distribution --origin-domain-name my-bucket.s3.amazonaws.com
+    ```
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_cloudfront_distribution" "cdn" {
+      origin {
+        domain_name = aws_s3_bucket.data.bucket_regional_domain_name
+        origin_id   = "s3-origin"
+      }
+      enabled = true
+    }
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   Cache behavior settings (TTL, cache keys) directly affect how fresh vs. stale content appears to users.
+*   Cache invalidation requests have associated costs beyond a free monthly allowance.
+*   Origin Access Control (OAC) should be used to restrict S3 origins to CloudFront-only access.
+*   Pricing varies by edge location/region (data transfer costs differ globally).
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** S3 or ALB (origins), Route 53 (DNS), WAF (security), ACM (SSL certificates).
+*   **Prerequisites:** Basic CDN/caching concepts helpful.
+
+### 🚀 Next Step
+Create a CloudFront distribution in front of an S3 bucket and test cache behavior with repeated requests.
+
+---
+
+## 27. API Gateway
+*   **Difficulty:** 🟡 Intermediate
+*   **Level Rationale:** Requires understanding API design (REST/HTTP/WebSocket), integration types, and how it connects to backend compute like Lambda.
+
+> 💡 **Definition:** API Gateway is a managed service for creating, publishing, securing, and monitoring APIs that act as a front door for backend services like Lambda, EC2, or other HTTP endpoints.
+
+### ⚙️ Core Capabilities & Uses
+*   Create REST, HTTP, or WebSocket APIs.
+*   Request/response transformation, validation, and throttling.
+*   Native integration with Lambda (serverless backends) or any HTTP endpoint.
+*   Built-in authorization (IAM, Cognito, Lambda authorizers) and API key management.
+
+### 🎯 Common Scenarios
+*   Exposing Lambda functions as RESTful or HTTP APIs.
+*   Building public-facing APIs with rate limiting and usage plans.
+*   Real-time applications using WebSocket APIs (chat, live updates).
+
+### 💻 Quick Examples
+*   **AWS CLI command to create an HTTP API:**
+    ```bash
+    aws apigatewayv2 create-api --name my-api --protocol-type HTTP
+    ```
+*   **Terraform configuration:**
+    ```hcl
+    resource "aws_apigatewayv2_api" "http_api" {
+      name          = "my-api"
+      protocol_type = "HTTP"
+    }
+    ```
+
+### ⚠️ Key Concepts & Considerations
+*   HTTP APIs are cheaper and simpler than REST APIs but offer fewer features (e.g., limited request validation).
+*   Throttling and usage plans help control cost and protect backend services from abuse.
+*   Custom domain names require an SSL certificate via ACM.
+*   Pricing based on number of API calls plus data transfer.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Lambda (most common backend), IAM/Cognito (auth), ACM (custom domains).
+*   **Prerequisites:** Basic REST/HTTP API design concepts recommended.
+
+### 🚀 Next Step
+Build a simple HTTP API in API Gateway that triggers a Lambda function and returns a JSON response.
+
+---
+
+## 28. Direct Connect
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Involves physical network circuits, BGP routing, and coordination with telecom/network providers — well beyond software-only configuration.
+
+> 💡 **Definition:** Direct Connect establishes a dedicated, private network connection between an on-premises data center and AWS, bypassing the public internet for more consistent performance and security.
+
+### ⚙️ Core Capabilities & Uses
+*   Dedicated physical fiber connection to an AWS Direct Connect location.
+*   Consistent network performance (lower latency, reduced jitter versus internet-based VPN).
+*   Supports both public (AWS service) and private (VPC) virtual interfaces (VIFs).
+*   Can be combined with VPN for encrypted backup connectivity.
+
+### 🎯 Common Scenarios
+*   Enterprises with consistent, high-volume data transfer between on-premises and AWS.
+*   Hybrid cloud architectures requiring predictable network performance.
+*   Compliance-sensitive workloads avoiding public internet transit.
+
+### 💻 Quick Examples
+*   **AWS CLI command to describe connections:**
+    ```bash
+    aws directconnect describe-connections
+    ```
+*   **Architecture Outline:** On-premises router ↔ dedicated fiber circuit ↔ AWS Direct Connect location ↔ Virtual Interface ↔ VPC.
+
+### ⚠️ Key Concepts & Considerations
+*   Requires working with a telecom/network provider to physically provision the circuit (can take weeks).
+*   Uses BGP (Border Gateway Protocol) for dynamic routing — requires networking expertise.
+*   Not inherently encrypted — VPN or application-layer encryption needed for sensitive data over Direct Connect.
+*   Pricing includes port-hour charges plus data transfer, generally cost-effective at high volume versus internet egress.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** Often paired with Transit Gateway for connecting multiple VPCs.
+*   **Prerequisites:** VPC (private VIF target), strong networking fundamentals (BGP, routing, VLANs) required.
+
+### 🚀 Next Step
+Review AWS's Direct Connect partner/location list and the public vs. private VIF decision guide before initiating a circuit request.
+
+---
+
+## 29. Transit Gateway
+*   **Difficulty:** 🔴 Advanced
+*   **Level Rationale:** Requires understanding multi-VPC network topology design and routing at scale, typically relevant only after VPC fundamentals are solid.
+
+> 💡 **Definition:** Transit Gateway acts as a central hub that connects multiple VPCs and on-premises networks through a single, scalable gateway, simplifying complex network topologies.
+
+### ⚙️ Core Capabilities & Uses
+*   Connects many VPCs (and on-premises networks via VPN/Direct Connect) through one gateway.
+*   Centralized route table management across attached networks.
+*   Supports inter-region peering for global network architectures.
+*   Scales to thousands of VPC attachments, replacing complex full-mesh peering.
+
+### 🎯 Common Scenarios
+*   Large organizations with many VPCs needing centralized connectivity.
+*   Hub-and-spoke network architectures replacing unwieldy VPC peering meshes.
+*   Connecting multiple on-premises sites to multiple VPCs through a single gateway.
+
+### 💻 Quick Examples
+*   **AWS CLI command to create a Transit Gateway:**
+    ```bash
+    aws ec2 create-transit-gateway --description "Central hub TGW"
+    ```
+*   **Architecture Outline:** VPC-A, VPC-B, VPC-C, and an on-premises VPN connection all attached to one Transit Gateway, with route tables controlling inter-VPC traffic.
+
+### ⚠️ Key Concepts & Considerations
+*   Route table design determines which attachments can communicate with each other (segmentation).
+*   Replaces VPC peering at scale, since peering does not support transitive routing (A↔B↔C requires direct A↔C peering, while TGW does not).
+*   Pricing includes per-attachment hourly cost plus data processing charges.
+*   Requires careful CIDR planning across all attached VPCs to avoid overlaps.
+
+### 🔗 Related Services / Prerequisites
+*   **Related:** VPC, Direct Connect, VPN — solid understanding of all three needed first.
+*   **Prerequisites:** Network architecture/routing design experience strongly recommended.
+
+### 🚀 Next Step
+Diagram a hub-and-spoke topology for 3+ VPCs and build it using Transit Gateway attachments and route tables in a sandbox account.
