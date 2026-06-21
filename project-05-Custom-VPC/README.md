@@ -7,7 +7,6 @@ Build a production-grade AWS network from absolute scratch — the same VPC arch
 
 ## 🗺️ Architecture / Resource Map
 ![VPC Resource Map](./resource-map.png)
-*Please save the image you provided as `resource-map.png` in this project folder so it renders here.*
 
 ## 🧠 Learning Objectives
 - Understand what a VPC is and why it exists
