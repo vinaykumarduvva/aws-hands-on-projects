@@ -19,7 +19,7 @@ Welcome to the **AWS Cloud Foundations Reference Guide**! This document serves a
 
 ## 1. What is AWS? 🌐
 
-![AWS Cloud Overview](images/aws_cloud_overview.png)
+<img src="images/aws_cloud_overview.png" width="400" alt="AWS Cloud Overview" />
 
 > **Definition:** **Amazon Web Services (AWS)** is a secure, cloud computing platform providing on-demand access to computing power, database storage, content delivery, and other IT infrastructure services over the internet, billed on a flexible pay-as-you-go basis.
 
@@ -100,7 +100,7 @@ Automation is a first-class citizen in AWS. You can interact with your resources
 
 ## 2. AWS Regions & Availability Zones 🗺️
 
-![AWS Regions & AZs](images/aws_regions_az.png)
+<img src="images/aws_regions_az.png" width="400" alt="AWS Regions & AZs" />
 
 > **Definition:** A **Region** is a separate, physical geographic area containing multiple isolated data centers. An **Availability Zone (AZ)** consists of one or more discrete data centers within a Region, equipped with independent redundant power, cooling, and network connectivity.
 
