@@ -3,6 +3,34 @@
  * Main Application JavaScript
  */
 
+// ===== SMOOTH SCROLL HELPER =====
+// Accounts for fixed navbar height (64px + 16px buffer)
+const SCROLL_OFFSET = 80;
+
+function smoothScrollTo(elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
+// Intercept all anchor links for smooth scroll with offset
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+  const href = link.getAttribute('href');
+  if (href === '#') {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const targetId = href.slice(1);
+  if (targetId) {
+    e.preventDefault();
+    smoothScrollTo(targetId);
+  }
+});
+
 // ===== THEME MANAGEMENT =====
 const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
@@ -43,24 +71,21 @@ navLinks.querySelectorAll('a').forEach(link => {
 
 // ===== NAVBAR SCROLL BEHAVIOR =====
 const navbar = document.getElementById('navbar');
-let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
-  const currentScroll = window.scrollY;
-  if (currentScroll > 50) {
+  if (window.scrollY > 50) {
     navbar.classList.add('scrolled');
   } else {
     navbar.classList.remove('scrolled');
   }
-  lastScroll = currentScroll;
-});
+}, { passive: true });
 
 // Active nav link highlighting
 const sections = document.querySelectorAll('section[id]');
 const navItems = navLinks.querySelectorAll('a');
 
 function highlightNavOnScroll() {
-  const scrollY = window.scrollY + 100;
+  const scrollY = window.scrollY + SCROLL_OFFSET + 20;
   sections.forEach(section => {
     const top = section.offsetTop;
     const height = section.offsetHeight;
@@ -75,7 +100,7 @@ function highlightNavOnScroll() {
     }
   });
 }
-window.addEventListener('scroll', highlightNavOnScroll);
+window.addEventListener('scroll', highlightNavOnScroll, { passive: true });
 
 // ===== BACK TO TOP BUTTON =====
 const backToTop = document.getElementById('backToTop');
@@ -85,7 +110,7 @@ window.addEventListener('scroll', () => {
   } else {
     backToTop.classList.remove('visible');
   }
-});
+}, { passive: true });
 backToTop.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
@@ -104,8 +129,9 @@ function createParticles() {
     particle.style.top = Math.random() * 100 + '%';
     particle.style.animationDelay = Math.random() * 10 + 's';
     particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    // Mix teal and orange particles for cloud theme
     if (Math.random() > 0.5) {
-      particle.style.background = 'rgba(37, 99, 235, 0.2)';
+      particle.style.background = 'rgba(255, 153, 0, 0.2)';
     }
     container.appendChild(particle);
   }
@@ -159,7 +185,7 @@ const revealObserver = new IntersectionObserver((entries) => {
       entry.target.classList.add('visible');
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
 document.querySelectorAll('.reveal, .stagger').forEach(el => {
   revealObserver.observe(el);
@@ -170,8 +196,9 @@ function renderCategoryNav() {
   const container = document.getElementById('categoryNav');
   if (!container || typeof AWS_CATEGORIES === 'undefined') return;
 
-  AWS_CATEGORIES.forEach((cat, idx) => {
+  AWS_CATEGORIES.forEach((cat) => {
     const pill = document.createElement('button');
+    pill.type = 'button';
     pill.className = 'category-pill';
     pill.innerHTML = `
       <span class="cat-icon">${cat.icon}</span>
@@ -179,11 +206,12 @@ function renderCategoryNav() {
       <span class="cat-count">${cat.count}</span>
     `;
     pill.addEventListener('click', () => {
-      // Scroll to reference section and filter
-      document.getElementById('reference').scrollIntoView({ behavior: 'smooth' });
+      // Smooth scroll to reference section with offset
+      smoothScrollTo('reference');
+      // Wait for scroll to complete, then filter
       setTimeout(() => {
         filterByCategory(cat.name);
-      }, 600);
+      }, 700);
     });
     container.appendChild(pill);
   });
@@ -329,11 +357,11 @@ function renderAllServices() {
     visibleCount += catServices.length;
 
     html += `
-      <div class="category-group reveal" style="margin-bottom: 32px;">
-        <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 1.5rem;">${cat.icon}</span>
+      <div class="category-group reveal">
+        <h3 class="category-group-header">
+          <span class="category-group-icon">${cat.icon}</span>
           ${escapeHtml(cat.name)}
-          <span style="font-size: 0.75rem; background: var(--bg-tertiary); padding: 3px 10px; border-radius: 99px; font-weight: 600; color: var(--text-tertiary);">${catServices.length}</span>
+          <span class="category-group-count">${catServices.length}</span>
         </h3>
         <div class="services-grid">
           ${catServices.map(s => renderServiceCard(s)).join('')}

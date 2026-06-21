@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="AWS Handy Book — A comprehensive, interactive reference guide covering 71 AWS services across 12 categories. From Beginner to Advanced, learn cloud computing with CLI commands, architecture outlines, and Infrastructure as Code examples.">
   <meta name="keywords" content="AWS, Amazon Web Services, Cloud Computing, Reference Guide, EC2, S3, Lambda, IAM, VPC">
-  <meta name="author" content="Vinay Kumar">
+  <meta name="author" content="Vinay Kumar Duvva">
   <title>AWS Handy Book — Cloud Services Reference Guide</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
   <link rel="stylesheet" href="styles.css">
@@ -25,6 +25,7 @@
         <li><a href="#foundations">Foundations</a></li>
         <li><a href="#regions">Regions &amp; AZs</a></li>
         <li><a href="#services-overview">Overview</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li><a href="#reference">Reference Book</a></li>
         <li><a href="#footer">Contact</a></li>
       </ul>
@@ -54,7 +55,7 @@
       </div>
       <h1>
         The Ultimate<br>
-        <span class="text-gradient glitch" data-text="AWS Reference Book">AWS Reference Book</span>
+        <span class="text-gradient">AWS Reference Book</span>
       </h1>
       <p>Master 71 AWS services across 12 categories — from cloud foundations to advanced architectures. Interactive, searchable, and built for both beginners and pros.</p>
       <div class="hero-stats">
@@ -81,8 +82,8 @@
   <!-- ===== SECTION: FOUNDATIONS ===== -->
   <section class="section" id="foundations">
     <div class="section-header reveal">
-      <p class="horror-subtitle">☠️ Dare to learn the cloud ☠️</p>
-      <h2 class="horror-header glitch" data-text="Cloud Foundations">Cloud Foundations</h2>
+      <p class="section-label">☁️ Cloud Fundamentals</p>
+      <h2 class="section-heading">Cloud Foundations</h2>
       <div class="section-divider"></div>
       <p>Core concepts every cloud practitioner must understand before launching a single resource.</p>
     </div>
@@ -183,8 +184,8 @@
   <!-- ===== SECTION: REGIONS & AZs ===== -->
   <section class="section bg-secondary" id="regions">
     <div class="section-header reveal">
-      <p class="horror-subtitle">🌍 The Global Terror Network 🌍</p>
-      <h2 class="horror-header glitch" data-text="Regions &amp; AZs">Regions &amp; AZs</h2>
+      <p class="section-label">🌍 Global Infrastructure</p>
+      <h2 class="section-heading">Regions &amp; Availability Zones</h2>
       <div class="section-divider"></div>
       <p>AWS's global infrastructure of Regions, Availability Zones, and Edge Locations.</p>
     </div>
@@ -263,7 +264,7 @@
         <li><strong>Inbound Data</strong> is always <strong class="text-success">FREE</strong> (data coming into AWS).</li>
         <li><strong>Intra-AZ Data</strong> is <strong class="text-success">FREE</strong> when using private IPs (same AZ communication).</li>
         <li><strong>Inter-AZ Data</strong> is <strong class="text-accent">CHARGED</strong> ($0.01/GB each direction, different AZs).</li>
-        <li><strong>Outbound Data</strong> (to internet) is the <strong class="text-horror">MOST EXPENSIVE</strong> charge.</li>
+        <li><strong>Outbound Data</strong> (to internet) is the <strong class="text-warning">MOST EXPENSIVE</strong> charge.</li>
       </ul>
     </div>
   </section>
@@ -271,8 +272,8 @@
   <!-- ===== SECTION: SERVICES OVERVIEW ===== -->
   <section class="section" id="services-overview">
     <div class="section-header reveal">
-      <p class="horror-subtitle">⚔️ The Arsenal of Cloud ⚔️</p>
-      <h2 class="horror-header glitch" data-text="Services Overview">Services Overview</h2>
+      <p class="section-label">📊 Service Catalog</p>
+      <h2 class="section-heading">Services Overview</h2>
       <div class="section-divider"></div>
       <p>Navigate the full AWS service catalog — 12 categories, 71 services.</p>
     </div>
@@ -282,11 +283,292 @@
     </div>
   </section>
 
-  <!-- ===== SECTION: REFERENCE BOOK ===== -->
-  <section class="section bg-secondary" id="reference">
+  <!-- ===== SECTION: HANDS-ON PROJECTS ===== -->
+  <section class="section bg-secondary" id="projects">
     <div class="section-header reveal">
-      <p class="horror-subtitle">📖 The Forbidden Tome 📖</p>
-      <h2 class="horror-header glitch" data-text="Reference Book">Reference Book</h2>
+      <p class="section-label">🚀 Hands-On Learning</p>
+      <h2 class="section-heading">AWS Hands-On Projects</h2>
+      <div class="section-divider"></div>
+      <p>A portfolio of 14 real-world AWS projects built from scratch using Free Tier resources — from IAM foundations to 3-tier high-availability architectures.</p>
+    </div>
+
+    <div class="projects-grid stagger reveal">
+      <!-- Project 01 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">01</div>
+          <div class="project-title">
+            <h4>AWS Account Setup &amp; IAM Foundations</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">IAM</span>
+          <span class="svc-tag">CloudWatch</span>
+          <span class="svc-tag">SNS</span>
+          <span class="svc-tag">CLI</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge beginner">🟢 Beginner</span>
+          <span class="status-badge done">✅ Done</span>
+        </div>
+        <a href="https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/tree/main/project-01-iam-setup" target="_blank" class="project-link">View on GitHub →</a>
+      </div>
+
+      <!-- Project 02 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">02</div>
+          <div class="project-title">
+            <h4>Static Website on S3 + CloudFront</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">S3</span>
+          <span class="svc-tag">CloudFront</span>
+          <span class="svc-tag">Route 53</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge beginner">🟢 Beginner</span>
+          <span class="status-badge done">✅ Done</span>
+        </div>
+        <a href="https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/tree/main/project-02-s3-static-website" target="_blank" class="project-link">View on GitHub →</a>
+      </div>
+
+      <!-- Project 03 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">03</div>
+          <div class="project-title">
+            <h4>Launch EC2 &amp; Connect via SSH</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">EC2</span>
+          <span class="svc-tag">VPC</span>
+          <span class="svc-tag">SG</span>
+          <span class="svc-tag">SSM</span>
+          <span class="svc-tag">IAM</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge beginner">🟢 Beginner</span>
+          <span class="status-badge done">✅ Done</span>
+        </div>
+        <a href="https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/tree/main/project-03-Launch-EC2-Connect-via-SSH" target="_blank" class="project-link">View on GitHub →</a>
+      </div>
+
+      <!-- Project 04 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">04</div>
+          <div class="project-title">
+            <h4>S3 Versioning, Lifecycle &amp; Replication</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">S3</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge beginner">🟢 Beginner</span>
+          <span class="status-badge done">✅ Done</span>
+        </div>
+        <a href="https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/tree/main/project-04-s3-versioning" target="_blank" class="project-link">View on GitHub →</a>
+      </div>
+
+      <!-- Project 05 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">05</div>
+          <div class="project-title">
+            <h4>Custom VPC: Subnets, IGW, NAT</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">VPC</span>
+          <span class="svc-tag">EC2</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge beginner">🟢 Beginner</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 06 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">06</div>
+          <div class="project-title">
+            <h4>RDS MySQL + EC2 Two-Tier App</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">RDS</span>
+          <span class="svc-tag">EC2</span>
+          <span class="svc-tag">VPC</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge beginner">🟢 Beginner</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 07 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">07</div>
+          <div class="project-title">
+            <h4>CloudWatch Alarms + SNS Alerts</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">CloudWatch</span>
+          <span class="svc-tag">SNS</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge beginner">🟢 Beginner</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 08 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">08</div>
+          <div class="project-title">
+            <h4>Serverless REST API</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">Lambda</span>
+          <span class="svc-tag">API Gateway</span>
+          <span class="svc-tag">DynamoDB</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge intermediate">🟡 Intermediate</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 09 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">09</div>
+          <div class="project-title">
+            <h4>CI/CD Pipeline</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">CodeCommit</span>
+          <span class="svc-tag">CodeBuild</span>
+          <span class="svc-tag">CodeDeploy</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge intermediate">🟡 Intermediate</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 10 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">10</div>
+          <div class="project-title">
+            <h4>Auto Scaling Group + ALB</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">EC2</span>
+          <span class="svc-tag">ALB</span>
+          <span class="svc-tag">ASG</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge intermediate">🟡 Intermediate</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 11 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">11</div>
+          <div class="project-title">
+            <h4>Infrastructure as Code</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">CloudFormation</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge intermediate">🟡 Intermediate</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 12 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">12</div>
+          <div class="project-title">
+            <h4>Event-Driven Pipeline</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">S3</span>
+          <span class="svc-tag">SQS</span>
+          <span class="svc-tag">Lambda</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge intermediate">🟡 Intermediate</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 13 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">13</div>
+          <div class="project-title">
+            <h4>Containerized App on ECS Fargate</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">ECS</span>
+          <span class="svc-tag">ECR</span>
+          <span class="svc-tag">Fargate</span>
+          <span class="svc-tag">ALB</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge advanced">🔴 Advanced</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+
+      <!-- Project 14 -->
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-number">14</div>
+          <div class="project-title">
+            <h4>Capstone: 3-Tier HA Architecture</h4>
+          </div>
+        </div>
+        <div class="project-services">
+          <span class="svc-tag">VPC</span>
+          <span class="svc-tag">ALB</span>
+          <span class="svc-tag">ASG</span>
+          <span class="svc-tag">RDS Multi-AZ</span>
+        </div>
+        <div class="project-meta">
+          <span class="tier-badge advanced">🔴 Advanced</span>
+          <span class="status-badge upcoming">⏳ Upcoming</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: REFERENCE BOOK ===== -->
+  <section class="section" id="reference">
+    <div class="section-header reveal">
+      <p class="section-label">📖 Deep-Dive Reference</p>
+      <h2 class="section-heading">Reference Book</h2>
       <div class="section-divider"></div>
       <p>Deep-dive into every AWS service — definitions, CLI commands, Terraform configs, architecture patterns, and study notes.</p>
     </div>
@@ -332,7 +614,7 @@
         <div class="publisher-info">
           <div class="publisher-avatar">VK</div>
           <div>
-            <strong class="publisher-name">Vinay Kumar</strong><br>
+            <strong class="publisher-name">Vinay Kumar Duvva</strong><br>
             <span class="publisher-role">Cloud Engineer &amp; Developer</span>
           </div>
         </div>
@@ -344,7 +626,7 @@
           <li><a href="#hero">🏠 Home</a></li>
           <li><a href="#foundations">📚 Foundations</a></li>
           <li><a href="#regions">🗺️ Regions &amp; AZs</a></li>
-          <li><a href="#services-overview">📊 Services Overview</a></li>
+          <li><a href="#projects">🚀 Projects</a></li>
           <li><a href="#reference">📖 Reference Book</a></li>
         </ul>
       </div>
@@ -352,15 +634,15 @@
       <div>
         <h4>Contact</h4>
         <ul class="footer-links">
-          <li><a href="https://github.com/vinay1515" target="_blank">🐙 GitHub Profile</a></li>
-          <li><a href="mailto:vinaykumar@example.com">📧 Email</a></li>
-          <li><a href="https://linkedin.com/in/vinaykumar" target="_blank">💼 LinkedIn</a></li>
+          <li><a href="mailto:duvvavinaykumar@gmail.com">📧 duvvavinaykumar@gmail.com</a></li>
+          <li><a href="https://www.linkedin.com/in/vinay-kumar-duvva/" target="_blank">💼 LinkedIn</a></li>
+          <li><a href="https://github.com/vinay1515" target="_blank">🐙 GitHub</a></li>
         </ul>
       </div>
 
       <div class="footer-project">
         <h4>🚀 AWS Hands-On Projects</h4>
-        <p>This reference guide is part of a larger collection of beginner-level AWS hands-on projects. Explore practical, step-by-step cloud labs and real-world architectures to reinforce your learning.</p>
+        <p>This reference guide is part of a portfolio of 14 hands-on AWS projects — from IAM foundations to 3-tier HA architectures. Each project includes full console + CLI instructions, architecture diagrams, and cleanup steps.</p>
         <a href="https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects" target="_blank" class="github-link">
           ⭐ View on GitHub
         </a>
@@ -368,8 +650,8 @@
     </div>
 
     <div class="footer-bottom">
-      <span>© 2026 Vinay Kumar. Built with ❤️ for the AWS Community.</span>
-      <span>Last updated: June 2026 · 71 Services · 12 Categories</span>
+      <span>© 2026 Vinay Kumar Duvva. Built with ❤️ for the AWS Community.</span>
+      <span>Last updated: June 2026 · 71 Services · 12 Categories · 14 Projects</span>
     </div>
   </footer>
 
