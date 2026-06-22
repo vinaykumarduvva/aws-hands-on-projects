@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Beginner Tier Exit Quiz</title>
+    <meta name="description" content="AWS Beginner Tier Exit Quiz to review your knowledge before moving to Intermediate.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <span class="badge">Complete! 🏆</span>
+                <h1>Beginner Tier Exit Quiz</h1>
+                <p>Before entering the Intermediate tier, let's review your knowledge. Write your answers below for review.</p>
+            </div>
+        </header>
+
+        <form id="quiz-form">
+            <!-- IAM Section -->
+            <section class="quiz-section">
+                <div class="section-image">
+                    <img src="assets/iam.png" alt="AWS IAM Concept">
+                </div>
+                <div class="section-content">
+                    <h2>Identity and Access Management (IAM)</h2>
+
+                    <div class="question-card">
+                        <label for="q1"><strong>Q1.</strong> What is the difference between an IAM Role and an IAM User?<br><br>Give one real example of when you would use a role instead of a user.</label>
+                        <textarea id="q1" name="q1" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+
+                    <div class="question-card">
+                        <label for="q2"><strong>Q2.</strong> In Project 3 you attached <code>AmazonSSMManagedInstanceCore</code> to an EC2 instance.<br><br>Why did you use a Role for this instead of creating an IAM user with access keys?</label>
+                        <textarea id="q2" name="q2" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- S3 Section -->
+            <section class="quiz-section">
+                <div class="section-image">
+                    <img src="assets/s3.png" alt="AWS S3 Concept">
+                </div>
+                <div class="section-content">
+                    <h2>Simple Storage Service (S3)</h2>
+
+                    <div class="question-card">
+                        <label for="q3"><strong>Q3.</strong> Your teammate accidentally deleted an important file from a versioned S3 bucket.<br><br>What are the exact steps to recover it using the AWS CLI?</label>
+                        <textarea id="q3" name="q3" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+
+                    <div class="question-card">
+                        <label for="q4"><strong>Q4.</strong> A startup stores 50 TB of server logs. Logs are accessed frequently for the first 7 days, occasionally for days 8–30, and never after day 30.<br><br>Design a lifecycle policy — which storage classes and at which intervals?</label>
+                        <textarea id="q4" name="q4" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EC2 + VPC Section -->
+            <section class="quiz-section">
+                <div class="section-image">
+                    <img src="assets/ec2_vpc.png" alt="AWS EC2 and VPC Concept">
+                </div>
+                <div class="section-content">
+                    <h2>EC2 &amp; VPC</h2>
+
+                    <div class="question-card">
+                        <label for="q5"><strong>Q5.</strong> You stop an EC2 instance overnight and restart it in the morning.<br><br>Name two things that change and one thing that stays the same.</label>
+                        <textarea id="q5" name="q5" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+
+                    <div class="question-card">
+                        <label for="q6"><strong>Q6.</strong> In Project 5 you created two route tables — one public, one private.<br><br>What is the single line difference between them that makes one public and one private?</label>
+                        <textarea id="q6" name="q6" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+
+                    <div class="question-card">
+                        <label for="q7"><strong>Q7.</strong> What is the difference between a Security Group and a Network ACL?<br><br>Which one is stateful and what does stateful mean in simple terms?</label>
+                        <textarea id="q7" name="q7" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- General AWS Section -->
+            <section class="quiz-section">
+                <div class="section-image">
+                    <img src="assets/general.png" alt="General AWS Concept">
+                </div>
+                <div class="section-content">
+                    <h2>General AWS</h2>
+
+                    <div class="question-card">
+                        <label for="q8"><strong>Q8.</strong> Look at this AWS CLI command from Project 5:</label>
+<pre><code>aws ec2 authorize-security-group-ingress \
+  --group-id $PRIVATE_SG \
+  --protocol tcp \
+  --port 22 \
+  --source-group $BASTION_SG</code></pre>
+                        <p>Explain in plain English what this command does and why <code>--source-group</code> was used instead of <code>--cidr</code>.</p>
+                        <textarea id="q8" name="q8" rows="4" placeholder="Type your answer here..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    <span>Submit Answers for Review</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
