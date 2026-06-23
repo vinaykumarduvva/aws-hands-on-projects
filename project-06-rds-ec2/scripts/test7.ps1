@@ -11,3 +11,5 @@ $SECRET_ARN = aws secretsmanager create-secret `
     "dbname": "appdb"
   }' `
   --query "ARN" --output text
+
+Write-Host "Created Secret with ARN: $SECRET_ARN"
