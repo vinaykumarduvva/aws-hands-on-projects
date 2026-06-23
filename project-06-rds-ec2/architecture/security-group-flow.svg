@@ -1,0 +1,12 @@
+Internet
+    │
+    ▼
+EC2 SG
+(22,80)
+    │
+    ▼
+RDS SG
+(3306)
+    │
+    ▼
+RDS MySQL

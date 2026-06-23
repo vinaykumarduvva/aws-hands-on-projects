@@ -1,0 +1,13 @@
+User Browser
+      │
+      ▼
+Public IP
+      │
+      ▼
+EC2 App Server
+      │
+      ▼
+Private Endpoint
+      │
+      ▼
+RDS MySQL

@@ -1,0 +1,24 @@
+Internet
+   │
+Internet Gateway
+   │
+─────────────────────────────
+VPC (10.0.0.0/16)
+─────────────────────────────
+
+Public Subnet
+┌──────────────┐
+│ EC2 App      │
+│ Amazon Linux │
+└──────┬───────┘
+       │3306
+       ▼
+
+Private Subnet A
+Private Subnet B
+
+┌──────────────────┐
+│ RDS MySQL        │
+│ db.t3.micro      │
+│ Private Access   │
+└──────────────────┘
