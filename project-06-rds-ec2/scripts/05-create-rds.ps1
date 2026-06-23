@@ -39,7 +39,7 @@ aws rds create-db-instance `
     --no-publicly-accessible `
     --backup-retention-period 1 `
     --no-deletion-protection `
-    --tags Key=Name, Value=myapp-database | Out-Null
+    --tags Key=Name,Value=myapp-database | Out-Null
 
 Write-Host "RDS creation initiated." -ForegroundColor Green
 Write-Host ""

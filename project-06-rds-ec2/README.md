@@ -72,7 +72,7 @@ Internet
 └────────────────────────────────────────────────────────────┘
 ```
 
-> See `diagrams/two-tier-architecture.svg` for the visual diagram.
+> See `architecture/two-tier-architecture.svg` for the visual diagram.
 
 ---
 
@@ -162,7 +162,8 @@ project-06-rds-ec2/
 ├── architecture/
 │   ├── architecture-diagram.svg
 │   ├── network-flow.svg
-│   └── security-group-flow.svg
+│   ├── security-group-flow.svg
+│   └── two-tier-architecture.svg
 └── images/
     └── (console screenshots)
 ```

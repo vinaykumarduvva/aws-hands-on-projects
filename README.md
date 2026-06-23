@@ -38,7 +38,7 @@ how I fixed it, and what I learned.
 | 03 | [Launch EC2 & Connect via SSH](project-3-Launch-EC2-Connect-via-SSH) | 🟢 Beginner | EC2, VPC, SG, SSM, IAM | ✅ Done |
 | 04 | [S3 Versioning, Lifecycle & Replication](project-04-s3-versioning) | 🟢 Beginner | S3 | ✅ Done |
 | 05 | [Custom VPC: Subnets, IGW, NAT](project-05-Custom-VPC) | 🟢 Beginner | VPC, EC2 | ✅ Done |
-| 06 | RDS MySQL + EC2 Two-Tier App | 🟢 Beginner | RDS, EC2, VPC | ⏳ Upcoming |
+| 06 | [RDS MySQL + EC2 Two-Tier App](project-06-rds-ec2) | 🟢 Beginner | RDS, EC2, VPC, Secrets Manager | ✅ Done |
 | 07 | CloudWatch Alarms + SNS Alerts | 🟢 Beginner | CloudWatch, SNS | ⏳ Upcoming |
 | 08 | Serverless REST API | 🟡 Intermediate | Lambda, API Gateway, DynamoDB | ⏳ Upcoming |
 | 09 | CI/CD Pipeline | 🟡 Intermediate | CodeCommit, CodeBuild, CodeDeploy | ⏳ Upcoming |
@@ -98,8 +98,8 @@ Each project README includes:
 |---|---|
 | IAM & Security | ⭐⭐⭐⭐☆ |
 | Storage (S3) | ⭐⭐⭐☆☆ |
-| Compute (EC2) | ⭐⭐⭐☆☆ |
-| Networking (VPC) | ⭐⭐☆☆☆ |
+| Compute (EC2) | ⭐⭐⭐⭐☆ |
+| Networking (VPC) | ⭐⭐⭐☆☆ |
 | Serverless | ⭐⭐☆☆☆ |
 | Containers | ⭐☆☆☆☆ |
 | IaC | ⭐☆☆☆☆ |

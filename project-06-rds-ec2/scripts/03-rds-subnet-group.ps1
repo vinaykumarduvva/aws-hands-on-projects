@@ -22,7 +22,7 @@ aws rds create-db-subnet-group `
     --db-subnet-group-name rds-subnet-group `
     --db-subnet-group-description "Private subnets for RDS across two AZs" `
     --subnet-ids $PRI_SUBNET_A $PRI_SUBNET_B `
-    --tags Key=Name, Value=rds-subnet-group | Out-Null
+    --tags Key=Name,Value=rds-subnet-group | Out-Null
 
 # Verify
 Write-Host "Verifying subnet group..." -ForegroundColor Yellow
