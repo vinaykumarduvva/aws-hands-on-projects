@@ -8,133 +8,25 @@ The architecture focuses on securing the AWS environment by applying IAM best pr
 
 ## Architecture Diagram
 
-<svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
-    <rect width="900" height="680" fill="#f8f9fa" rx="12"/>
-
-    <text x="450" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#232f3e">Project 1 — AWS Account Setup & IAM Foundations</text>
-  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#666">AWS Region: us-east-1 (Required for Billing Metrics)</text>
-
-    <rect x="30" y="75" width="840" height="580" rx="10" fill="none" stroke="#f90" stroke-width="2.5" stroke-dasharray="10,5"/>
-  <text x="50" y="98" font-size="13" font-weight="bold" fill="#f90">AWS Account Boundary (secured)</text>
-
-    <rect x="370" y="82" width="160" height="38" rx="8" fill="#232f3e"/>
-  <text x="450" y="106" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Internet / Logical Interface</text>
-
-    <line x1="450" y1="120" x2="450" y2="148" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-
-    <rect x="360" y="148" width="180" height="44" rx="8" fill="#ff9900" />
-  <text x="450" y="172" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Logical Handoff</text>
-
-    <line x1="450" y1="192" x2="450" y2="222" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-
-    <rect x="55" y="222" width="380" height="170" rx="8" fill="#e8f4e8" stroke="#28a745" stroke-width="1.5"/>
-  <text x="75" y="242" font-size="12" font-weight="bold" fill="#28a745">Identity and Access Conceptual Zone</text>
-
-    <rect x="75" y="252" width="160" height="120" rx="8" fill="white" stroke="#ff9900" stroke-width="2"/>
-  <rect x="75" y="252" width="160" height="30" rx="8" fill="#ff9900"/>
-  <text x="155" y="272" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Root User (Legacy)</text>
-  <text x="100" y="300" font-size="12" fill="#333">Status: Secure</text>
-  <text x="100" y="318" font-size="12" fill="#333">Use: Setup Only</text>
-  <text x="100" y="336" font-size="12" fill="#333">Frequency: Rare</text>
-  <text x="100" y="354" font-size="12" fill="#28a745">✓ MFA Enabled</text>
-
-    <line x1="235" y1="312" x2="255" y2="312" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-
-    <rect x="255" y="252" width="160" height="120" rx="8" fill="white" stroke="#28a745" stroke-width="2"/>
-  <rect x="255" y="252" width="160" height="30" rx="8" fill="#28a745"/>
-  <text x="335" y="272" text-anchor="middle" font-size="13" font-weight="bold" fill="white">IAM Admin User (Active)</text>
-  <text x="280" y="300" font-size="12" fill="#333">Status: Active</text>
-  <text x="280" y="318" font-size="12" fill="#333">Use: All operations</text>
-  <text x="280" y="336" font-size="12" fill="#333">Frequency: Daily</text>
-  <text x="280" y="354" font-size="12" fill="#28a745">✓ Keys Configured</text>
-
-    <rect x="465" y="222" width="380" height="60" rx="8" fill="#e8f4e8" stroke="#28a745" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <text x="485" y="248" font-size="12" font-weight="bold" fill="#28a745">Billing Preferences logical zone</text>
-  <text x="485" y="268" font-size="12" fill="#888">(Receive alerts via email)</text>
-
-  <line x1="655" y1="192" x2="655" y2="222" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="670" y="208" font-size="11" fill="#555">Enable Alerts</text>
-
-  <line x1="335" y1="372" x2="335" y2="418" stroke="#555" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow)"/>
-  <text x="350" y="398" font-size="11" fill="#555">Management</text>
-
-    <rect x="55" y="418" width="790" height="220" rx="8" fill="#eaf0fb" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="75" y="440" font-size="12" font-weight="bold" fill="#1a73e8">Billing and Alerting Conceptual Zone</text>
-
-    <rect x="70" y="448" width="355" height="172" rx="8" fill="white" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="90" y="468" font-size="12" font-weight="bold" fill="#1a73e8">Billing Metrics logical group (N. Virginia)</text>
-
-    <rect x="85" y="478" width="325" height="124" rx="8" fill="white" stroke="#527fff" stroke-width="2"/>
-  <rect x="85" y="478" width="325" height="30" rx="8" fill="#527fff"/>
-  <text x="247" y="498" text-anchor="middle" font-size="13" font-weight="bold" fill="white">CloudWatch Alarm</text>
-  <text x="105" y="526" font-size="12" fill="#333">Metric: Estimated Charges</text>
-  <text x="105" y="544" font-size="12" fill="#333">Value: USD</text>
-  <text x="105" y="562" font-size="12" fill="#333">Condition: Static > 5</text>
-  <text x="105" y="580" font-size="12" fill="#333">Target: billing-alert-topic</text>
-  <text x="105" y="596" font-size="12" fill="#c0392b">Status: Green OK</text>
-
-    <line x1="410" y1="540" x2="445" y2="540" stroke="#1a73e8" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
-
-    <rect x="445" y="448" width="180" height="172" rx="8" fill="white" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="8,4"/>
-  <text x="465" y="468" font-size="12" font-weight="bold" fill="#1a73e8">SNS Topic logical group</text>
-  <rect x="460" y="478" width="150" height="124" rx="8" fill="#ffe0b2" stroke="#f57c00" stroke-width="1.5"/>
-  <text x="535" y="500" text-anchor="middle" font-size="12" font-weight="bold" fill="#232f3e">billing-alert-topic</text>
-  <text x="475" y="530" font-size="11" fill="#333">Protocol: Email</text>
-  <text x="475" y="550" font-size="11" fill="#333">Subscriber: [Your email]</text>
-  <text x="475" y="570" font-size="11" fill="#c0392b">✓ Subscribed</text>
-
-    <line x1="610" y1="540" x2="645" y2="540" stroke="#1a73e8" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
-
-    <rect x="645" y="448" width="185" height="172" rx="8" fill="white" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="8,4"/>
-  <text x="665" y="468" font-size="12" font-weight="bold" fill="#1a73e8">Email Notification logical box</text>
-  <rect x="660" y="478" width="155" height="124" rx="6" fill="#e1bee7" stroke="#8e24aa" stroke-width="1.5"/>
-  <text x="737" y="500" text-anchor="middle" font-size="12" font-weight="bold" fill="#232f3e">Confirm Email</text>
-  <text x="675" y="530" font-size="11" fill="#333">✓ Open email</text>
-  <text x="675" y="550" font-size="11" fill="#333">✓ Click confirmation link</text>
-  <text x="675" y="570" font-size="11" fill="#333">Now: Active subscription</text>
-
-    <rect x="680" y="82" width="180" height="310" rx="8" fill="#fff8f0" stroke="#ff9900" stroke-width="1.5"/>
-  <text x="770" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#ff9900">Supporting Services</text>
-
-  <rect x="695" y="110" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="128" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">IAM</text>
-  <text x="770" y="144" text-anchor="middle" font-size="10" fill="#555">users, keys, policies</text>
-
-  <rect x="695" y="162" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="180" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">CloudWatch</text>
-  <text x="770" y="196" text-anchor="middle" font-size="10" fill="#555">metrics · alarms</text>
-
-  <rect x="695" y="214" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="232" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">Billing</text>
-  <text x="770" y="248" text-anchor="middle" font-size="10" fill="#555">preferences · metrics</text>
-
-  <rect x="695" y="266" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="284" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">SNS</text>
-  <text x="770" y="300" text-anchor="middle" font-size="10" fill="#555">alert topic · email subscription</text>
-
-  <rect x="695" y="318" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="336" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">AWS CLI v2</text>
-  <text x="770" y="352" text-anchor="middle" font-size="10" fill="#555">Windows installation</text>
-
-    <rect x="55" y="648" width="790" height="1" fill="#ddd"/>
-  <text x="55" y="668" font-size="11" fill="#888">Legend: </text>
-  <line x1="110" y1="663" x2="145" y2="663" stroke="#1a73e8" stroke-width="2.5"/>
-  <text x="150" y="668" font-size="11" fill="#888">Alert traffic</text>
-  <line x1="280" y1="663" x2="315" y2="663" stroke="#555" stroke-width="2"/>
-  <text x="320" y="668" font-size="11" fill="#888">Management flow</text>
-  <rect x="440" y="656" width="14" height="14" fill="#e8f4e8" stroke="#28a745" stroke-width="1.5"/>
-  <text x="460" y="668" font-size="11" fill="#888">Primary Active Zone</text>
-  <rect x="580" y="656" width="14" height="14" fill="#ffcccb" stroke="#ff9900" stroke-width="2"/>
-  <text x="600" y="668" font-size="11" fill="#888">Legacy Secure User</text>
-  <rect x="720" y="656" width="14" height="14" fill="#eaf0fb" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="740" y="668" font-size="11" fill="#888">Alerting Zone</text>
-
-    <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
-    </marker>
-    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#1a73e8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#f8f9fa" rx="10"/>
+  <rect x="50" y="50" width="150" height="80" fill="#ffcccb" stroke="#d32f2f" stroke-width="2" rx="5"/>
+  <text x="125" y="90" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Root User</text>
+  <text x="125" y="110" font-family="Arial" font-size="12" text-anchor="middle">(Secured with MFA)</text>
+  <rect x="50" y="250" width="150" height="80" fill="#c8e6c9" stroke="#388e3c" stroke-width="2" rx="5"/>
+  <text x="125" y="290" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">IAM Admin User</text>
+  <text x="125" y="310" font-family="Arial" font-size="12" text-anchor="middle">(CLI & Console Access)</text>
+  <rect x="350" y="100" width="180" height="60" fill="#bbdefb" stroke="#1976d2" stroke-width="2" rx="5"/>
+  <text x="440" y="135" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">CloudWatch Alarm</text>
+  <rect x="350" y="220" width="180" height="60" fill="#ffe0b2" stroke="#f57c00" stroke-width="2" rx="5"/>
+  <text x="440" y="255" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">SNS Topic</text>
+  <rect x="350" y="320" width="180" height="40" fill="#e1bee7" stroke="#8e24aa" stroke-width="2" rx="5"/>
+  <text x="440" y="345" font-family="Arial" font-size="14" text-anchor="middle">Email Notification</text>
+  <path d="M 440 160 L 440 215" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 440 280 L 440 315" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
     </marker>
   </defs>
 </svg>
