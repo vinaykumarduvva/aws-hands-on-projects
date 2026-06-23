@@ -1,3 +1,13 @@
+# Architecture: Static Website on S3 + CloudFront
+
+This document illustrates the architecture for globally distributing a highly-available static website using AWS S3 and CloudFront.
+
+## Overview
+
+The solution provides a secure, fast, and cost-effective way to host a static portfolio website. It leverages Amazon S3 for origin storage and Amazon CloudFront as a Content Delivery Network (CDN) to ensure low latency and HTTPS security worldwide.
+
+## Architecture Diagram
+
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300">
   <rect width="700" height="300" fill="#f8f9fa" rx="10"/>
   <rect x="50" y="110" width="120" height="80" fill="#e0e0e0" stroke="#757575" stroke-width="2" rx="5"/>
@@ -19,3 +29,15 @@
     </marker>
   </defs>
 </svg>
+
+## Component Details
+
+1. **Web Browser (User)**: The client requesting the website content. All connections are forced to use HTTPS for security.
+2. **CloudFront CDN**: A global content delivery network spanning over 400 edge locations worldwide. It caches static assets closer to the users, terminates SSL/TLS connections, and significantly reduces latency.
+3. **Amazon S3 (Origin Bucket)**: The foundational storage layer holding the website's static files (`index.html`, `error.html`, CSS, JS). It is configured for static website hosting and grants public read access to its objects.
+
+## Traffic Flow
+
+1. **Request**: A user requests the website via their browser. The request is routed to the nearest CloudFront Edge Location.
+2. **Cache Check**: CloudFront checks its local cache. If the content is available (Cache Hit), it serves the content immediately to the user over HTTPS.
+3. **Origin Fetch**: If the content is not cached (Cache Miss), CloudFront securely fetches the files from the S3 Origin Bucket over HTTP, caches them for future requests, and returns them to the user.
