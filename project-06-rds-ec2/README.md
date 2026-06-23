@@ -138,45 +138,33 @@ aws ec2 describe-key-pairs --key-names aws-ec2-keypair `
 
 ```
 project-06-rds-ec2/
-│
-├── README.md                          ← This file
-│
-├── scripts/
-│   ├── 01-create-vpc.ps1              ← VPC + subnets + IGW + route tables
-│   ├── 02-create-security-groups.ps1  ← ec2-app-sg + rds-sg
-│   ├── 03-create-rds-subnet-group.ps1 ← RDS subnet group
-│   ├── 04-store-credentials.ps1       ← Secrets Manager setup
-│   ├── 05-launch-rds.ps1              ← RDS MySQL creation
-│   ├── 06-launch-ec2.ps1              ← EC2 app server
-│   ├── 07-test-connection.sql         ← MySQL test queries
-│   └── 08-cleanup.ps1                 ← Full teardown
-│
-├── cloudformation/
-│   └── rds-ec2-stack.yaml             ← Full IaC version
-│
-├── diagrams/
-│   └── two-tier-architecture.svg      ← Architecture diagram
-│
+├── README.md
+├── LICENSE
+├── .gitignore
 ├── docs/
-│   ├── rds-concepts.md                ← RDS deep dive notes
-│   ├── security-group-notes.md        ← SG chaining for this project
-│   ├── iam-policy-notes.md            ← IAM role and policies used
-│   └── troubleshooting.md             ← Common issues and fixes
-│
-└── screenshots/
-    ├── README.md                      ← Screenshot guide
-    ├── 01-vpc-created.png
-    ├── 02-security-groups.png
-    ├── 03-rds-subnet-group.png
-    ├── 04-secrets-manager.png
-    ├── 05-rds-creating.png
-    ├── 06-rds-available.png
-    ├── 07-rds-connectivity.png
-    ├── 08-ec2-running.png
-    ├── 09-mysql-connected.png
-    ├── 10-mysql-queries.png
-    ├── 11-cloudwatch-metrics.png
-    └── 12-cleanup-complete.png
+│   ├── project-overview.md
+│   ├── architecture.md
+│   ├── implementation-guide.md
+│   ├── security-design.md
+│   ├── troubleshooting.md
+│   └── cleanup-guide.md
+├── scripts/
+│   ├── 01-vpc-setup.ps1
+│   ├── 02-security-groups.ps1
+│   ├── 03-rds-subnet-group.ps1
+│   ├── 04-secrets-manager.ps1
+│   ├── 05-create-rds.ps1
+│   ├── 06-launch-ec2.ps1
+│   ├── 07-rds-connect.sql
+│   ├── 08-cloudwatch-monitoring.ps1
+│   ├── 09-rds-operations.ps1
+│   └── 10-cleanup.ps1
+├── architecture/
+│   ├── architecture-diagram.svg
+│   ├── network-flow.svg
+│   └── security-group-flow.svg
+└── images/
+    └── (console screenshots)
 ```
 
 ---

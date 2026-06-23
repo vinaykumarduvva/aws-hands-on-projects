@@ -40,20 +40,3 @@ else {
 # Verify
 Write-Host ""
 Write-Host "Verifying secret..." -ForegroundColor Yellow
-aws secretsmanager describe-secret `
-    --secret-id "rds/myapp/credentials" `
-    --query "{Name:Name,ARN:ARN,Created:CreatedDate}" `
-    --output table
-
-Write-Host ""
-Write-Host "=== Secrets Manager Complete ===" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "  SECRET_ARN = $SECRET_ARN"
-Write-Host ""
-Write-Host "Password rules applied:"
-Write-Host "  8+ chars, uppercase + lowercase + numbers + special chars"
-Write-Host '  No @ / " or \ characters (break MySQL connection strings)'
-Write-Host ""
-Write-Host "EC2 will retrieve this secret via IAM role in Part 7."
-Write-Host ""
-Write-Host "Next step: Run 05-create-rds.ps1" -ForegroundColor Cyan

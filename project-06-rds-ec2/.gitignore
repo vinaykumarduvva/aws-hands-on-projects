@@ -1,0 +1,28 @@
+# AWS credentials — never commit these
+.aws/
+credentials
+*.pem
+*.ppk
+
+# Secrets
+*.env
+.env.*
+secrets.json
+*credentials*.json
+
+# PowerShell temp files
+*.tmp
+userdata-app.sh
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Raw screenshots (keep processed ones in images/)
+screenshots/raw-console-screenshots/
