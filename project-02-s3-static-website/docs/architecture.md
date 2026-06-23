@@ -1,8 +1,3 @@
-# Architecture: S3 + CloudFront Static Hosting
-
-This diagram details the flow of traffic. The user requests the webpage, which hits the nearest CloudFront edge location. If the file is not cached, CloudFront pulls it from the S3 bucket origin.
-
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300">
   <rect width="700" height="300" fill="#f8f9fa" rx="10"/>
   <rect x="50" y="110" width="120" height="80" fill="#e0e0e0" stroke="#757575" stroke-width="2" rx="5"/>
@@ -24,4 +19,3 @@ This diagram details the flow of traffic. The user requests the webpage, which h
     </marker>
   </defs>
 </svg>
-```
