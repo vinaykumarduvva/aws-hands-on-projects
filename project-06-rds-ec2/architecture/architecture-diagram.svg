@@ -1,24 +1,114 @@
-Internet
-   │
-Internet Gateway
-   │
-─────────────────────────────
-VPC (10.0.0.0/16)
-─────────────────────────────
+<svg width="860" height="640" viewBox="0 0 860 640" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round"/></marker>
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round"/></marker>
+    <marker id="arrOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round"/></marker>
+    <marker id="arrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#6f42c1" stroke-width="2" stroke-linecap="round"/></marker>
+  </defs>
 
-Public Subnet
-┌──────────────┐
-│ EC2 App      │
-│ Amazon Linux │
-└──────┬───────┘
-       │3306
-       ▼
+  <!-- Background -->
+  <rect width="860" height="640" fill="#f8f9fa" rx="12"/>
 
-Private Subnet A
-Private Subnet B
+  <!-- Title -->
+  <text x="430" y="34" text-anchor="middle" font-size="18" font-weight="bold" fill="#232f3e">Project 6 — Two-Tier Architecture: EC2 + RDS MySQL</text>
+  <text x="430" y="54" text-anchor="middle" font-size="12" fill="#666">VPC: 10.0.0.0/16 · Region: us-east-1 · MySQL 8.0</text>
 
-┌──────────────────┐
-│ RDS MySQL        │
-│ db.t3.micro      │
-│ Private Access   │
-└──────────────────┘
+  <!-- Internet -->
+  <rect x="320" y="68" width="220" height="42" rx="8" fill="#e8f4fd" stroke="#1a73e8" stroke-width="1.5"/>
+  <text x="430" y="87" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a73e8">🌐 Internet</text>
+  <text x="430" y="103" text-anchor="middle" font-size="11" fill="#1a73e8">SSH port 22 (My IP) · HTTP port 80</text>
+
+  <!-- Arrow Internet to IGW -->
+  <line x1="430" y1="110" x2="430" y2="134" stroke="#1a73e8" stroke-width="2" marker-end="url(#arrBlue)"/>
+
+  <!-- IGW -->
+  <rect x="300" y="134" width="260" height="40" rx="8" fill="#fff3cd" stroke="#ff9900" stroke-width="1.5"/>
+  <text x="430" y="150" text-anchor="middle" font-size="12" font-weight="bold" fill="#b36800">Internet Gateway — my-vpc-igw</text>
+  <text x="430" y="167" text-anchor="middle" font-size="11" fill="#b36800">Bidirectional internet access</text>
+
+  <!-- VPC box -->
+  <rect x="28" y="188" width="804" height="408" rx="14" fill="none" stroke="#232f3e" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="48" y="208" font-size="13" font-weight="bold" fill="#232f3e">VPC: my-custom-vpc — 10.0.0.0/16</text>
+
+  <!-- Public Subnet -->
+  <rect x="44" y="216" width="772" height="148" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
+  <text x="430" y="234" text-anchor="middle" font-size="12" font-weight="bold" fill="#155724">Public Subnet A — 10.0.1.0/24 · us-east-1a</text>
+
+  <!-- EC2 App Server box -->
+  <rect x="220" y="244" width="420" height="104" rx="8" fill="#ffffff" stroke="#28a745" stroke-width="1.5"/>
+  <text x="430" y="264" text-anchor="middle" font-size="13" font-weight="bold" fill="#155724">EC2 App Server — app-server</text>
+  <text x="430" y="282" text-anchor="middle" font-size="11" fill="#444">Amazon Linux 2023 · t2.micro · Public IP ✅</text>
+  <text x="430" y="298" text-anchor="middle" font-size="11" fill="#444">MySQL Client + Apache installed via User Data</text>
+  <text x="430" y="314" text-anchor="middle" font-size="11" fill="#28a745">Security Group: ec2-app-sg</text>
+  <text x="430" y="330" text-anchor="middle" font-size="11" fill="#555">SSH :22 (My IP) · HTTP :80 (0.0.0.0/0)</text>
+
+  <!-- Arrow IGW to Public subnet -->
+  <line x1="430" y1="174" x2="430" y2="244" stroke="#ff9900" stroke-width="2" marker-end="url(#arrOrange)"/>
+
+  <!-- Private Subnets label -->
+  <rect x="44" y="380" width="772" height="200" rx="10" fill="#fce8e8" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="430" y="400" text-anchor="middle" font-size="12" font-weight="bold" fill="#721c24">Private Subnets — DB Tier</text>
+  <text x="200" y="418" text-anchor="middle" font-size="11" fill="#721c24">private-subnet-a · 10.0.3.0/24 · us-east-1a</text>
+  <text x="660" y="418" text-anchor="middle" font-size="11" fill="#721c24">private-subnet-b · 10.0.4.0/24 · us-east-1b</text>
+
+  <!-- RDS box -->
+  <rect x="160" y="424" width="540" height="140" rx="8" fill="#ffffff" stroke="#dc3545" stroke-width="1.5"/>
+  <text x="430" y="446" text-anchor="middle" font-size="13" font-weight="bold" fill="#721c24">RDS MySQL 8.0 — myapp-database</text>
+  <text x="430" y="464" text-anchor="middle" font-size="11" fill="#444">db.t3.micro · 20 GB gp2 · Encryption enabled</text>
+  <text x="430" y="480" text-anchor="middle" font-size="11" fill="#444">Automated backups: 1 day · No public access</text>
+  <text x="430" y="496" text-anchor="middle" font-size="11" fill="#dc3545">Security Group: rds-sg · Port: 3306</text>
+  <text x="430" y="512" text-anchor="middle" font-size="11" fill="#555">DB: appdb · Tables: users, products, orders</text>
+  <text x="430" y="528" text-anchor="middle" font-size="10" fill="#888">Endpoint: myapp-database.xxxxxxxx.us-east-1.rds.amazonaws.com</text>
+  <text x="430" y="548" text-anchor="middle" font-size="11" fill="#dc3545">Subnet Group: rds-subnet-group (spans both AZs)</text>
+
+  <!-- Arrow EC2 to RDS -->
+  <line x1="430" y1="348" x2="430" y2="424" stroke="#6f42c1" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrPurple)"/>
+  <rect x="342" y="374" width="176" height="22" rx="4" fill="#f8f4ff" stroke="#6f42c1" stroke-width="1"/>
+  <text x="430" y="389" text-anchor="middle" font-size="11" font-weight="bold" fill="#6f42c1">MySQL Port 3306</text>
+
+  <!-- Secrets Manager box -->
+  <rect x="614" y="216" width="200" height="148" rx="8" fill="#f0f0ff" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="714" y="236" text-anchor="middle" font-size="11" font-weight="bold" fill="#6f42c1">Secrets Manager</text>
+  <text x="714" y="254" text-anchor="middle" font-size="10" fill="#444">rds/myapp/credentials</text>
+  <text x="714" y="272" text-anchor="middle" font-size="10" fill="#444">username: admin</text>
+  <text x="714" y="288" text-anchor="middle" font-size="10" fill="#444">password: ••••••••</text>
+  <text x="714" y="304" text-anchor="middle" font-size="10" fill="#444">engine: mysql</text>
+  <text x="714" y="320" text-anchor="middle" font-size="10" fill="#444">port: 3306</text>
+  <text x="714" y="338" text-anchor="middle" font-size="10" fill="#6f42c1">ec2-app-role access only</text>
+  <text x="714" y="354" text-anchor="middle" font-size="10" fill="#888">IAM: secretsmanager:</text>
+  <text x="714" y="368" text-anchor="middle" font-size="10" fill="#888">GetSecretValue</text>
+
+  <!-- Arrow EC2 to Secrets Manager -->
+  <line x1="640" y1="296" x2="614" y2="296" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrPurple)"/>
+
+  <!-- CloudWatch box -->
+  <rect x="46" y="216" width="162" height="148" rx="8" fill="#fff8e1" stroke="#ff9900" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="127" y="236" text-anchor="middle" font-size="11" font-weight="bold" fill="#b36800">CloudWatch</text>
+  <text x="127" y="254" text-anchor="middle" font-size="10" fill="#444">RDS Metrics:</text>
+  <text x="127" y="270" text-anchor="middle" font-size="10" fill="#444">· CPUUtilization</text>
+  <text x="127" y="286" text-anchor="middle" font-size="10" fill="#444">· DB Connections</text>
+  <text x="127" y="302" text-anchor="middle" font-size="10" fill="#444">· FreeStorageSpace</text>
+  <text x="127" y="318" text-anchor="middle" font-size="10" fill="#444">· ReadIOPS</text>
+  <text x="127" y="334" text-anchor="middle" font-size="10" fill="#444">· WriteIOPS</text>
+  <text x="127" y="350" text-anchor="middle" font-size="10" fill="#b36800">Auto-collected</text>
+  <text x="127" y="366" text-anchor="middle" font-size="10" fill="#888">every 60 seconds</text>
+
+  <!-- Arrow RDS to CloudWatch (dashed) -->
+  <line x1="208" y1="296" x2="220" y2="296" stroke="#ff9900" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrOrange)"/>
+
+  <!-- Legend -->
+  <rect x="28" y="606" width="804" height="26" rx="6" fill="#f1f3f4" stroke="#dee2e6" stroke-width="1"/>
+  <line x1="50" y1="619" x2="72" y2="619" stroke="#ff9900" stroke-width="2"/>
+  <text x="78" y="623" font-size="10" fill="#444">Public internet access</text>
+  <line x1="190" y1="619" x2="212" y2="619" stroke="#6f42c1" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="218" y="623" font-size="10" fill="#444">MySQL :3306 (SG chaining)</text>
+  <line x1="360" y1="619" x2="382" y2="619" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="388" y="623" font-size="10" fill="#444">Secrets Manager fetch</text>
+  <rect x="515" y="612" width="12" height="12" rx="2" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
+  <text x="531" y="623" font-size="10" fill="#444">Public subnet</text>
+  <rect x="610" y="612" width="12" height="12" rx="2" fill="#fce8e8" stroke="#dc3545" stroke-width="1"/>
+  <text x="626" y="623" font-size="10" fill="#444">Private subnet (DB tier)</text>
+  <rect x="740" y="612" width="12" height="12" rx="2" fill="#f0f0ff" stroke="#6f42c1" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="756" y="623" font-size="10" fill="#444">AWS services</text>
+</svg>
