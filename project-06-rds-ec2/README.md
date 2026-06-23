@@ -550,23 +550,6 @@ aws ec2 delete-vpc --vpc-id $VPC_ID
 
 ---
 
-## Resume Bullets
-
-- Deployed a two-tier AWS architecture with EC2 (app server) in a
-  public subnet connected to RDS MySQL 8.0 (db.t3.micro) in private
-  subnets, enforcing strict network isolation via security group
-  chaining on port 3306
-- Secured database credentials using AWS Secrets Manager with a
-  least-privilege IAM instance profile granting EC2 scoped
-  `secretsmanager:GetSecretValue` access to a specific secret path
-- Created and queried a MySQL schema including DDL (CREATE TABLE)
-  and DML (INSERT, SELECT, WHERE) operations via CLI connection
-  from EC2 to RDS endpoint across private subnet boundaries
-- Monitored RDS health via CloudWatch metrics (CPU utilization,
-  database connections, free storage) and created manual snapshots
-  for point-in-time backup verification
-
----
 
 ## Next Project
 
