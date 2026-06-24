@@ -39,7 +39,7 @@ how I fixed it, and what I learned.
 | 04 | [S3 Versioning, Lifecycle & Replication](project-04-s3-versioning) | 🟢 Beginner | S3 | ✅ Done |
 | 05 | [Custom VPC: Subnets, IGW, NAT](project-05-Custom-VPC) | 🟢 Beginner | VPC, EC2 | ✅ Done |
 | 06 | [RDS MySQL + EC2 Two-Tier App](project-06-rds-ec2) | 🟢 Beginner | RDS, EC2, VPC, Secrets Manager | ✅ Done |
-| 07 | CloudWatch Alarms + SNS Alerts | 🟢 Beginner | CloudWatch, SNS | ⏳ Upcoming |
+| 07 | [CloudWatch Alarms + SNS Alerts](project-07-cloudwatch-monitoring) | 🟢 Beginner | CloudWatch, SNS | ✅ Done |
 | 08 | Serverless REST API | 🟡 Intermediate | Lambda, API Gateway, DynamoDB | ⏳ Upcoming |
 | 09 | CI/CD Pipeline | 🟡 Intermediate | CodeCommit, CodeBuild, CodeDeploy | ⏳ Upcoming |
 | 10 | Auto Scaling Group + ALB | 🟡 Intermediate | EC2, ALB, ASG | ⏳ Upcoming |
@@ -100,6 +100,7 @@ Each project README includes:
 | Storage (S3) | ⭐⭐⭐☆☆ |
 | Compute (EC2) | ⭐⭐⭐⭐☆ |
 | Networking (VPC) | ⭐⭐⭐☆☆ |
+| Monitoring & Observability | ⭐⭐⭐☆☆ |
 | Serverless | ⭐⭐☆☆☆ |
 | Containers | ⭐☆☆☆☆ |
 | IaC | ⭐☆☆☆☆ |
