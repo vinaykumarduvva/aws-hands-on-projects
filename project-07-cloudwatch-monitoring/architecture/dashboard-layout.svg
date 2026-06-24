@@ -1,0 +1,446 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" font-family="'AWS', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#161b22;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="widgetBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1c2333;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#151d2b;stop-opacity:0.95" />
+    </linearGradient>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F58536;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E07C2A;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Widget specific gradients -->
+    <linearGradient id="chart1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#FF9900;stop-opacity:0.02" />
+    </linearGradient>
+    <linearGradient id="chart2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#4CAF50;stop-opacity:0.02" />
+    </linearGradient>
+    <linearGradient id="chart3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#9C27B0;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#9C27B0;stop-opacity:0.02" />
+    </linearGradient>
+    
+    <!-- Glow filters -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glowSoft" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Chart clip paths -->
+    <clipPath id="clipChart1">
+      <rect x="95" y="125" width="480" height="150" rx="0"/>
+    </clipPath>
+    <clipPath id="clipChart2">
+      <rect x="625" y="125" width="480" height="150" rx="0"/>
+    </clipPath>
+    <clipPath id="clipChart3">
+      <rect x="95" y="390" width="480" height="150" rx="0"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="900" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle grid -->
+  <g opacity="0.03">
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#ffffff" stroke-width="0.5"/>
+    </pattern>
+    <rect width="1200" height="900" fill="url(#grid)"/>
+  </g>
+
+  <!-- ============ HEADER ============ -->
+  <rect x="0" y="0" width="1200" height="60" fill="#161b22" border-bottom="1px solid #30363d"/>
+  <rect x="0" y="58" width="1200" height="2" fill="#30363d"/>
+  
+  <!-- AWS Logo placeholder -->
+  <rect x="25" y="15" width="30" height="30" rx="6" fill="url(#headerGrad)" opacity="0.9"/>
+  <text x="40" y="35" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">A</text>
+  
+  <text x="70" y="35" fill="#F0F6FC" font-size="16" font-weight="600">CloudWatch Dashboard</text>
+  <text x="260" y="35" fill="#8B949E" font-size="12">AWS-Bootcamp-Dashboard</text>
+  
+  <!-- Header right controls -->
+  <rect x="980" y="15" width="80" height="30" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="1020" y="35" text-anchor="middle" fill="#8B949E" font-size="11">Auto refresh</text>
+  
+  <rect x="1070" y="15" width="100" height="30" rx="6" fill="#238636" stroke="#238636" stroke-width="1"/>
+  <text x="1120" y="35" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">+ Add widget</text>
+
+  <!-- ============ TIME RANGE BAR ============ -->
+  <rect x="25" y="70" width="1150" height="30" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="40" y="90" fill="#8B949E" font-size="11">Time range:</text>
+  
+  <rect x="130" y="76" width="40" height="18" rx="4" fill="#21262d" stroke="#58A6FF" stroke-width="1"/>
+  <text x="150" y="89" text-anchor="middle" fill="#58A6FF" font-size="10">1h</text>
+  
+  <rect x="175" y="76" width="40" height="18" rx="4" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="195" y="89" text-anchor="middle" fill="#8B949E" font-size="10">3h</text>
+  
+  <rect x="220" y="76" width="40" height="18" rx="4" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="240" y="89" text-anchor="middle" fill="#8B949E" font-size="10">12h</text>
+  
+  <rect x="265" y="76" width="40" height="18" rx="4" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="285" y="89" text-anchor="middle" fill="#8B949E" font-size="10">24h</text>
+  
+  <rect x="310" y="76" width="50" height="18" rx="4" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <text x="335" y="89" text-anchor="middle" fill="#8B949E" font-size="10">3d</text>
+  
+  <text x="420" y="90" fill="#8B949E" font-size="11">| Last 1 hour · 1-minute resolution</text>
+  
+  <text x="1050" y="90" fill="#8B949E" font-size="11">📊 UTC</text>
+
+  <!-- ============================================================ -->
+  <!-- ROW 1: EC2 CPU (left) + EC2 Network (right)                    -->
+  <!-- ============================================================ -->
+  
+  <!-- Widget 1: EC2 CPU Utilization -->
+  <rect x="25" y="110" width="560" height="200" rx="8" fill="url(#widgetBg)" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  
+  <!-- Widget header -->
+  <rect x="25" y="110" width="560" height="35" rx="8" fill="#1c2333"/>
+  <rect x="25" y="135" width="560" height="10" fill="#1c2333"/>
+  <rect x="25" y="143" width="560" height="2" fill="#30363d"/>
+  
+  <circle cx="40" cy="127" r="6" fill="#FF9900"/>
+  <text x="52" y="132" fill="#F0F6FC" font-size="13" font-weight="600">EC2 CPU Utilization</text>
+  
+  <text x="460" y="132" fill="#8B949E" font-size="10">Instance: i-0a1b2c3d4e5f67890</text>
+  
+  <text x="40" y="180" fill="#8B949E" font-size="9">100</text>
+  <text x="40" y="200" fill="#8B949E" font-size="9">75</text>
+  <text x="40" y="220" fill="#8B949E" font-size="9">50</text>
+  <text x="40" y="240" fill="#8B949E" font-size="9">25</text>
+  <text x="40" y="260" fill="#8B949E" font-size="9">0</text>
+  
+  <!-- Y-axis line -->
+  <line x1="55" y1="175" x2="55" y2="265" stroke="#30363d" stroke-width="1"/>
+  
+  <!-- Chart area -->
+  <rect x="55" y="175" width="500" height="90" fill="transparent"/>
+  
+  <!-- Horizontal grid lines -->
+  <line x1="55" y1="197" x2="555" y2="197" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="55" y1="220" x2="555" y2="220" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="55" y1="242" x2="555" y2="242" stroke="#21262d" stroke-width="0.5"/>
+  
+  <!-- Alarm threshold line (70%) -->
+  <line x1="55" y1="205" x2="555" y2="205" stroke="#FF4444" stroke-width="1.5" stroke-dasharray="8,4"/>
+  <text x="560" y="209" fill="#FF4444" font-size="8">70% threshold</text>
+  
+  <!-- Area fill under CPU line -->
+  <path d="M 55 265 L 55 220 Q 80 210 120 215 Q 160 225 200 210 Q 240 195 280 200 Q 320 205 360 190 Q 400 175 440 185 Q 480 195 520 200 Q 540 205 555 210 L 555 265 Z" 
+        fill="url(#chart1Grad)" opacity="0.6"/>
+  
+  <!-- CPU data line -->
+  <path d="M 55 220 Q 80 210 120 215 Q 160 225 200 210 Q 240 195 280 200 Q 320 205 360 190 Q 400 175 440 185 Q 480 195 520 200 Q 540 205 555 210" 
+        fill="none" stroke="#FF9900" stroke-width="2.5"/>
+  
+  <!-- Data points -->
+  <circle cx="55" cy="220" r="3" fill="#FF9900"/>
+  <circle cx="120" cy="215" r="3" fill="#FF9900"/>
+  <circle cx="200" cy="210" r="3" fill="#FF9900"/>
+  <circle cx="280" cy="200" r="3" fill="#FF9900"/>
+  <circle cx="360" cy="190" r="3" fill="#FF9900"/>
+  <circle cx="440" cy="185" r="3" fill="#FF9900"/>
+  <circle cx="520" cy="200" r="3" fill="#FF9900"/>
+  
+  <!-- X-axis labels -->
+  <text x="75" y="278" fill="#8B949E" font-size="8">10:00</text>
+  <text x="175" y="278" fill="#8B949E" font-size="8">10:10</text>
+  <text x="275" y="278" fill="#8B949E" font-size="8">10:20</text>
+  <text x="375" y="278" fill="#8B949E" font-size="8">10:30</text>
+  <text x="475" y="278" fill="#8B949E" font-size="8">10:40</text>
+  <text x="545" y="278" fill="#8B949E" font-size="8">10:50</text>
+  
+  <!-- Stats in footer -->
+  <text x="40" y="298" fill="#8B949E" font-size="9">Avg: 42.3% · Max: 89.7% · Min: 12.1%</text>
+  <text x="460" y="298" fill="#8B949E" font-size="9">Alarm: OK</text>
+  <circle cx="545" cy="294" r="5" fill="#4CAF50"/>
+  
+  <!-- ============================================================ -->
+  <!-- Widget 2: EC2 Network Traffic -->
+  <rect x="615" y="110" width="560" height="200" rx="8" fill="url(#widgetBg)" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  
+  <!-- Widget header -->
+  <rect x="615" y="110" width="560" height="35" rx="8" fill="#1c2333"/>
+  <rect x="615" y="135" width="560" height="10" fill="#1c2333"/>
+  <rect x="615" y="143" width="560" height="2" fill="#30363d"/>
+  
+  <circle cx="630" cy="127" r="6" fill="#4CAF50"/>
+  <text x="642" y="132" fill="#F0F6FC" font-size="13" font-weight="600">EC2 Network Traffic</text>
+  
+  <!-- Legend -->
+  <circle cx="480" cy="125" r="4" fill="#4CAF50"/>
+  <text x="488" y="129" fill="#8B949E" font-size="9">Network In</text>
+  <circle cx="555" cy="125" r="4" fill="#FF9800"/>
+  <text x="563" y="129" fill="#8B949E" font-size="9">Network Out</text>
+  
+  <text x="40" y="180" fill="#8B949E" font-size="9">600</text>
+  <text x="35" y="200" fill="#8B949E" font-size="9">400</text>
+  <text x="35" y="220" fill="#8B949E" font-size="9">200</text>
+  <text x="35" y="240" fill="#8B949E" font-size="9">0</text>
+  
+  <line x1="50" y1="175" x2="50" y2="265" stroke="#30363d" stroke-width="1"/>
+  
+  <!-- Grid lines -->
+  <line x1="50" y1="197" x2="1145" y2="197" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="50" y1="220" x2="1145" y2="220" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="50" y1="242" x2="1145" y2="242" stroke="#21262d" stroke-width="0.5"/>
+  
+  <!-- Network In line (green) -->
+  <path d="M 50 230 Q 80 215 130 220 Q 180 225 230 210 Q 280 195 330 200 Q 380 205 430 190 Q 480 180 530 195 Q 580 205 630 200 Q 680 195 730 185 Q 780 175 830 190 Q 880 200 930 195 Q 980 190 1030 200 Q 1080 210 1130 215 Q 1145 220 1150 220" 
+        fill="none" stroke="#4CAF50" stroke-width="2"/>
+  
+  <!-- Network Out line (orange) -->
+  <path d="M 50 245 Q 80 235 130 240 Q 180 250 230 235 Q 280 220 330 225 Q 380 230 430 215 Q 480 205 530 220 Q 580 230 630 225 Q 680 220 730 210 Q 780 200 830 215 Q 880 225 930 220 Q 980 215 1030 225 Q 1080 235 1130 240 Q 1145 245 1150 245" 
+        fill="none" stroke="#FF9800" stroke-width="2"/>
+  
+  <!-- X-axis labels -->
+  <text x="70" y="278" fill="#8B949E" font-size="8">10:00</text>
+  <text x="170" y="278" fill="#8B949E" font-size="8">10:10</text>
+  <text x="270" y="278" fill="#8B949E" font-size="8">10:20</text>
+  <text x="370" y="278" fill="#8B949E" font-size="8">10:30</text>
+  <text x="470" y="278" fill="#8B949E" font-size="8">10:40</text>
+  <text x="570" y="278" fill="#8B949E" font-size="8">10:50</text>
+  <text x="670" y="278" fill="#8B949E" font-size="8">11:00</text>
+  <text x="770" y="278" fill="#8B949E" font-size="8">11:10</text>
+  <text x="870" y="278" fill="#8B949E" font-size="8">11:20</text>
+  <text x="970" y="278" fill="#8B949E" font-size="8">11:30</text>
+  <text x="1070" y="278" fill="#8B949E" font-size="8">11:40</text>
+  
+  <!-- Footer -->
+  <text x="40" y="298" fill="#8B949E" font-size="9">In: 234 KB/s · Out: 89 KB/s</text>
+  <text x="460" y="298" fill="#8B949E" font-size="9">Alarm: OK</text>
+  <circle cx="545" cy="294" r="5" fill="#4CAF50"/>
+
+  <!-- ============================================================ -->
+  <!-- ROW 2: RDS CPU (left) + RDS Connections (middle) + Billing (right) -->
+  <!-- ============================================================ -->
+  
+  <!-- Widget 3: RDS CPU Utilization -->
+  <rect x="25" y="375" width="370" height="200" rx="8" fill="url(#widgetBg)" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  
+  <!-- Header -->
+  <rect x="25" y="375" width="370" height="35" rx="8" fill="#1c2333"/>
+  <rect x="25" y="400" width="370" height="10" fill="#1c2333"/>
+  <rect x="25" y="408" width="370" height="2" fill="#30363d"/>
+  
+  <circle cx="40" cy="392" r="6" fill="#9C27B0"/>
+  <text x="52" y="397" fill="#F0F6FC" font-size="13" font-weight="600">RDS CPU Utilization</text>
+  <text x="300" y="397" fill="#8B949E" font-size="10">DB: myapp-database</text>
+  
+  <text x="40" y="445" fill="#8B949E" font-size="9">100</text>
+  <text x="40" y="465" fill="#8B949E" font-size="9">50</text>
+  <text x="40" y="485" fill="#8B949E" font-size="9">0</text>
+  
+  <line x1="55" y1="440" x2="55" y2="530" stroke="#30363d" stroke-width="1"/>
+  
+  <rect x="55" y="440" width="310" height="90" fill="transparent"/>
+  
+  <!-- Grid lines -->
+  <line x1="55" y1="462" x2="365" y2="462" stroke="#21262d" stroke-width="0.5"/>
+  <line x1="55" y1="485" x2="365" y2="485" stroke="#21262d" stroke-width="0.5"/>
+  
+  <!-- Threshold line -->
+  <line x1="55" y1="470" x2="365" y2="470" stroke="#FF4444" stroke-width="1.5" stroke-dasharray="8,4"/>
+  
+  <!-- Area fill -->
+  <path d="M 55 530 L 55 480 Q 90 470 130 475 Q 170 485 210 470 Q 250 455 290 465 Q 330 475 365 480 L 365 530 Z" 
+        fill="url(#chart3Grad)" opacity="0.5"/>
+  
+  <!-- Data line -->
+  <path d="M 55 480 Q 90 470 130 475 Q 170 485 210 470 Q 250 455 290 465 Q 330 475 365 480" 
+        fill="none" stroke="#9C27B0" stroke-width="2.5"/>
+  
+  <circle cx="55" cy="480" r="3" fill="#9C27B0"/>
+  <circle cx="130" cy="475" r="3" fill="#9C27B0"/>
+  <circle cx="210" cy="470" r="3" fill="#9C27B0"/>
+  <circle cx="290" cy="465" r="3" fill="#9C27B0"/>
+  
+  <!-- X-axis -->
+  <text x="75" y="543" fill="#8B949E" font-size="8">10:00</text>
+  <text x="140" y="543" fill="#8B949E" font-size="8">10:15</text>
+  <text x="205" y="543" fill="#8B949E" font-size="8">10:30</text>
+  <text x="270" y="543" fill="#8B949E" font-size="8">10:45</text>
+  <text x="335" y="543" fill="#8B949E" font-size="8">11:00</text>
+  
+  <text x="40" y="563" fill="#8B949E" font-size="9">Avg: 15.2% · Max: 32.8%</text>
+  <text x="280" y="563" fill="#8B949E" font-size="9">Alarm: OK</text>
+  <circle cx="365" cy="559" r="5" fill="#4CAF50"/>
+  
+  <!-- ============================================================ -->
+  <!-- Widget 4: RDS Database Connections (Number) -->
+  <rect x="415" y="375" width="370" height="200" rx="8" fill="url(#widgetBg)" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  
+  <rect x="415" y="375" width="370" height="35" rx="8" fill="#1c2333"/>
+  <rect x="415" y="400" width="370" height="10" fill="#1c2333"/>
+  <rect x="415" y="408" width="370" height="2" fill="#30363d"/>
+  
+  <circle cx="430" cy="392" r="6" fill="#E91E63"/>
+  <text x="442" y="397" fill="#F0F6FC" font-size="13" font-weight="600">RDS Connections</text>
+  
+  <!-- Big number display -->
+  <text x="600" y="480" text-anchor="middle" fill="#F0F6FC" font-size="52" font-weight="300">23</text>
+  <text x="600" y="505" text-anchor="middle" fill="#8B949E" font-size="11">Active connections</text>
+  
+  <!-- Mini sparkline -->
+  <path d="M 430 540 Q 450 530 470 535 Q 490 525 510 530 Q 530 520 550 525 Q 570 515 590 520 Q 610 510 630 515 Q 650 505 670 510 Q 690 500 710 505 Q 730 495 750 500 Q 770 490 780 495" 
+        fill="none" stroke="#E91E63" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- Connection limit indicator -->
+  <rect x="460" y="555" width="280" height="8" rx="4" fill="#21262d"/>
+  <rect x="460" y="555" width="40" height="8" rx="4" fill="#E91E63"/>
+  <text x="460" y="575" fill="#8B949E" font-size="9">Max: 66 (t3.micro limit)</text>
+  <text x="680" y="575" fill="#8B949E" font-size="9">Alarm: OK</text>
+  <circle cx="770" cy="571" r="5" fill="#4CAF50"/>
+  
+  <!-- ============================================================ -->
+  <!-- Widget 5: Billing -->
+  <rect x="805" y="375" width="370" height="200" rx="8" fill="url(#widgetBg)" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  
+  <rect x="805" y="375" width="370" height="35" rx="8" fill="#1c2333"/>
+  <rect x="805" y="400" width="370" height="10" fill="#1c2333"/>
+  <rect x="805" y="408" width="370" height="2" fill="#30363d"/>
+  
+  <circle cx="820" cy="392" r="6" fill="#FF5722"/>
+  <text x="832" y="397" fill="#F0F6FC" font-size="13" font-weight="600">Monthly Billing</text>
+  
+  <!-- Big number -->
+  <text x="990" y="475" text-anchor="middle" fill="#FF5722" font-size="48" font-weight="300">$2.47</text>
+  <text x="990" y="500" text-anchor="middle" fill="#8B949E" font-size="11">Estimated charges this month</text>
+  
+  <!-- Progress bar -->
+  <rect x="840" y="520" width="300" height="20" rx="10" fill="#21262d"/>
+  <rect x="840" y="520" width="100" height="20" rx="10" fill="#FF5722" opacity="0.8"/>
+  <text x="990" y="535" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">49% of $5 threshold</text>
+  
+  <!-- Service breakdown -->
+  <text x="840" y="558" fill="#8B949E" font-size="9">EC2: $0.82</text>
+  <text x="940" y="558" fill="#8B949E" font-size="9">RDS: $1.15</text>
+  <text x="1040" y="558" fill="#8B949E" font-size="9">S3: $0.50</text>
+  
+  <text x="840" y="575" fill="#8B949E" font-size="9">Alarm: OK (threshold $5)</text>
+  <circle cx="1060" cy="571" r="5" fill="#4CAF50"/>
+
+  <!-- ============================================================ -->
+  <!-- ROW 3: Alarm Status (full width)                               -->
+  <!-- ============================================================ -->
+  
+  <!-- Widget 6: Alarm Status -->
+  <rect x="25" y="600" width="1150" height="140" rx="8" fill="url(#widgetBg)" stroke="#30363d" stroke-width="1" filter="url(#shadow)"/>
+  
+  <rect x="25" y="600" width="1150" height="35" rx="8" fill="#1c2333"/>
+  <rect x="25" y="625" width="1150" height="10" fill="#1c2333"/>
+  <rect x="25" y="633" width="1150" height="2" fill="#30363d"/>
+  
+  <circle cx="40" cy="617" r="6" fill="#FF6B6B"/>
+  <text x="52" y="622" fill="#F0F6FC" font-size="13" font-weight="600">Alarm Status — All Alarms</text>
+  <text x="240" y="622" fill="#8B949E" font-size="10">Last updated: 2026-06-24 11:42:03 UTC</text>
+  
+  <!-- Alarm status cards -->
+  <!-- EC2 CPU -->
+  <rect x="45" y="655" width="160" height="65" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <circle cx="60" cy="672" r="5" fill="#4CAF50"/>
+  <text x="70" y="676" fill="#F0F6FC" font-size="10" font-weight="600">EC2-CPU-High</text>
+  <text x="70" y="692" fill="#8B949E" font-size="9">OK · 42.3% avg</text>
+  <rect x="60" y="705" width="130" height="4" rx="2" fill="#4CAF50" opacity="0.3"/>
+  <rect x="60" y="705" width="60" height="4" rx="2" fill="#4CAF50"/>
+  
+  <!-- EC2 Status -->
+  <rect x="220" y="655" width="160" height="65" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <circle cx="235" cy="672" r="5" fill="#4CAF50"/>
+  <text x="245" y="676" fill="#F0F6FC" font-size="10" font-weight="600">EC2-Status-Fail</text>
+  <text x="245" y="692" fill="#8B949E" font-size="9">OK · 0 failed</text>
+  <rect x="235" y="705" width="130" height="4" rx="2" fill="#4CAF50" opacity="0.3"/>
+  <rect x="235" y="705" width="130" height="4" rx="2" fill="#4CAF50"/>
+  
+  <!-- EC2 Network -->
+  <rect x="395" y="655" width="160" height="65" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <circle cx="410" cy="672" r="5" fill="#4CAF50"/>
+  <text x="420" y="676" fill="#F0F6FC" font-size="10" font-weight="600">EC2-Network-High</text>
+  <text x="420" y="692" fill="#8B949E" font-size="9">OK · 234 KB/s</text>
+  <rect x="410" y="705" width="130" height="4" rx="2" fill="#4CAF50" opacity="0.3"/>
+  <rect x="410" y="705" width="110" height="4" rx="2" fill="#4CAF50"/>
+  
+  <!-- RDS CPU -->
+  <rect x="570" y="655" width="160" height="65" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <circle cx="585" cy="672" r="5" fill="#4CAF50"/>
+  <text x="595" y="676" fill="#F0F6FC" font-size="10" font-weight="600">RDS-CPU-High</text>
+  <text x="595" y="692" fill="#8B949E" font-size="9">OK · 15.2% avg</text>
+  <rect x="585" y="705" width="130" height="4" rx="2" fill="#4CAF50" opacity="0.3"/>
+  <rect x="585" y="705" width="25" height="4" rx="2" fill="#4CAF50"/>
+  
+  <!-- RDS Storage -->
+  <rect x="745" y="655" width="160" height="65" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <circle cx="760" cy="672" r="5" fill="#4CAF50"/>
+  <text x="770" y="676" fill="#F0F6FC" font-size="10" font-weight="600">RDS-Storage-Low</text>
+  <text x="770" y="692" fill="#8B949E" font-size="9">OK · 18.4 GB free</text>
+  <rect x="760" y="705" width="130" height="4" rx="2" fill="#4CAF50" opacity="0.3"/>
+  <rect x="760" y="705" width="115" height="4" rx="2" fill="#4CAF50"/>
+  
+  <!-- RDS Connections -->
+  <rect x="920" y="655" width="120" height="65" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <circle cx="935" cy="672" r="5" fill="#4CAF50"/>
+  <text x="945" y="676" fill="#F0F6FC" font-size="10" font-weight="600">RDS-Conn</text>
+  <text x="945" y="692" fill="#8B949E" font-size="9">OK · 23 conn</text>
+  <rect x="935" y="705" width="90" height="4" rx="2" fill="#4CAF50" opacity="0.3"/>
+  <rect x="935" y="705" width="35" height="4" rx="2" fill="#4CAF50"/>
+  
+  <!-- Billing -->
+  <rect x="1055" y="655" width="100" height="65" rx="6" fill="#21262d" stroke="#30363d" stroke-width="1"/>
+  <circle cx="1070" cy="672" r="5" fill="#4CAF50"/>
+  <text x="1080" y="676" fill="#F0F6FC" font-size="10" font-weight="600">Billing</text>
+  <text x="1080" y="692" fill="#8B949E" font-size="9">OK · $2.47</text>
+  <rect x="1070" y="705" width="70" height="4" rx="2" fill="#4CAF50" opacity="0.3"/>
+  <rect x="1070" y="705" width="35" height="4" rx="2" fill="#4CAF50"/>
+  
+  <!-- ============ FOOTER ============ -->
+  <rect x="25" y="755" width="1150" height="35" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  
+  <text x="40" y="778" fill="#8B949E" font-size="10">📊 6 widgets · 1 dashboard · Auto-refresh: 1m</text>
+  
+  <text x="500" y="778" fill="#8B949E" font-size="10">✅ All alarms OK · No active alerts</text>
+  
+  <text x="850" y="778" fill="#8B949E" font-size="10">🔗 Share dashboard</text>
+  <text x="970" y="778" fill="#8B949E" font-size="10">📥 Export</text>
+  <text x="1050" y="778" fill="#8B949E" font-size="10">⚙️ Settings</text>
+
+  <!-- Legend dots in footer -->
+  <circle cx="40" cy="800" r="4" fill="#FF9900"/>
+  <text x="50" y="804" fill="#8B949E" font-size="9">EC2 CPU</text>
+  
+  <circle cx="110" cy="800" r="4" fill="#4CAF50"/>
+  <text x="120" y="804" fill="#8B949E" font-size="9">Network In</text>
+  
+  <circle cx="200" cy="800" r="4" fill="#FF9800"/>
+  <text x="210" y="804" fill="#8B949E" font-size="9">Network Out</text>
+  
+  <circle cx="290" cy="800" r="4" fill="#9C27B0"/>
+  <text x="300" y="804" fill="#8B949E" font-size="9">RDS CPU</text>
+  
+  <circle cx="370" cy="800" r="4" fill="#E91E63"/>
+  <text x="380" y="804" fill="#8B949E" font-size="9">RDS Conn</text>
+  
+  <circle cx="460" cy="800" r="4" fill="#FF5722"/>
+  <text x="470" y="804" fill="#8B949E" font-size="9">Billing</text>
+
+  <!-- Decorative accent line -->
+  <rect x="25" y="820" width="1150" height="2" rx="1" fill="#21262d"/>
+  
+  <text x="550" y="838" text-anchor="middle" fill="#30363d" font-size="9">AWS Bootcamp — CloudWatch Dashboard · All metrics within Free Tier</text>
+</svg>

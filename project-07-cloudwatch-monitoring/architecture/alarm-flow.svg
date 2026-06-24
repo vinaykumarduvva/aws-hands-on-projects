@@ -1,0 +1,268 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 750" font-family="'AWS', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="ec2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E07C1F;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="rdsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#527FFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3366CC;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="snsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF4F8B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#CC2266;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cwGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F58536;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D96B2A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="alarmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E03131;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="billingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00A86B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#007F52;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="emailGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#34A853;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E7E34;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e2a45;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#141e33;stop-opacity:0.95" />
+    </linearGradient>
+    <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:0.1" />
+      <stop offset="50%" style="stop-color:#00D4FF;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#00D4FF;stop-opacity:0.1" />
+    </linearGradient>
+
+    <!-- Glow filters -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glowSoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+
+    <!-- Arrow marker -->
+    <marker id="arrowWhite" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#8899BB" />
+    </marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FF9900" />
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FF6B6B" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34A853" />
+    </marker>
+    <marker id="arrowPink" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FF4F8B" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="750" fill="url(#bgGrad)" rx="0"/>
+  
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.5"/>
+    </pattern>
+    <rect width="1100" height="750" fill="url(#grid)"/>
+  </g>
+
+  <!-- Title -->
+  <text x="550" y="42" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700" filter="url(#glowSoft)">CloudWatch Alarm Flow — Monitoring Stack</text>
+  <text x="550" y="62" text-anchor="middle" fill="#8899BB" font-size="12">EC2 · RDS · Billing → CloudWatch Alarms → SNS → Email Notifications</text>
+
+  <!-- ============ SECTION 1: DATA SOURCES ============ -->
+  <rect x="30" y="85" width="1040" height="175" rx="12" fill="url(#boxGrad)" stroke="#2a3a5c" stroke-width="1" filter="url(#shadow)"/>
+  <text x="50" y="112" fill="#8899BB" font-size="11" font-weight="600" letter-spacing="1">DATA SOURCES</text>
+  <line x1="50" y1="118" x2="270" y2="118" stroke="#2a3a5c" stroke-width="1"/>
+
+  <!-- EC2 Box -->
+  <rect x="60" y="135" width="200" height="100" rx="10" fill="#FF9900" fill-opacity="0.12" stroke="#FF9900" stroke-width="1.5"/>
+  <rect x="60" y="135" width="200" height="30" rx="10" fill="#FF9900" fill-opacity="0.15"/>
+  <rect x="60" y="155" width="200" height="10" rx="0" fill="#FF9900" fill-opacity="0.15"/>
+  <text x="75" y="155" fill="#FF9900" font-size="13" font-weight="700">⚡ EC2 Instance</text>
+  <text x="75" y="180" fill="#ccd6f6" font-size="11">• CPUUtilization</text>
+  <text x="75" y="198" fill="#ccd6f6" font-size="11">• NetworkIn / NetworkOut</text>
+  <text x="75" y="216" fill="#ccd6f6" font-size="11">• StatusCheckFailed</text>
+
+  <!-- RDS Box -->
+  <rect x="300" y="135" width="200" height="100" rx="10" fill="#527FFF" fill-opacity="0.12" stroke="#527FFF" stroke-width="1.5"/>
+  <rect x="300" y="135" width="200" height="30" rx="10" fill="#527FFF" fill-opacity="0.15"/>
+  <rect x="300" y="155" width="200" height="10" rx="0" fill="#527FFF" fill-opacity="0.15"/>
+  <text x="315" y="155" fill="#7B93FF" font-size="13" font-weight="700">🗄️ RDS MySQL</text>
+  <text x="315" y="180" fill="#ccd6f6" font-size="11">• CPUUtilization</text>
+  <text x="315" y="198" fill="#ccd6f6" font-size="11">• DatabaseConnections</text>
+  <text x="315" y="216" fill="#ccd6f6" font-size="11">• FreeStorageSpace</text>
+
+  <!-- Billing Box -->
+  <rect x="540" y="135" width="200" height="100" rx="10" fill="#00A86B" fill-opacity="0.12" stroke="#00A86B" stroke-width="1.5"/>
+  <rect x="540" y="135" width="200" height="30" rx="10" fill="#00A86B" fill-opacity="0.15"/>
+  <rect x="540" y="155" width="200" height="10" rx="0" fill="#00A86B" fill-opacity="0.15"/>
+  <text x="555" y="155" fill="#00C853" font-size="13" font-weight="700">💰 Billing</text>
+  <text x="555" y="180" fill="#ccd6f6" font-size="11">• EstimatedCharges (USD)</text>
+  <text x="555" y="198" fill="#8899BB" font-size="10" font-style="italic">• us-east-1 only</text>
+  <text x="555" y="216" fill="#8899BB" font-size="10">• 24hr period</text>
+
+  <!-- Custom Apps Box -->
+  <rect x="780" y="135" width="260" height="100" rx="10" fill="#F58536" fill-opacity="0.12" stroke="#F58536" stroke-width="1.5"/>
+  <rect x="780" y="135" width="260" height="30" rx="10" fill="#F58536" fill-opacity="0.15"/>
+  <rect x="780" y="155" width="260" height="10" rx="0" fill="#F58536" fill-opacity="0.15"/>
+  <text x="795" y="155" fill="#F58536" font-size="13" font-weight="700">📋 Custom App Logs</text>
+  <text x="795" y="180" fill="#ccd6f6" font-size="11">• Log Group: /aws/ec2/monitoring-test</text>
+  <text x="795" y="198" fill="#ccd6f6" font-size="11">• Metric Filter: ERROR pattern → AppErrors</text>
+  <text x="795" y="216" fill="#ccd6f6" font-size="11">• Custom Namespace: CustomMetrics</text>
+
+  <!-- Flow arrows from sources to CloudWatch -->
+  <path d="M 160 245 L 160 278" stroke="#8899BB" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowWhite)" opacity="0.6"/>
+  <path d="M 400 245 L 400 278" stroke="#8899BB" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowWhite)" opacity="0.6"/>
+  <path d="M 640 245 L 640 278" stroke="#8899BB" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowWhite)" opacity="0.6"/>
+  <path d="M 910 245 L 910 278" stroke="#8899BB" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowWhite)" opacity="0.6"/>
+
+  <!-- Metric labels on arrows -->
+  <text x="170" y="268" fill="#8899BB" font-size="8" text-anchor="middle">metrics</text>
+  <text x="410" y="268" fill="#8899BB" font-size="8" text-anchor="middle">metrics</text>
+  <text x="650" y="268" fill="#8899BB" font-size="8" text-anchor="middle">metrics</text>
+  <text x="920" y="268" fill="#8899BB" font-size="8" text-anchor="middle">logs</text>
+
+  <!-- ============ SECTION 2: CLOUDWATCH ============ -->
+  <rect x="30" y="290" width="1040" height="180" rx="12" fill="url(#boxGrad)" stroke="#2a3a5c" stroke-width="1" filter="url(#shadow)"/>
+  <text x="50" y="317" fill="#8899BB" font-size="11" font-weight="600" letter-spacing="1">CLOUDWATCH CORE</text>
+  <line x1="50" y1="323" x2="270" y2="323" stroke="#2a3a5c" stroke-width="1"/>
+
+  <!-- CloudWatch Main Box -->
+  <rect x="60" y="338" width="420" height="115" rx="10" fill="#F58536" fill-opacity="0.08" stroke="#F58536" stroke-width="1.5"/>
+  <text x="270" y="362" text-anchor="middle" fill="#F58536" font-size="14" font-weight="700">☁️ Amazon CloudWatch</text>
+
+  <!-- Alarm boxes inside CloudWatch -->
+  <rect x="80" y="378" width="120" height="55" rx="8" fill="#FF6B6B" fill-opacity="0.15" stroke="#FF6B6B" stroke-width="1"/>
+  <text x="140" y="398" text-anchor="middle" fill="#FF6B6B" font-size="10" font-weight="600">EC2-CPU-High</text>
+  <text x="140" y="414" text-anchor="middle" fill="#ccd6f6" font-size="9">>70% / 2 periods</text>
+  <circle cx="88" cy="388" r="4" fill="#FF6B6B" opacity="0.8"/>
+
+  <rect x="210" y="378" width="120" height="55" rx="8" fill="#FF6B6B" fill-opacity="0.15" stroke="#FF6B6B" stroke-width="1"/>
+  <text x="270" y="398" text-anchor="middle" fill="#FF6B6B" font-size="10" font-weight="600">EC2-Status-Fail</text>
+  <text x="270" y="414" text-anchor="middle" fill="#ccd6f6" font-size="9">StatusCheckFailed</text>
+  <circle cx="218" cy="388" r="4" fill="#FF6B6B" opacity="0.8"/>
+
+  <rect x="340" y="378" width="120" height="55" rx="8" fill="#FF6B6B" fill-opacity="0.15" stroke="#FF6B6B" stroke-width="1"/>
+  <text x="400" y="398" text-anchor="middle" fill="#FF6B6B" font-size="10" font-weight="600">EC2-Network-High</text>
+  <text x="400" y="414" text-anchor="middle" fill="#ccd6f6" font-size="9">NetworkIn >5MB</text>
+  <circle cx="348" cy="388" r="4" fill="#FF6B6B" opacity="0.8"/>
+
+  <!-- RDS Alarms -->
+  <rect x="510" y="338" width="180" height="55" rx="8" fill="#527FFF" fill-opacity="0.15" stroke="#527FFF" stroke-width="1"/>
+  <text x="600" y="358" text-anchor="middle" fill="#7B93FF" font-size="10" font-weight="600">RDS-CPU-High</text>
+  <text x="600" y="374" text-anchor="middle" fill="#ccd6f6" font-size="9">>80% / 2 periods</text>
+  <circle cx="518" cy="348" r="4" fill="#7B93FF" opacity="0.8"/>
+
+  <rect x="510" y="398" width="180" height="55" rx="8" fill="#527FFF" fill-opacity="0.15" stroke="#527FFF" stroke-width="1"/>
+  <text x="600" y="418" text-anchor="middle" fill="#7B93FF" font-size="10" font-weight="600">RDS-Storage-Low</text>
+  <text x="600" y="434" text-anchor="middle" fill="#ccd6f6" font-size="9">&lt;2GB Free</text>
+  <circle cx="518" cy="408" r="4" fill="#7B93FF" opacity="0.8"/>
+
+  <rect x="700" y="338" width="160" height="55" rx="8" fill="#00A86B" fill-opacity="0.15" stroke="#00A86B" stroke-width="1"/>
+  <text x="780" y="358" text-anchor="middle" fill="#00C853" font-size="10" font-weight="600">Billing-Alert</text>
+  <text x="780" y="374" text-anchor="middle" fill="#ccd6f6" font-size="9">>$5 USD</text>
+  <circle cx="708" cy="348" r="4" fill="#00C853" opacity="0.8"/>
+
+  <rect x="700" y="398" width="160" height="55" rx="8" fill="#F58536" fill-opacity="0.15" stroke="#F58536" stroke-width="1"/>
+  <text x="780" y="418" text-anchor="middle" fill="#F58536" font-size="10" font-weight="600">App-Errors-High</text>
+  <text x="780" y="434" text-anchor="middle" fill="#ccd6f6" font-size="9">&gt;5 errors / 5min</text>
+  <circle cx="708" cy="408" r="4" fill="#F58536" opacity="0.8"/>
+
+  <!-- Dashboard Link -->
+  <rect x="890" y="340" width="160" height="100" rx="10" fill="#F58536" fill-opacity="0.06" stroke="#F58536" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="970" y="368" text-anchor="middle" fill="#F58536" font-size="11" font-weight="600">📊 Custom Dashboard</text>
+  <text x="970" y="390" text-anchor="middle" fill="#8899BB" font-size="9">AWS-Bootcamp</text>
+  <text x="970" y="408" text-anchor="middle" fill="#8899BB" font-size="9">6 widgets</text>
+  <text x="970" y="426" text-anchor="middle" fill="#8899BB" font-size="9">Real-time metrics</text>
+
+  <!-- Flow arrow: CloudWatch → SNS -->
+  <rect x="460" y="320" width="60" height="28" rx="14" fill="#FF6B6B" fill-opacity="0.2" stroke="#FF6B6B" stroke-width="1"/>
+  <text x="490" y="339" text-anchor="middle" fill="#FF6B6B" font-size="9" font-weight="700">ALARM</text>
+  <path d="M 490 350 L 490 388" stroke="#FF6B6B" stroke-width="2" marker-end="url(#arrowRed)" opacity="0.8"/>
+
+  <!-- ============ SECTION 3: SNS ============ -->
+  <rect x="30" y="490" width="1040" height="100" rx="12" fill="url(#boxGrad)" stroke="#2a3a5c" stroke-width="1" filter="url(#shadow)"/>
+  <text x="50" y="517" fill="#8899BB" font-size="11" font-weight="600" letter-spacing="1">NOTIFICATION HUB</text>
+  <line x1="50" y1="523" x2="270" y2="523" stroke="#2a3a5c" stroke-width="1"/>
+
+  <!-- SNS Topic -->
+  <rect x="60" y="538" width="320" height="40" rx="20" fill="url(#snsGrad)" fill-opacity="0.15" stroke="#FF4F8B" stroke-width="1.5" filter="url(#glowSoft)"/>
+  <text x="220" y="563" text-anchor="middle" fill="#FF4F8B" font-size="14" font-weight="700">📨 SNS Topic: monitoring-alerts</text>
+
+  <!-- Alarm state indicators flowing to SNS -->
+  <circle cx="430" cy="558" r="6" fill="#FF6B6B" opacity="0.8"/>
+  <text x="440" y="562" fill="#FF6B6B" font-size="9">ALARM →</text>
+  <path d="M 490 558 L 530 558" stroke="#FF4F8B" stroke-width="2" marker-end="url(#arrowPink)"/>
+
+  <!-- Subscription -->
+  <rect x="560" y="538" width="280" height="40" rx="10" fill="#34A853" fill-opacity="0.1" stroke="#34A853" stroke-width="1"/>
+  <text x="700" y="555" text-anchor="middle" fill="#34A853" font-size="11" font-weight="600">📧 Email Subscription</text>
+  <text x="700" y="571" text-anchor="middle" fill="#8899BB" font-size="10">your@email.com — Confirmed ✅</text>
+
+  <!-- Flow arrow: SNS → Email -->
+  <path d="M 850 558 L 890 558" stroke="#34A853" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+  <!-- ============ SECTION 4: EMAIL ============ -->
+  <rect x="900" y="530" width="160" height="55" rx="12" fill="url(#emailGrad)" fill-opacity="0.12" stroke="#34A853" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="980" y="552" text-anchor="middle" fill="#34A853" font-size="13" font-weight="700">✉️ Email Alert</text>
+  <text x="980" y="570" text-anchor="middle" fill="#ccd6f6" font-size="10">Notification Received</text>
+
+  <!-- ============ FOOTER ============ -->
+  <rect x="30" y="610" width="1040" height="55" rx="8" fill="#1a1a2e" stroke="#2a3a5c" stroke-width="1" opacity="0.8"/>
+  
+  <!-- Alarm state legend -->
+  <text x="50" y="635" fill="#8899BB" font-size="10" font-weight="600">ALARM STATES:</text>
+  
+  <circle cx="175" cy="632" r="5" fill="#4CAF50"/>
+  <text x="185" y="636" fill="#ccd6f6" font-size="10">OK</text>
+  
+  <circle cx="225" cy="632" r="5" fill="#FF6B6B"/>
+  <text x="235" y="636" fill="#ccd6f6" font-size="10">ALARM</text>
+  
+  <circle cx="295" cy="632" r="5" fill="#FFA726"/>
+  <text x="305" y="636" fill="#ccd6f6" font-size="10">INSUFFICIENT_DATA</text>
+
+  <line x1="410" y1="625" x2="410" y2="650" stroke="#2a3a5c" stroke-width="1"/>
+
+  <text x="430" y="635" fill="#8899BB" font-size="10">📐 Alarm evaluation: 2 × 5-min periods</text>
+
+  <text x="680" y="635" fill="#8899BB" font-size="10">✅ All services within AWS Free Tier</text>
+
+  <!-- Decorative dots -->
+  <circle cx="1020" cy="635" r="3" fill="#FF9900" opacity="0.4"/>
+  <circle cx="1035" cy="635" r="3" fill="#527FFF" opacity="0.4"/>
+  <circle cx="1050" cy="635" r="3" fill="#FF4F8B" opacity="0.4"/>
+
+  <!-- ============ ANNOTATION ARROWS (Data Source → CloudWatch) ============ -->
+  <!-- Animated glow lines -->
+  <rect x="30" y="85" width="1040" height="175" rx="12" fill="none" stroke="#00D4FF" stroke-width="0.5" opacity="0.2"/>
+  <rect x="30" y="290" width="1040" height="180" rx="12" fill="none" stroke="#00D4FF" stroke-width="0.5" opacity="0.2"/>
+  <rect x="30" y="490" width="1040" height="100" rx="12" fill="none" stroke="#00D4FF" stroke-width="0.5" opacity="0.2"/>
+
+</svg>
