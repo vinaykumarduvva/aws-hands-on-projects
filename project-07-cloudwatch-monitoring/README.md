@@ -155,13 +155,4 @@ project-07-cloudwatch-monitoring/
 
 ---
 
-## Resume Bullets
-
-- Built a complete AWS observability stack with 8 CloudWatch alarms across EC2, RDS, and Billing namespaces, routing alerts through an SNS topic to email with confirmed subscriptions
-- Triggered and verified the EC2-CPU-High alarm end-to-end using a stress test, observing the state transition from OK to ALARM within two 5-minute evaluation periods
-- Created a CloudWatch Logs metric filter to count application ERROR events and feed a custom namespace alarm, demonstrating log-to-alert pipeline construction
-- Built a custom CloudWatch dashboard combining EC2 CPU, network, RDS connections, storage, and billing metrics in a single operational view
-
----
-
 *Part of the AWS Cloud Projects portfolio — hands-on infrastructure built and documented end to end.*
