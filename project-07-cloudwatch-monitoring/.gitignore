@@ -1,0 +1,29 @@
+# AWS credentials — never commit
+.aws/
+credentials
+*.pem
+*.ppk
+
+# Secrets / config with real values
+*.env
+.env.*
+
+# Generated files
+dashboard.json
+userdata-*.sh
+
+# PowerShell temp
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Raw screenshots
+screenshots/raw-console-captures/

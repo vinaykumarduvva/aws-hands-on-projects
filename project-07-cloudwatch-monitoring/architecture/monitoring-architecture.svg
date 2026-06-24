@@ -1,0 +1,133 @@
+<svg viewBox="0 0 920 660" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="920" height="660" fill="#f8f9fa" rx="12"/>
+  <text x="460" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#232f3e">Project 7 — CloudWatch Monitoring Architecture</text>
+
+  <!-- METRIC SOURCES ROW -->
+  <text x="30" y="72" font-size="13" font-weight="bold" fill="#555">Metric Sources</text>
+
+  <!-- EC2 Box -->
+  <rect x="30" y="82" width="210" height="140" rx="8" fill="white" stroke="#ff9900" stroke-width="2"/>
+  <rect x="30" y="82" width="210" height="30" rx="8" fill="#ff9900"/>
+  <text x="135" y="102" text-anchor="middle" font-size="13" font-weight="bold" fill="white">EC2 — monitoring-test</text>
+  <text x="50" y="130" font-size="11" fill="#333">CPUUtilization</text>
+  <text x="50" y="148" font-size="11" fill="#333">NetworkIn / NetworkOut</text>
+  <text x="50" y="166" font-size="11" fill="#333">StatusCheckFailed</text>
+  <text x="50" y="184" font-size="11" fill="#888">namespace: AWS/EC2</text>
+  <text x="50" y="200" font-size="10" fill="#888">auto-published every 1 min</text>
+
+  <!-- RDS Box -->
+  <rect x="260" y="82" width="210" height="140" rx="8" fill="white" stroke="#527fff" stroke-width="2"/>
+  <rect x="260" y="82" width="210" height="30" rx="8" fill="#527fff"/>
+  <text x="365" y="102" text-anchor="middle" font-size="13" font-weight="bold" fill="white">RDS — myapp-database</text>
+  <text x="280" y="130" font-size="11" fill="#333">CPUUtilization</text>
+  <text x="280" y="148" font-size="11" fill="#333">DatabaseConnections</text>
+  <text x="280" y="166" font-size="11" fill="#333">FreeStorageSpace</text>
+  <text x="280" y="184" font-size="11" fill="#888">namespace: AWS/RDS</text>
+  <text x="280" y="200" font-size="10" fill="#888">auto-published every 1 min</text>
+
+  <!-- Billing Box -->
+  <rect x="490" y="82" width="210" height="140" rx="8" fill="white" stroke="#c0392b" stroke-width="2"/>
+  <rect x="490" y="82" width="210" height="30" rx="8" fill="#c0392b"/>
+  <text x="595" y="102" text-anchor="middle" font-size="13" font-weight="bold" fill="white">AWS Billing</text>
+  <text x="510" y="130" font-size="11" fill="#333">EstimatedCharges</text>
+  <text x="510" y="148" font-size="11" fill="#888">dimension: Currency=USD</text>
+  <text x="510" y="166" font-size="11" fill="#888">namespace: AWS/Billing</text>
+  <text x="510" y="184" font-size="11" fill="#888">us-east-1 only</text>
+  <text x="510" y="200" font-size="10" fill="#888">published once per day</text>
+
+  <!-- CloudWatch Logs Box -->
+  <rect x="720" y="82" width="175" height="140" rx="8" fill="white" stroke="#28a745" stroke-width="2"/>
+  <rect x="720" y="82" width="175" height="30" rx="8" fill="#28a745"/>
+  <text x="807" y="102" text-anchor="middle" font-size="13" font-weight="bold" fill="white">CloudWatch Logs</text>
+  <text x="738" y="130" font-size="11" fill="#333">/aws/ec2/monitoring-test</text>
+  <text x="738" y="148" font-size="11" fill="#333">Metric Filter: ErrorCount</text>
+  <text x="738" y="166" font-size="11" fill="#333">pattern: "ERROR"</text>
+  <text x="738" y="184" font-size="11" fill="#888">→ CustomMetrics/</text>
+  <text x="738" y="200" font-size="10" fill="#888">ApplicationErrors</text>
+
+  <!-- Arrows down to CloudWatch Metrics -->
+  <line x1="135" y1="222" x2="135" y2="260" stroke="#999" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="365" y1="222" x2="365" y2="260" stroke="#999" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="595" y1="222" x2="595" y2="260" stroke="#999" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="807" y1="222" x2="807" y2="260" stroke="#999" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- CloudWatch Metrics Store -->
+  <rect x="30" y="260" width="865" height="50" rx="8" fill="#fff8e1" stroke="#ff9900" stroke-width="1.5"/>
+  <text x="462" y="280" text-anchor="middle" font-size="13" font-weight="bold" fill="#e65100">CloudWatch Metrics Store</text>
+  <text x="462" y="298" text-anchor="middle" font-size="11" fill="#555">Namespaces: AWS/EC2 · AWS/RDS · AWS/Billing · CustomMetrics</text>
+
+  <!-- Three branches down -->
+  <line x1="220" y1="310" x2="220" y2="345" stroke="#999" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="462" y1="310" x2="462" y2="345" stroke="#999" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="750" y1="310" x2="750" y2="345" stroke="#999" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- ALARMS Box -->
+  <rect x="30" y="345" width="380" height="165" rx="8" fill="white" stroke="#e53935" stroke-width="2"/>
+  <rect x="30" y="345" width="380" height="30" rx="8" fill="#e53935"/>
+  <text x="220" y="365" text-anchor="middle" font-size="13" font-weight="bold" fill="white">CloudWatch Alarms (8)</text>
+
+  <rect x="46" y="382" width="168" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="55" y="399" font-size="11" fill="#333">EC2-CPU-High (> 70%)</text>
+
+  <rect x="226" y="382" width="172" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="235" y="399" font-size="11" fill="#333">EC2-StatusCheck-Failed</text>
+
+  <rect x="46" y="412" width="168" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="55" y="429" font-size="11" fill="#333">EC2-NetworkIn-High</text>
+
+  <rect x="226" y="412" width="172" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="235" y="429" font-size="11" fill="#333">RDS-CPU-High (> 80%)</text>
+
+  <rect x="46" y="442" width="168" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="55" y="459" font-size="11" fill="#333">RDS-Storage-Low (&lt; 2GB)</text>
+
+  <rect x="226" y="442" width="172" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="235" y="459" font-size="11" fill="#333">RDS-Connections-High</text>
+
+  <rect x="46" y="472" width="168" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="55" y="489" font-size="11" fill="#333">Billing-Alert-5USD</text>
+
+  <rect x="226" y="472" width="172" height="24" rx="4" fill="#fff5f5" stroke="#e53935" stroke-width="1"/>
+  <text x="235" y="489" font-size="11" fill="#333">App-Errors-High (> 5)</text>
+
+  <!-- Dashboard Box -->
+  <rect x="272" y="345" width="380" height="165" rx="8" fill="white" stroke="#1a73e8" stroke-width="2" x="272"/>
+  <!-- shift right -->
+  <rect x="432" y="345" width="365" height="165" rx="8" fill="white" stroke="#1a73e8" stroke-width="2"/>
+  <rect x="432" y="345" width="365" height="30" rx="8" fill="#1a73e8"/>
+  <text x="614" y="365" text-anchor="middle" font-size="13" font-weight="bold" fill="white">CloudWatch Dashboard</text>
+  <text x="452" y="392" font-size="11" fill="#333">AWS-Bootcamp-Dashboard</text>
+  <text x="452" y="410" font-size="11" fill="#555">Widget 1: EC2 CPU (line + threshold)</text>
+  <text x="452" y="428" font-size="11" fill="#555">Widget 2: EC2 NetworkIn + NetworkOut</text>
+  <text x="452" y="446" font-size="11" fill="#555">Widget 3: RDS CPU (line + threshold)</text>
+  <text x="452" y="464" font-size="11" fill="#555">Widget 4: RDS Connections (number)</text>
+  <text x="452" y="482" font-size="11" fill="#555">Widget 5: Estimated Charges USD (number)</text>
+  <text x="452" y="500" font-size="10" fill="#888">Grid: 24-column · 5 widgets</text>
+
+  <!-- Arrow from Alarms to SNS -->
+  <line x1="220" y1="510" x2="220" y2="550" stroke="#e53935" stroke-width="2" marker-end="url(#aRed)"/>
+  <text x="232" y="534" font-size="10" fill="#e53935">state = ALARM</text>
+
+  <!-- SNS Topic Box -->
+  <rect x="30" y="550" width="380" height="54" rx="8" fill="#880e4f" stroke="#c2185b" stroke-width="1.5"/>
+  <text x="220" y="572" text-anchor="middle" font-size="13" font-weight="bold" fill="white">SNS Topic: monitoring-alerts</text>
+  <text x="220" y="592" text-anchor="middle" font-size="11" fill="#f8bbd9">arn:aws:sns:us-east-1:ACCOUNT:monitoring-alerts</text>
+
+  <!-- Arrow to Email -->
+  <line x1="220" y1="604" x2="220" y2="634" stroke="#880e4f" stroke-width="2" marker-end="url(#aPurple)"/>
+
+  <rect x="90" y="634" width="260" height="18" rx="6" fill="white" stroke="#880e4f" stroke-width="1.5"/>
+  <text x="220" y="647" text-anchor="middle" font-size="12" fill="#880e4f">📧 Email notification delivered</text>
+
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#999"/>
+    </marker>
+    <marker id="aRed" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#e53935"/>
+    </marker>
+    <marker id="aPurple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#880e4f"/>
+    </marker>
+  </defs>
+</svg>
