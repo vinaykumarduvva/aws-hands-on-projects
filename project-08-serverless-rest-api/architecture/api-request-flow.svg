@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Arial, sans-serif">
+  <defs>
+    <linearGradient id="postGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="getGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565C0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="putGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF9800;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E65100;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="deleteGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F44336;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B71C1C;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="500" fill="#1a1a2e" rx="10"/>
+  
+  <text x="400" y="35" text-anchor="middle" fill="white" font-size="22" font-weight="bold">API Request Flow</text>
+  <text x="400" y="55" text-anchor="middle" fill="#999" font-size="12">API Gateway → Lambda → DynamoDB</text>
+
+  <!-- Client -->
+  <rect x="50" y="80" width="100" height="50" rx="8" fill="#2d2d44" stroke="#666" stroke-width="1.5"/>
+  <text x="100" y="110" text-anchor="middle" fill="white" font-size="14">Client</text>
+
+  <!-- API Gateway -->
+  <rect x="220" y="80" width="180" height="50" rx="8" fill="#6B46C1" filter="url(#shadow)"/>
+  <text x="310" y="105" text-anchor="middle" fill="white" font-size="14" font-weight="bold">API Gateway</text>
+  <text x="310" y="120" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10">Route Matching</text>
+
+  <!-- Lambda -->
+  <rect x="470" y="80" width="150" height="50" rx="8" fill="#FF9900" filter="url(#shadow)"/>
+  <text x="545" y="105" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Lambda</text>
+  <text x="545" y="120" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10">lambda_handler</text>
+
+  <!-- DynamoDB -->
+  <rect x="690" y="80" width="70" height="50" rx="8" fill="#2E8B57" filter="url(#shadow)"/>
+  <text x="725" y="110" text-anchor="middle" fill="white" font-size="12" font-weight="bold">DynamoDB</text>
+
+  <!-- Arrows between main components -->
+  <line x1="150" y1="105" x2="215" y2="105" stroke="#666" stroke-width="2"/>
+  <line x1="400" y1="105" x2="465" y2="105" stroke="#FF9900" stroke-width="2"/>
+  <line x1="620" y1="105" x2="685" y2="105" stroke="#2E8B57" stroke-width="2"/>
+
+  <!-- POST Flow -->
+  <rect x="50" y="180" width="720" height="65" rx="8" fill="url(#postGrad)" opacity="0.15"/>
+  <text x="70" y="200" fill="#4CAF50" font-size="16" font-weight="bold">POST /users</text>
+  <text x="70" y="220" fill="#999" font-size="11">Create new user record</text>
+  <text x="370" y="200" fill="#999" font-size="11">→</text>
+  <text x="400" y="200" fill="#4CAF50" font-size="11">Validates name &amp; email</text>
+  <text x="580" y="200" fill="#999" font-size="11">→</text>
+  <text x="610" y="200" fill="#4CAF50" font-size="11">dynamodb:PutItem</text>
+  <text x="370" y="220" fill="#666" font-size="10">lambda_handler → create_user()</text>
+  <text x="580" y="220" fill="#666" font-size="10">Returns 201 with userId</text>
+
+  <!-- GET All Flow -->
+  <rect x="50" y="255" width="720" height="65" rx="8" fill="url(#getGrad)" opacity="0.15"/>
+  <text x="70" y="275" fill="#2196F3" font-size="16" font-weight="bold">GET /users</text>
+  <text x="70" y="295" fill="#999" font-size="11">List all users</text>
+  <text x="370" y="275" fill="#999" font-size="11">→</text>
+  <text x="400" y="275" fill="#2196F3" font-size="11">No parameters needed</text>
+  <text x="580" y="275" fill="#999" font-size="11">→</text>
+  <text x="610" y="275" fill="#2196F3" font-size="11">dynamodb:Scan</text>
+  <text x="370" y="295" fill="#666" font-size="10">lambda_handler → list_users()</text>
+  <text x="580" y="295" fill="#666" font-size="10">Returns 200 with user array</text>
+
+  <!-- GET Single Flow -->
+  <rect x="50" y="330" width="720" height="55" rx="8" fill="url(#getGrad)" opacity="0.1"/>
+  <text x="70" y="352" fill="#2196F3" font-size="16" font-weight="bold">GET /users/{userId}</text>
+  <text x="270" y="352" fill="#999" font-size="11">→ pathParameters</text>
+  <text x="430" y="352" fill="#2196F3" font-size="11">→ dynamodb:GetItem</text>
+  <text x="610" y="352" fill="#999" font-size="11">→ 200 or 404</text>
+  <text x="270" y="370" fill="#666" font-size="10">lambda_handler → get_user(userId)</text>
+
+  <!-- PUT Flow -->
+  <rect x="50" y="395" width="720" height="55" rx="8" fill="url(#putGrad)" opacity="0.1"/>
+  <text x="70" y="417" fill="#FF9800" font-size="16" font-weight="bold">PUT /users/{userId}</text>
+  <text x="270" y="417" fill="#999" font-size="11">→ pathParameters + body</text>
+  <text x="470" y="417" fill="#FF9800" font-size="11">→ dynamodb:UpdateItem</text>
+  <text x="650" y="417" fill="#999" font-size="11">→ 200 or 404</text>
+  <text x="270" y="435" fill="#666" font-size="10">lambda_handler → update_user(userId, body)</text>
+
+  <!-- DELETE Flow -->
+  <rect x="50" y="460" width="720" height="55" rx="8" fill="url(#deleteGrad)" opacity="0.1"/>
+  <text x="70" y="482" fill="#F44336" font-size="16" font-weight="bold">DELETE /users/{userId}</text>
+  <text x="290" y="482" fill="#999" font-size="11">→ pathParameters</text>
+  <text x="470" y="482" fill="#F44336" font-size="11">→ dynamodb:DeleteItem</text>
+  <text x="650" y="482" fill="#999" font-size="11">→ 200 or 404</text>
+  <text x="290" y="500" fill="#666" font-size="10">lambda_handler → delete_user(userId)</text>
+</svg>

@@ -1,209 +1,350 @@
-<svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
-  <rect width="900" height="680" fill="#f8f9fa" rx="12"/>
-  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#232f3e">Alarm State Machine &amp; Evaluation Logic</text>
+<svg viewBox="0 0 1000 750" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <style>
+    .bg { fill: url(#bgL); }
+    .gw { opacity: 0.05; }
+    .card { fill: #ffffff; stroke: #e2e8f0; }
+    .tt { fill: #0f172a; }
+    .ts { fill: #64748b; }
+    .tp { fill: #1e293b; }
+    .tc { fill: #64748b; }
+    .tw { fill: #ffffff; }
+    .dv { stroke: #e2e8f0; }
+    .tbl-header { fill: #1e293b; }
+    .tbl-row-even { fill: #f8fafc; }
+    .tbl-row-odd { fill: #ffffff; }
+    .tbl-border { stroke: #e2e8f0; fill: none; }
+    .note-bg { fill: #eff6ff; stroke: #3B82F6; }
+    .note-text { fill: #1e40af; }
 
-  <!-- ── STATE MACHINE (top half) ── -->
-  <text x="30" y="68" font-size="13" font-weight="bold" fill="#555">Alarm State Transitions</text>
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: url(#bgD); }
+      .gw { opacity: 0.025; }
+      .card { fill: #1a2444; stroke: #2a3a5c; }
+      .tt { fill: #f0f6fc; }
+      .ts { fill: #8899bb; }
+      .tp { fill: #ccd6f6; }
+      .tc { fill: #8899bb; }
+      .dv { stroke: #2a3a5c; }
+      .tbl-header { fill: #232f3e; }
+      .tbl-row-even { fill: #111833; }
+      .tbl-row-odd { fill: #141e38; }
+      .tbl-border { stroke: #2a3a5c; }
+      .note-bg { fill: #0f1629; stroke: #3B82F6; }
+      .note-text { fill: #60a5fa; }
+    }
 
-  <!-- INSUFFICIENT_DATA -->
-  <rect x="60" y="82" width="200" height="70" rx="10" fill="#fff8e1" stroke="#f9a825" stroke-width="2.5"/>
-  <text x="160" y="108" text-anchor="middle" font-size="13" font-weight="bold" fill="#f57f17">INSUFFICIENT_DATA</text>
-  <text x="160" y="126" text-anchor="middle" font-size="11" fill="#555">No data points yet</text>
-  <text x="160" y="142" text-anchor="middle" font-size="10" fill="#888">Initial state after creation</text>
-
-  <!-- OK -->
-  <rect x="350" y="82" width="200" height="70" rx="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2.5"/>
-  <text x="450" y="108" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e7d32">OK</text>
-  <text x="450" y="126" text-anchor="middle" font-size="11" fill="#555">Metric within threshold</text>
-  <text x="450" y="142" text-anchor="middle" font-size="10" fill="#888">ok-action fires on entry</text>
-
-  <!-- ALARM -->
-  <rect x="640" y="82" width="200" height="70" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2.5"/>
-  <text x="740" y="108" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">ALARM</text>
-  <text x="740" y="126" text-anchor="middle" font-size="11" fill="#555">Threshold breached N periods</text>
-  <text x="740" y="142" text-anchor="middle" font-size="10" fill="#888">alarm-action fires on entry</text>
-
-  <!-- Transition arrows -->
-  <!-- INSUFFICIENT_DATA → OK -->
-  <path d="M 260 105 Q 305 88 350 105" fill="none" stroke="#388e3c" stroke-width="2" marker-end="url(#aGreen)"/>
-  <text x="305" y="84" text-anchor="middle" font-size="10" fill="#388e3c">first data arrives,</text>
-  <text x="305" y="96" text-anchor="middle" font-size="10" fill="#388e3c">metric within threshold</text>
-
-  <!-- INSUFFICIENT_DATA → ALARM -->
-  <path d="M 160 152 Q 160 195 740 195 Q 740 165 740 152" fill="none" stroke="#c62828" stroke-width="1.8" stroke-dasharray="6,3" marker-end="url(#aRed)"/>
-  <text x="450" y="210" text-anchor="middle" font-size="10" fill="#c62828">first data arrives already breaching threshold (INSUFFICIENT → ALARM, no email on this transition)</text>
-
-  <!-- OK → ALARM -->
-  <path d="M 550 105 Q 595 88 640 105" fill="none" stroke="#c62828" stroke-width="2" marker-end="url(#aRed)"/>
-  <text x="595" y="84" text-anchor="middle" font-size="10" fill="#c62828">N consecutive periods</text>
-  <text x="595" y="96" text-anchor="middle" font-size="10" fill="#c62828">above threshold</text>
-
-  <!-- ALARM → OK -->
-  <path d="M 640 135 Q 595 155 550 135" fill="none" stroke="#388e3c" stroke-width="2" marker-end="url(#aGreen)"/>
-  <text x="595" y="160" text-anchor="middle" font-size="10" fill="#388e3c">metric drops below threshold</text>
-
-  <!-- ── EVALUATION PERIOD DIAGRAM (middle) ── -->
-  <line x1="30" y1="228" x2="870" y2="228" stroke="#ddd" stroke-width="1"/>
-  <text x="30" y="250" font-size="13" font-weight="bold" fill="#555">Evaluation Period Logic — EC2-CPU-High (threshold 70%, 2 periods of 5 min)</text>
-
-  <!-- Timeline base -->
-  <rect x="30" y="265" width="840" height="6" rx="3" fill="#e0e0e0"/>
-
-  <!-- Time labels -->
-  <text x="30"  y="285" font-size="10" fill="#888">T+0</text>
-  <text x="155" y="285" font-size="10" fill="#888">T+5m</text>
-  <text x="285" y="285" font-size="10" fill="#888">T+10m</text>
-  <text x="415" y="285" font-size="10" fill="#888">T+15m</text>
-  <text x="545" y="285" font-size="10" fill="#888">T+20m</text>
-  <text x="680" y="285" font-size="10" fill="#888">T+25m</text>
-  <text x="810" y="285" font-size="10" fill="#888">T+30m</text>
-
-  <!-- Period blocks -->
-  <!-- Period 1: 0-5m CPU=30% OK -->
-  <rect x="30"  y="295" width="125" height="46" rx="4" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5"/>
-  <text x="92"  y="315" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Period 1</text>
-  <text x="92"  y="331" text-anchor="middle" font-size="11" fill="#333">CPU avg: 30%</text>
-  <text x="92"  y="344" text-anchor="middle" font-size="10" fill="#388e3c">✓ OK</text>
-
-  <!-- Period 2: 5-10m CPU=75% BREACH #1 -->
-  <rect x="160" y="295" width="125" height="46" rx="4" fill="#fff8e1" stroke="#f57f17" stroke-width="1.5"/>
-  <text x="222" y="315" text-anchor="middle" font-size="11" font-weight="bold" fill="#e65100">Period 2</text>
-  <text x="222" y="331" text-anchor="middle" font-size="11" fill="#333">CPU avg: 75%</text>
-  <text x="222" y="344" text-anchor="middle" font-size="10" fill="#e65100">⚡ BREACH 1</text>
-
-  <!-- Period 3: 10-15m CPU=82% BREACH #2 → ALARM -->
-  <rect x="290" y="295" width="125" height="46" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
-  <text x="352" y="315" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">Period 3</text>
-  <text x="352" y="331" text-anchor="middle" font-size="11" fill="#333">CPU avg: 82%</text>
-  <text x="352" y="344" text-anchor="middle" font-size="10" fill="#c62828">🔔 ALARM fires!</text>
-
-  <!-- Period 4: 15-20m CPU=90% still ALARM -->
-  <rect x="420" y="295" width="125" height="46" rx="4" fill="#ffcdd2" stroke="#c62828" stroke-width="1.5"/>
-  <text x="482" y="315" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">Period 4</text>
-  <text x="482" y="331" text-anchor="middle" font-size="11" fill="#333">CPU avg: 90%</text>
-  <text x="482" y="344" text-anchor="middle" font-size="10" fill="#c62828">⚠ still ALARM</text>
-
-  <!-- Period 5: 20-25m CPU=55% → OK transition -->
-  <rect x="550" y="295" width="125" height="46" rx="4" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5"/>
-  <text x="612" y="315" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Period 5</text>
-  <text x="612" y="331" text-anchor="middle" font-size="11" fill="#333">CPU avg: 55%</text>
-  <text x="612" y="344" text-anchor="middle" font-size="10" fill="#388e3c">✓ → OK recovery</text>
-
-  <!-- Period 6: 25-30m OK -->
-  <rect x="680" y="295" width="125" height="46" rx="4" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5"/>
-  <text x="742" y="315" text-anchor="middle" font-size="11" font-weight="bold" fill="#2e7d32">Period 6</text>
-  <text x="742" y="331" text-anchor="middle" font-size="11" fill="#333">CPU avg: 20%</text>
-  <text x="742" y="344" text-anchor="middle" font-size="10" fill="#388e3c">✓ OK</text>
-
-  <!-- ALARM annotation arrow -->
-  <line x1="352" y1="295" x2="352" y2="262" stroke="#c62828" stroke-width="1.5" marker-end="url(#aRed)"/>
-  <text x="360" y="258" font-size="10" fill="#c62828">SNS email sent</text>
-
-  <!-- OK recovery annotation -->
-  <line x1="612" y1="295" x2="612" y2="262" stroke="#388e3c" stroke-width="1.5" marker-end="url(#aGreen)"/>
-  <text x="620" y="258" font-size="10" fill="#388e3c">recovery email</text>
-
-  <!-- ── ALL 8 ALARMS TABLE ── -->
-  <line x1="30" y1="360" x2="870" y2="360" stroke="#ddd" stroke-width="1"/>
-  <text x="30" y="382" font-size="13" font-weight="bold" fill="#555">All 8 Alarms — Configuration Summary</text>
-
-  <!-- Table header -->
-  <rect x="30" y="390" width="840" height="26" rx="4" fill="#232f3e"/>
-  <text x="42"  y="408" font-size="11" font-weight="bold" fill="white">Alarm Name</text>
-  <text x="242" y="408" font-size="11" font-weight="bold" fill="white">Metric</text>
-  <text x="402" y="408" font-size="11" font-weight="bold" fill="white">Threshold</text>
-  <text x="522" y="408" font-size="11" font-weight="bold" fill="white">Period × N</text>
-  <text x="642" y="408" font-size="11" font-weight="bold" fill="white">Statistic</text>
-  <text x="752" y="408" font-size="11" font-weight="bold" fill="white">OK-action</text>
-
-  <!-- Row data -->
-  <!-- EC2-CPU-High -->
-  <rect x="30" y="416" width="840" height="24" rx="0" fill="#fff8f8"/>
-  <text x="42"  y="432" font-size="11" fill="#333">EC2-CPU-High</text>
-  <text x="242" y="432" font-size="11" fill="#333">AWS/EC2 CPUUtilization</text>
-  <text x="402" y="432" font-size="11" fill="#c62828">&gt; 70%</text>
-  <text x="522" y="432" font-size="11" fill="#333">300s × 2</text>
-  <text x="642" y="432" font-size="11" fill="#333">Average</text>
-  <text x="752" y="432" font-size="11" fill="#388e3c">✓ Yes</text>
-
-  <!-- EC2-StatusCheck -->
-  <rect x="30" y="440" width="840" height="24" rx="0" fill="white"/>
-  <text x="42"  y="456" font-size="11" fill="#333">EC2-StatusCheck-Failed</text>
-  <text x="242" y="456" font-size="11" fill="#333">AWS/EC2 StatusCheckFailed</text>
-  <text x="402" y="456" font-size="11" fill="#c62828">≥ 1</text>
-  <text x="522" y="456" font-size="11" fill="#333">60s × 2</text>
-  <text x="642" y="456" font-size="11" fill="#333">Maximum</text>
-  <text x="752" y="456" font-size="11" fill="#888">No</text>
-
-  <!-- EC2-NetworkIn -->
-  <rect x="30" y="464" width="840" height="24" rx="0" fill="#fff8f8"/>
-  <text x="42"  y="480" font-size="11" fill="#333">EC2-NetworkIn-High</text>
-  <text x="242" y="480" font-size="11" fill="#333">AWS/EC2 NetworkIn</text>
-  <text x="402" y="480" font-size="11" fill="#c62828">&gt; 5,000,000 bytes</text>
-  <text x="522" y="480" font-size="11" fill="#333">300s × 1</text>
-  <text x="642" y="480" font-size="11" fill="#333">Average</text>
-  <text x="752" y="480" font-size="11" fill="#888">No</text>
-
-  <!-- RDS-CPU -->
-  <rect x="30" y="488" width="840" height="24" rx="0" fill="white"/>
-  <text x="42"  y="504" font-size="11" fill="#333">RDS-CPU-High</text>
-  <text x="242" y="504" font-size="11" fill="#333">AWS/RDS CPUUtilization</text>
-  <text x="402" y="504" font-size="11" fill="#c62828">&gt; 80%</text>
-  <text x="522" y="504" font-size="11" fill="#333">300s × 2</text>
-  <text x="642" y="504" font-size="11" fill="#333">Average</text>
-  <text x="752" y="504" font-size="11" fill="#388e3c">✓ Yes</text>
-
-  <!-- RDS-Storage -->
-  <rect x="30" y="512" width="840" height="24" rx="0" fill="#fff8f8"/>
-  <text x="42"  y="528" font-size="11" fill="#333">RDS-Storage-Low</text>
-  <text x="242" y="528" font-size="11" fill="#333">AWS/RDS FreeStorageSpace</text>
-  <text x="402" y="528" font-size="11" fill="#c62828">&lt; 2,000,000,000 bytes</text>
-  <text x="522" y="528" font-size="11" fill="#333">300s × 1</text>
-  <text x="642" y="528" font-size="11" fill="#333">Average</text>
-  <text x="752" y="528" font-size="11" fill="#388e3c">✓ Yes</text>
-
-  <!-- RDS-Connections -->
-  <rect x="30" y="536" width="840" height="24" rx="0" fill="white"/>
-  <text x="42"  y="552" font-size="11" fill="#333">RDS-Connections-High</text>
-  <text x="242" y="552" font-size="11" fill="#333">AWS/RDS DatabaseConnections</text>
-  <text x="402" y="552" font-size="11" fill="#c62828">&gt; 50</text>
-  <text x="522" y="552" font-size="11" fill="#333">300s × 1</text>
-  <text x="642" y="552" font-size="11" fill="#333">Average</text>
-  <text x="752" y="552" font-size="11" fill="#888">No</text>
-
-  <!-- Billing -->
-  <rect x="30" y="560" width="840" height="24" rx="0" fill="#fff8f8"/>
-  <text x="42"  y="576" font-size="11" fill="#333">Billing-Alert-5USD</text>
-  <text x="242" y="576" font-size="11" fill="#333">AWS/Billing EstimatedCharges</text>
-  <text x="402" y="576" font-size="11" fill="#c62828">&gt; $5 USD</text>
-  <text x="522" y="576" font-size="11" fill="#333">86400s × 1</text>
-  <text x="642" y="576" font-size="11" fill="#333">Maximum</text>
-  <text x="752" y="576" font-size="11" fill="#888">No</text>
-
-  <!-- App-Errors -->
-  <rect x="30" y="584" width="840" height="24" rx="0" fill="white"/>
-  <text x="42"  y="600" font-size="11" fill="#333">App-Errors-High</text>
-  <text x="242" y="600" font-size="11" fill="#333">CustomMetrics ApplicationErrors</text>
-  <text x="402" y="600" font-size="11" fill="#c62828">&gt; 5 (sum)</text>
-  <text x="522" y="600" font-size="11" fill="#333">300s × 1</text>
-  <text x="642" y="600" font-size="11" fill="#333">Sum</text>
-  <text x="752" y="600" font-size="11" fill="#888">No</text>
-
-  <!-- Table border -->
-  <rect x="30" y="390" width="840" height="218" rx="4" fill="none" stroke="#ccc" stroke-width="1"/>
-  <line x1="30" y1="416" x2="870" y2="416" stroke="#eee" stroke-width="1"/>
-
-  <!-- treat-missing-data note -->
-  <rect x="30" y="620" width="840" height="40" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1"/>
-  <text x="450" y="637" text-anchor="middle" font-size="11" font-weight="bold" fill="#1565c0">All alarms: treat-missing-data = notBreaching</text>
-  <text x="450" y="653" text-anchor="middle" font-size="11" fill="#555">If metric stops publishing (instance stopped), alarm stays OK — no false alerts when resources are intentionally shut down.</text>
+    @keyframes dashF { to { stroke-dashoffset: -20; } }
+    .df { stroke-dasharray: 6 4; animation: dashF 1s linear infinite; }
+    @keyframes pulseAlarm { 0%,100% { opacity:0.4; r:18; } 50% { opacity:0.8; r:22; } }
+    .pulse-ring { animation: pulseAlarm 2s ease-in-out infinite; }
+    @keyframes fUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .fu { animation: fUp 0.5s ease-out both; }
+    @keyframes breathe { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+    .breathe { animation: breathe 2s ease-in-out infinite; }
+  </style>
 
   <defs>
-    <marker id="aGreen" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#388e3c"/>
+    <linearGradient id="bgL" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0f4f8"/><stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="bgD" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e17"/><stop offset="100%" stop-color="#141b2b"/>
+    </linearGradient>
+    <linearGradient id="gYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/><stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="gRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EF4444"/><stop offset="100%" stop-color="#DC2626"/>
+    </linearGradient>
+
+    <filter id="sh" x="-6%" y="-6%" width="112%" height="118%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+    <filter id="gl" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <marker id="aGreen" markerWidth="9" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#10B981"/>
     </marker>
-    <marker id="aRed" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#c62828"/>
+    <marker id="aRed" markerWidth="9" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#EF4444"/>
     </marker>
+
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#94a3b8" stroke-width="0.5"/>
+    </pattern>
   </defs>
+
+  <rect width="1000" height="750" class="bg"/>
+  <g class="gw"><rect width="1000" height="750" fill="url(#grid)"/></g>
+
+  <!-- ═══ TITLE ═══ -->
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" class="tt" filter="url(#gl)">Alarm State Machine &amp; Evaluation Logic</text>
+  <text x="500" y="52" text-anchor="middle" font-size="11" class="ts">How CloudWatch alarms transition between states and trigger notifications</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 1: STATE MACHINE                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="30" y="78" font-size="10" font-weight="700" letter-spacing="1" class="ts">ALARM STATE TRANSITIONS</text>
+
+  <!-- INSUFFICIENT_DATA State -->
+  <g class="fu" style="animation-delay:0.1s">
+    <rect x="60" y="92" width="220" height="80" rx="14" class="card" stroke-width="1.5" filter="url(#sh)"/>
+    <rect x="60" y="92" width="220" height="80" rx="14" fill="#F59E0B" fill-opacity="0.06" stroke="#F59E0B" stroke-width="2"/>
+    <circle cx="80" cy="118" r="8" fill="url(#gYellow)" class="breathe"/>
+    <text x="95" y="122" font-size="12" font-weight="700" fill="#D97706">INSUFFICIENT_DATA</text>
+    <text x="80" y="142" font-size="9" class="tc">No data points yet</text>
+    <text x="80" y="156" font-size="8" class="tc">Initial state after alarm creation</text>
+  </g>
+
+  <!-- OK State -->
+  <g class="fu" style="animation-delay:0.2s">
+    <rect x="380" y="92" width="220" height="80" rx="14" class="card" stroke-width="1.5" filter="url(#sh)"/>
+    <rect x="380" y="92" width="220" height="80" rx="14" fill="#10B981" fill-opacity="0.06" stroke="#10B981" stroke-width="2"/>
+    <circle cx="400" cy="118" r="8" fill="url(#gGreen)" class="breathe"/>
+    <text x="415" y="122" font-size="12" font-weight="700" fill="#059669">OK</text>
+    <text x="400" y="142" font-size="9" class="tc">Metric within threshold</text>
+    <text x="400" y="156" font-size="8" class="tc">ok-action fires on entry</text>
+  </g>
+
+  <!-- ALARM State -->
+  <g class="fu" style="animation-delay:0.3s">
+    <rect x="700" y="92" width="220" height="80" rx="14" class="card" stroke-width="1.5" filter="url(#sh)"/>
+    <rect x="700" y="92" width="220" height="80" rx="14" fill="#EF4444" fill-opacity="0.06" stroke="#EF4444" stroke-width="2"/>
+    <!-- Pulse ring behind alarm -->
+    <circle cx="720" cy="118" fill="none" stroke="#EF4444" stroke-width="1" class="pulse-ring"/>
+    <circle cx="720" cy="118" r="8" fill="url(#gRed)"/>
+    <text x="735" y="122" font-size="12" font-weight="700" fill="#DC2626">ALARM</text>
+    <text x="720" y="142" font-size="9" class="tc">Threshold breached N periods</text>
+    <text x="720" y="156" font-size="8" class="tc">alarm-action fires → SNS email</text>
+  </g>
+
+  <!-- Transition: INSUFFICIENT_DATA → OK -->
+  <path d="M 280,118 Q 330,90 380,118" fill="none" stroke="#10B981" stroke-width="2" marker-end="url(#aGreen)"/>
+  <text x="330" y="85" text-anchor="middle" font-size="8" fill="#059669">first data arrives,</text>
+  <text x="330" y="95" text-anchor="middle" font-size="8" fill="#059669">within threshold</text>
+
+  <!-- Transition: INSUFFICIENT_DATA → ALARM (dashed, rare path) -->
+  <path d="M 170,172 Q 170,210 810,210 Q 810,185 810,172" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#aRed)"/>
+  <text x="490" y="225" text-anchor="middle" font-size="8" fill="#EF4444">first data arrives already breaching threshold (rare — no email on initial transition)</text>
+
+  <!-- Transition: OK → ALARM -->
+  <path d="M 600,118 Q 650,90 700,118" fill="none" stroke="#EF4444" stroke-width="2" marker-end="url(#aRed)"/>
+  <text x="650" y="85" text-anchor="middle" font-size="8" fill="#DC2626">N consecutive periods</text>
+  <text x="650" y="95" text-anchor="middle" font-size="8" fill="#DC2626">above threshold</text>
+
+  <!-- Transition: ALARM → OK -->
+  <path d="M 700,152 Q 650,175 600,152" fill="none" stroke="#10B981" stroke-width="2" marker-end="url(#aGreen)"/>
+  <text x="650" y="186" text-anchor="middle" font-size="8" fill="#059669">metric drops below threshold</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 2: EVALUATION PERIOD TIMELINE       -->
+  <!-- ═══════════════════════════════════════════ -->
+  <line x1="30" y1="245" x2="970" y2="245" stroke-width="0.5" class="dv"/>
+  <text x="30" y="265" font-size="10" font-weight="700" letter-spacing="1" class="ts">EVALUATION PERIOD LOGIC — EC2-CPU-High (threshold 70%, 2 of 2 periods of 5 min)</text>
+
+  <!-- Timeline bar -->
+  <rect x="30" y="280" width="940" height="6" rx="3" fill="#e2e8f0"/>
+
+  <!-- Time labels -->
+  <text x="30" y="300" font-size="9" class="tc">T+0</text>
+  <text x="160" y="300" font-size="9" class="tc">T+5m</text>
+  <text x="290" y="300" font-size="9" class="tc">T+10m</text>
+  <text x="420" y="300" font-size="9" class="tc">T+15m</text>
+  <text x="550" y="300" font-size="9" class="tc">T+20m</text>
+  <text x="680" y="300" font-size="9" class="tc">T+25m</text>
+  <text x="820" y="300" font-size="9" class="tc">T+30m</text>
+
+  <!-- Period 1: OK -->
+  <g class="fu" style="animation-delay:0.1s">
+    <rect x="30" y="310" width="135" height="52" rx="8" fill="#10B981" fill-opacity="0.06" stroke="#10B981" stroke-width="1.5" filter="url(#sh)"/>
+    <text x="97" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#059669">Period 1</text>
+    <text x="97" y="345" text-anchor="middle" font-size="10" class="tp">CPU avg: 30%</text>
+    <text x="97" y="358" text-anchor="middle" font-size="9" fill="#10B981">✓ OK</text>
+  </g>
+
+  <!-- Period 2: BREACH -->
+  <g class="fu" style="animation-delay:0.15s">
+    <rect x="175" y="310" width="135" height="52" rx="8" fill="#F59E0B" fill-opacity="0.08" stroke="#F59E0B" stroke-width="1.5" filter="url(#sh)"/>
+    <text x="242" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#D97706">Period 2</text>
+    <text x="242" y="345" text-anchor="middle" font-size="10" class="tp">CPU avg: 75%</text>
+    <text x="242" y="358" text-anchor="middle" font-size="9" fill="#F59E0B">⚡ BREACH 1</text>
+  </g>
+
+  <!-- Period 3: ALARM FIRES -->
+  <g class="fu" style="animation-delay:0.2s">
+    <rect x="320" y="310" width="135" height="52" rx="8" fill="#EF4444" fill-opacity="0.08" stroke="#EF4444" stroke-width="2" filter="url(#sh)"/>
+    <text x="387" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#DC2626">Period 3</text>
+    <text x="387" y="345" text-anchor="middle" font-size="10" class="tp">CPU avg: 82%</text>
+    <text x="387" y="358" text-anchor="middle" font-size="9" fill="#EF4444">🔔 ALARM fires!</text>
+  </g>
+
+  <!-- Period 4: still ALARM -->
+  <g class="fu" style="animation-delay:0.25s">
+    <rect x="465" y="310" width="135" height="52" rx="8" fill="#EF4444" fill-opacity="0.05" stroke="#EF4444" stroke-width="1.5"/>
+    <text x="532" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#DC2626">Period 4</text>
+    <text x="532" y="345" text-anchor="middle" font-size="10" class="tp">CPU avg: 90%</text>
+    <text x="532" y="358" text-anchor="middle" font-size="9" fill="#EF4444">⚠ still ALARM</text>
+  </g>
+
+  <!-- Period 5: OK recovery -->
+  <g class="fu" style="animation-delay:0.3s">
+    <rect x="610" y="310" width="135" height="52" rx="8" fill="#10B981" fill-opacity="0.06" stroke="#10B981" stroke-width="1.5"/>
+    <text x="677" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#059669">Period 5</text>
+    <text x="677" y="345" text-anchor="middle" font-size="10" class="tp">CPU avg: 55%</text>
+    <text x="677" y="358" text-anchor="middle" font-size="9" fill="#10B981">✓ → OK recovery</text>
+  </g>
+
+  <!-- Period 6: OK -->
+  <g class="fu" style="animation-delay:0.35s">
+    <rect x="755" y="310" width="135" height="52" rx="8" fill="#10B981" fill-opacity="0.06" stroke="#10B981" stroke-width="1.5"/>
+    <text x="822" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#059669">Period 6</text>
+    <text x="822" y="345" text-anchor="middle" font-size="10" class="tp">CPU avg: 20%</text>
+    <text x="822" y="358" text-anchor="middle" font-size="9" fill="#10B981">✓ OK</text>
+  </g>
+
+  <!-- ALARM annotation -->
+  <line x1="387" y1="310" x2="387" y2="278" stroke="#EF4444" stroke-width="1.5" marker-end="url(#aRed)"/>
+  <rect x="360" y="265" width="80" height="14" rx="7" fill="#EF4444" fill-opacity="0.1" stroke="#EF4444" stroke-width="0.8"/>
+  <text x="400" y="276" text-anchor="middle" font-size="8" font-weight="600" fill="#EF4444">SNS email sent</text>
+
+  <!-- OK recovery annotation -->
+  <line x1="677" y1="310" x2="677" y2="278" stroke="#10B981" stroke-width="1.5" marker-end="url(#aGreen)"/>
+  <rect x="645" y="265" width="90" height="14" rx="7" fill="#10B981" fill-opacity="0.1" stroke="#10B981" stroke-width="0.8"/>
+  <text x="690" y="276" text-anchor="middle" font-size="8" font-weight="600" fill="#10B981">recovery email</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 3: ALL 8 ALARMS TABLE               -->
+  <!-- ═══════════════════════════════════════════ -->
+  <line x1="30" y1="380" x2="970" y2="380" stroke-width="0.5" class="dv"/>
+  <text x="30" y="400" font-size="10" font-weight="700" letter-spacing="1" class="ts">ALL 8 ALARMS — CONFIGURATION SUMMARY</text>
+
+  <g class="fu" style="animation-delay:0.4s">
+    <!-- Table container -->
+    <rect x="30" y="410" width="940" height="250" rx="10" class="tbl-border" stroke-width="1" filter="url(#sh)"/>
+
+    <!-- Table header -->
+    <rect x="30" y="410" width="940" height="28" rx="10" class="tbl-header"/>
+    <rect x="30" y="428" width="940" height="10" class="tbl-header"/>
+    <text x="50" y="430" font-size="10" font-weight="700" class="tw">Alarm Name</text>
+    <text x="230" y="430" font-size="10" font-weight="700" class="tw">Metric</text>
+    <text x="430" y="430" font-size="10" font-weight="700" class="tw">Threshold</text>
+    <text x="560" y="430" font-size="10" font-weight="700" class="tw">Period × N</text>
+    <text x="670" y="430" font-size="10" font-weight="700" class="tw">Statistic</text>
+    <text x="770" y="430" font-size="10" font-weight="700" class="tw">OK-action</text>
+    <text x="870" y="430" font-size="10" font-weight="700" class="tw">Status</text>
+
+    <!-- Row 1: EC2-CPU-High -->
+    <rect x="30" y="438" width="940" height="26" class="tbl-row-even"/>
+    <circle cx="42" cy="451" r="4" fill="#FF9900"/>
+    <text x="50" y="455" font-size="10" class="tp">EC2-CPU-High</text>
+    <text x="230" y="455" font-size="10" class="tc">AWS/EC2 CPUUtilization</text>
+    <text x="430" y="455" font-size="10" fill="#EF4444">> 70%</text>
+    <text x="560" y="455" font-size="10" class="tc">300s × 2</text>
+    <text x="670" y="455" font-size="10" class="tc">Average</text>
+    <text x="770" y="455" font-size="10" fill="#10B981">✓ Yes</text>
+    <circle cx="878" cy="451" r="4" fill="#10B981"/>
+    <text x="888" y="455" font-size="9" fill="#10B981">OK</text>
+
+    <!-- Row 2: EC2-StatusCheck -->
+    <rect x="30" y="464" width="940" height="26" class="tbl-row-odd"/>
+    <circle cx="42" cy="477" r="4" fill="#FF9900"/>
+    <text x="50" y="481" font-size="10" class="tp">EC2-StatusCheck-Failed</text>
+    <text x="230" y="481" font-size="10" class="tc">AWS/EC2 StatusCheckFailed</text>
+    <text x="430" y="481" font-size="10" fill="#EF4444">≥ 1</text>
+    <text x="560" y="481" font-size="10" class="tc">60s × 2</text>
+    <text x="670" y="481" font-size="10" class="tc">Maximum</text>
+    <text x="770" y="481" font-size="10" class="tc">No</text>
+    <circle cx="878" cy="477" r="4" fill="#10B981"/>
+    <text x="888" y="481" font-size="9" fill="#10B981">OK</text>
+
+    <!-- Row 3: EC2-NetworkIn -->
+    <rect x="30" y="490" width="940" height="26" class="tbl-row-even"/>
+    <circle cx="42" cy="503" r="4" fill="#FF9900"/>
+    <text x="50" y="507" font-size="10" class="tp">EC2-NetworkIn-High</text>
+    <text x="230" y="507" font-size="10" class="tc">AWS/EC2 NetworkIn</text>
+    <text x="430" y="507" font-size="10" fill="#EF4444">> 5,000,000 bytes</text>
+    <text x="560" y="507" font-size="10" class="tc">300s × 1</text>
+    <text x="670" y="507" font-size="10" class="tc">Average</text>
+    <text x="770" y="507" font-size="10" class="tc">No</text>
+    <circle cx="878" cy="503" r="4" fill="#10B981"/>
+    <text x="888" y="507" font-size="9" fill="#10B981">OK</text>
+
+    <!-- Row 4: RDS-CPU -->
+    <rect x="30" y="516" width="940" height="26" class="tbl-row-odd"/>
+    <circle cx="42" cy="529" r="4" fill="#9C27B0"/>
+    <text x="50" y="533" font-size="10" class="tp">RDS-CPU-High</text>
+    <text x="230" y="533" font-size="10" class="tc">AWS/RDS CPUUtilization</text>
+    <text x="430" y="533" font-size="10" fill="#EF4444">> 80%</text>
+    <text x="560" y="533" font-size="10" class="tc">300s × 2</text>
+    <text x="670" y="533" font-size="10" class="tc">Average</text>
+    <text x="770" y="533" font-size="10" fill="#10B981">✓ Yes</text>
+    <circle cx="878" cy="529" r="4" fill="#10B981"/>
+    <text x="888" y="533" font-size="9" fill="#10B981">OK</text>
+
+    <!-- Row 5: RDS-Storage -->
+    <rect x="30" y="542" width="940" height="26" class="tbl-row-even"/>
+    <circle cx="42" cy="555" r="4" fill="#9C27B0"/>
+    <text x="50" y="559" font-size="10" class="tp">RDS-Storage-Low</text>
+    <text x="230" y="559" font-size="10" class="tc">AWS/RDS FreeStorageSpace</text>
+    <text x="430" y="559" font-size="10" fill="#EF4444">&lt; 2,000,000,000 bytes</text>
+    <text x="560" y="559" font-size="10" class="tc">300s × 1</text>
+    <text x="670" y="559" font-size="10" class="tc">Average</text>
+    <text x="770" y="559" font-size="10" fill="#10B981">✓ Yes</text>
+    <circle cx="878" cy="555" r="4" fill="#10B981"/>
+    <text x="888" y="559" font-size="9" fill="#10B981">OK</text>
+
+    <!-- Row 6: RDS-Connections -->
+    <rect x="30" y="568" width="940" height="26" class="tbl-row-odd"/>
+    <circle cx="42" cy="581" r="4" fill="#9C27B0"/>
+    <text x="50" y="585" font-size="10" class="tp">RDS-Connections-High</text>
+    <text x="230" y="585" font-size="10" class="tc">AWS/RDS DatabaseConnections</text>
+    <text x="430" y="585" font-size="10" fill="#EF4444">> 50</text>
+    <text x="560" y="585" font-size="10" class="tc">300s × 1</text>
+    <text x="670" y="585" font-size="10" class="tc">Average</text>
+    <text x="770" y="585" font-size="10" class="tc">No</text>
+    <circle cx="878" cy="581" r="4" fill="#10B981"/>
+    <text x="888" y="585" font-size="9" fill="#10B981">OK</text>
+
+    <!-- Row 7: Billing -->
+    <rect x="30" y="594" width="940" height="26" class="tbl-row-even"/>
+    <circle cx="42" cy="607" r="4" fill="#FF5722"/>
+    <text x="50" y="611" font-size="10" class="tp">Billing-Alert-5USD</text>
+    <text x="230" y="611" font-size="10" class="tc">AWS/Billing EstimatedCharges</text>
+    <text x="430" y="611" font-size="10" fill="#EF4444">> $5 USD</text>
+    <text x="560" y="611" font-size="10" class="tc">86400s × 1</text>
+    <text x="670" y="611" font-size="10" class="tc">Maximum</text>
+    <text x="770" y="611" font-size="10" class="tc">No</text>
+    <circle cx="878" cy="607" r="4" fill="#10B981"/>
+    <text x="888" y="611" font-size="9" fill="#10B981">OK</text>
+
+    <!-- Row 8: App-Errors -->
+    <rect x="30" y="620" width="940" height="26" rx="0" class="tbl-row-odd"/>
+    <rect x="30" y="636" width="940" height="10" rx="10" class="tbl-row-odd"/>
+    <circle cx="42" cy="633" r="4" fill="#2E7D32"/>
+    <text x="50" y="637" font-size="10" class="tp">App-Errors-High</text>
+    <text x="230" y="637" font-size="10" class="tc">CustomMetrics ApplicationErrors</text>
+    <text x="430" y="637" font-size="10" fill="#EF4444">> 5 (sum)</text>
+    <text x="560" y="637" font-size="10" class="tc">300s × 1</text>
+    <text x="670" y="637" font-size="10" class="tc">Sum</text>
+    <text x="770" y="637" font-size="10" class="tc">No</text>
+    <circle cx="878" cy="633" r="4" fill="#10B981"/>
+    <text x="888" y="637" font-size="9" fill="#10B981">OK</text>
+  </g>
+
+  <!-- ═══ TREAT-MISSING-DATA NOTE ═══ -->
+  <g class="fu" style="animation-delay:0.6s">
+    <rect x="30" y="680" width="940" height="42" rx="10" class="note-bg" stroke-width="1"/>
+    <rect x="30" y="680" width="4" height="42" rx="2" fill="#3B82F6"/>
+    <text x="500" y="700" text-anchor="middle" font-size="11" font-weight="700" class="note-text">All alarms: treat-missing-data = notBreaching</text>
+    <text x="500" y="714" text-anchor="middle" font-size="10" class="tc">If metric stops publishing (instance stopped), alarm stays OK — no false alerts when resources are intentionally shut down.</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="500" y="742" text-anchor="middle" font-size="8" class="tc" opacity="0.5">Project 07 — CloudWatch Monitoring · Alarm State Machine &amp; Evaluation Logic</text>
 </svg>

@@ -1,0 +1,356 @@
+<svg viewBox="0 0 1200 850" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <style>
+    .bg-main { fill: url(#bgLight); }
+    .grid-wrap { opacity: 0.05; }
+    .card { fill: #ffffff; stroke: #e2e8f0; }
+    .text-title { fill: #0f172a; }
+    .text-subtitle { fill: #64748b; }
+    .text-primary { fill: #1e293b; }
+    .text-secondary { fill: #64748b; }
+    .text-white { fill: #ffffff; }
+    .divider { stroke: #e2e8f0; }
+    .lane-bg-even { fill: #f8fafc; }
+    .lane-bg-odd { fill: #ffffff; }
+    .code-bg { fill: #f1f5f9; stroke: #e2e8f0; }
+    .arrow-line { stroke: #cbd5e1; }
+    .footer-bg { fill: #f8fafc; stroke: #e2e8f0; }
+
+    @media (prefers-color-scheme: dark) {
+      .bg-main { fill: url(#bgDark); }
+      .grid-wrap { opacity: 0.025; }
+      .card { fill: #1a2444; stroke: #2a3a5c; }
+      .text-title { fill: #f0f6fc; }
+      .text-subtitle { fill: #8899bb; }
+      .text-primary { fill: #ccd6f6; }
+      .text-secondary { fill: #8899bb; }
+      .divider { stroke: #2a3a5c; }
+      .lane-bg-even { fill: #111833; }
+      .lane-bg-odd { fill: #141e38; }
+      .code-bg { fill: #0f1629; stroke: #2a3a5c; }
+      .arrow-line { stroke: #3a4a6c; }
+      .footer-bg { fill: #111833; stroke: #2a3a5c; }
+    }
+
+    @keyframes dashFlow { to { stroke-dashoffset: -20; } }
+    .flow-dash { stroke-dasharray: 6 4; animation: dashFlow 1s linear infinite; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .fade-row { animation: fadeIn 0.5s ease-out both; }
+    .fade-d1 { animation-delay: 0.1s; }
+    .fade-d2 { animation-delay: 0.2s; }
+    .fade-d3 { animation-delay: 0.3s; }
+    .fade-d4 { animation-delay: 0.4s; }
+    .fade-d5 { animation-delay: 0.5s; }
+    @keyframes pulseOpacity { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+    .pulse { animation: pulseOpacity 2s ease-in-out infinite; }
+  </style>
+
+  <defs>
+    <linearGradient id="bgLight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0f4f8"/><stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="bgDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e17"/><stop offset="100%" stop-color="#141b2b"/>
+    </linearGradient>
+    <linearGradient id="postGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981"/><stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="getGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="putGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="deleteGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EF4444"/><stop offset="100%" stop-color="#DC2626"/>
+    </linearGradient>
+    <linearGradient id="lambdaAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF9900"/><stop offset="100%" stop-color="#E07C1F"/>
+    </linearGradient>
+    <linearGradient id="dynamoAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/><stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <marker id="arrPost" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#10B981"/>
+    </marker>
+    <marker id="arrGet" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2563EB"/>
+    </marker>
+    <marker id="arrPut" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#F59E0B"/>
+    </marker>
+    <marker id="arrDel" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#EF4444"/>
+    </marker>
+    <marker id="arrOrange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#FF9900"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2563EB"/>
+    </marker>
+
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#94a3b8" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="850" class="bg-main"/>
+  <g class="grid-wrap"><rect width="1200" height="850" fill="url(#grid)"/></g>
+
+  <!-- ════ TITLE ════ -->
+  <text x="600" y="38" text-anchor="middle" font-size="24" font-weight="700" class="text-title" filter="url(#glow)">CRUD Workflow</text>
+  <text x="600" y="58" text-anchor="middle" font-size="12" class="text-subtitle">Five REST operations — from HTTP request to DynamoDB and back</text>
+  <line x1="440" y1="68" x2="760" y2="68" stroke="url(#lambdaAccent)" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- ════ COLUMN HEADERS ════ -->
+  <g transform="translate(0, 82)">
+    <!-- HTTP Method column -->
+    <rect x="30" y="0" width="200" height="32" rx="8" fill="#8B5CF6" fill-opacity="0.12" stroke="#8B5CF6" stroke-width="1"/>
+    <text x="130" y="21" text-anchor="middle" font-size="11" font-weight="700" fill="#8B5CF6">HTTP Request</text>
+    <!-- Endpoint column -->
+    <rect x="245" y="0" width="200" height="32" rx="8" fill="#6366F1" fill-opacity="0.12" stroke="#6366F1" stroke-width="1"/>
+    <text x="345" y="21" text-anchor="middle" font-size="11" font-weight="700" fill="#6366F1">API Endpoint</text>
+    <!-- Lambda column -->
+    <rect x="480" y="0" width="220" height="32" rx="8" fill="#FF9900" fill-opacity="0.12" stroke="#FF9900" stroke-width="1"/>
+    <text x="590" y="21" text-anchor="middle" font-size="11" font-weight="700" fill="#FF9900">Lambda Handler</text>
+    <!-- DynamoDB column -->
+    <rect x="735" y="0" width="200" height="32" rx="8" fill="#2563EB" fill-opacity="0.12" stroke="#2563EB" stroke-width="1"/>
+    <text x="835" y="21" text-anchor="middle" font-size="11" font-weight="700" fill="#2563EB">DynamoDB Operation</text>
+    <!-- Response column -->
+    <rect x="970" y="0" width="195" height="32" rx="8" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-width="1"/>
+    <text x="1067" y="21" text-anchor="middle" font-size="11" font-weight="700" fill="#10B981">Response</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- ROW 1: POST /users — Create User                           -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <g class="fade-row fade-d1">
+    <rect x="25" y="128" width="1150" height="120" rx="12" class="lane-bg-odd" stroke-width="0" filter="url(#shadow)"/>
+    <!-- Left accent bar -->
+    <rect x="25" y="128" width="5" height="120" rx="2" fill="url(#postGrad)"/>
+
+    <!-- Method badge -->
+    <rect x="45" y="148" width="70" height="28" rx="6" fill="url(#postGrad)" filter="url(#glow)"/>
+    <text x="80" y="167" text-anchor="middle" font-size="12" font-weight="800" class="text-white">POST</text>
+    <text x="45" y="205" font-size="10" class="text-secondary">Create a new user</text>
+    <text x="45" y="220" font-size="9" class="text-secondary">with name &amp; email</text>
+
+    <!-- Arrow → Endpoint -->
+    <line x1="130" y1="162" x2="245" y2="162" stroke="#10B981" stroke-width="1.5" class="flow-dash" marker-end="url(#arrPost)"/>
+
+    <!-- Endpoint -->
+    <rect x="250" y="145" width="185" height="34" rx="8" class="code-bg" stroke-width="1"/>
+    <text x="342" y="167" text-anchor="middle" font-size="12" font-family="monospace" class="text-primary">/users</text>
+    <text x="260" y="200" font-size="9" class="text-secondary">Body: { name, email }</text>
+    <text x="260" y="215" font-size="9" class="text-secondary">Content-Type: JSON</text>
+
+    <!-- Arrow → Lambda -->
+    <line x1="445" y1="162" x2="490" y2="162" stroke="#FF9900" stroke-width="1.5" class="flow-dash" marker-end="url(#arrOrange)"/>
+
+    <!-- Lambda handler -->
+    <rect x="495" y="140" width="200" height="46" rx="8" fill="#FF9900" fill-opacity="0.06" stroke="#FF9900" stroke-width="1"/>
+    <text x="595" y="161" text-anchor="middle" font-size="11" font-weight="600" fill="#FF9900">create_user()</text>
+    <text x="595" y="178" text-anchor="middle" font-size="9" class="text-secondary">Generate UUID → PutItem</text>
+    <text x="505" y="210" font-size="9" class="text-secondary">uuid4() for userId</text>
+    <text x="505" y="225" font-size="9" class="text-secondary">Add timestamps</text>
+
+    <!-- Arrow → DynamoDB -->
+    <line x1="705" y1="162" x2="740" y2="162" stroke="#2563EB" stroke-width="1.5" class="flow-dash" marker-end="url(#arrBlue)"/>
+
+    <!-- DynamoDB op -->
+    <rect x="745" y="140" width="180" height="46" rx="8" fill="#2563EB" fill-opacity="0.06" stroke="#2563EB" stroke-width="1"/>
+    <text x="835" y="161" text-anchor="middle" font-size="11" font-weight="600" fill="#2563EB">PutItem</text>
+    <text x="835" y="178" text-anchor="middle" font-size="9" class="text-secondary">Insert full user record</text>
+    <text x="755" y="210" font-size="9" class="text-secondary">Condition: userId not exists</text>
+
+    <!-- Response -->
+    <rect x="975" y="148" width="56" height="24" rx="12" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="1"/>
+    <text x="1003" y="165" text-anchor="middle" font-size="11" font-weight="700" fill="#10B981">201</text>
+    <text x="1040" y="165" font-size="10" class="text-secondary">Created</text>
+    <text x="980" y="200" font-size="9" class="text-secondary">Returns: user object</text>
+    <text x="980" y="215" font-size="9" class="text-secondary">with generated userId</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- ROW 2: GET /users — List All Users                          -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <g class="fade-row fade-d2">
+    <rect x="25" y="260" width="1150" height="120" rx="12" class="lane-bg-even" stroke-width="0" filter="url(#shadow)"/>
+    <rect x="25" y="260" width="5" height="120" rx="2" fill="url(#getGrad)"/>
+
+    <rect x="45" y="280" width="70" height="28" rx="6" fill="url(#getGrad)" filter="url(#glow)"/>
+    <text x="80" y="299" text-anchor="middle" font-size="12" font-weight="800" class="text-white">GET</text>
+    <text x="45" y="337" font-size="10" class="text-secondary">List all users</text>
+    <text x="45" y="352" font-size="9" class="text-secondary">No parameters</text>
+
+    <line x1="130" y1="294" x2="245" y2="294" stroke="#2563EB" stroke-width="1.5" class="flow-dash" marker-end="url(#arrGet)"/>
+
+    <rect x="250" y="277" width="185" height="34" rx="8" class="code-bg" stroke-width="1"/>
+    <text x="342" y="299" text-anchor="middle" font-size="12" font-family="monospace" class="text-primary">/users</text>
+    <text x="260" y="332" font-size="9" class="text-secondary">No request body</text>
+    <text x="260" y="347" font-size="9" class="text-secondary">Optional: query params</text>
+
+    <line x1="445" y1="294" x2="490" y2="294" stroke="#FF9900" stroke-width="1.5" class="flow-dash" marker-end="url(#arrOrange)"/>
+
+    <rect x="495" y="272" width="200" height="46" rx="8" fill="#FF9900" fill-opacity="0.06" stroke="#FF9900" stroke-width="1"/>
+    <text x="595" y="293" text-anchor="middle" font-size="11" font-weight="600" fill="#FF9900">list_users()</text>
+    <text x="595" y="310" text-anchor="middle" font-size="9" class="text-secondary">Full table scan</text>
+    <text x="505" y="342" font-size="9" class="text-secondary">Returns array of all items</text>
+
+    <line x1="705" y1="294" x2="740" y2="294" stroke="#2563EB" stroke-width="1.5" class="flow-dash" marker-end="url(#arrBlue)"/>
+
+    <rect x="745" y="272" width="180" height="46" rx="8" fill="#2563EB" fill-opacity="0.06" stroke="#2563EB" stroke-width="1"/>
+    <text x="835" y="293" text-anchor="middle" font-size="11" font-weight="600" fill="#2563EB">Scan</text>
+    <text x="835" y="310" text-anchor="middle" font-size="9" class="text-secondary">Return all records</text>
+
+    <rect x="975" y="280" width="56" height="24" rx="12" fill="#2563EB" fill-opacity="0.15" stroke="#2563EB" stroke-width="1"/>
+    <text x="1003" y="297" text-anchor="middle" font-size="11" font-weight="700" fill="#2563EB">200</text>
+    <text x="1040" y="297" font-size="10" class="text-secondary">OK</text>
+    <text x="980" y="332" font-size="9" class="text-secondary">Returns: { users: [...] }</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- ROW 3: GET /users/{id} — Get Single User                    -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <g class="fade-row fade-d3">
+    <rect x="25" y="392" width="1150" height="120" rx="12" class="lane-bg-odd" stroke-width="0" filter="url(#shadow)"/>
+    <rect x="25" y="392" width="5" height="120" rx="2" fill="url(#getGrad)"/>
+
+    <rect x="45" y="412" width="70" height="28" rx="6" fill="url(#getGrad)" filter="url(#glow)"/>
+    <text x="80" y="431" text-anchor="middle" font-size="12" font-weight="800" class="text-white">GET</text>
+    <text x="45" y="469" font-size="10" class="text-secondary">Get single user</text>
+    <text x="45" y="484" font-size="9" class="text-secondary">by userId path param</text>
+
+    <line x1="130" y1="426" x2="245" y2="426" stroke="#2563EB" stroke-width="1.5" class="flow-dash" marker-end="url(#arrGet)"/>
+
+    <rect x="250" y="409" width="185" height="34" rx="8" class="code-bg" stroke-width="1"/>
+    <text x="342" y="431" text-anchor="middle" font-size="12" font-family="monospace" class="text-primary">/users/{userId}</text>
+    <text x="260" y="464" font-size="9" class="text-secondary">Path param: userId</text>
+    <text x="260" y="479" font-size="9" class="text-secondary">Example: /users/abc-123</text>
+
+    <line x1="445" y1="426" x2="490" y2="426" stroke="#FF9900" stroke-width="1.5" class="flow-dash" marker-end="url(#arrOrange)"/>
+
+    <rect x="495" y="404" width="200" height="46" rx="8" fill="#FF9900" fill-opacity="0.06" stroke="#FF9900" stroke-width="1"/>
+    <text x="595" y="425" text-anchor="middle" font-size="11" font-weight="600" fill="#FF9900">get_user(userId)</text>
+    <text x="595" y="442" text-anchor="middle" font-size="9" class="text-secondary">Extract userId → GetItem</text>
+    <text x="505" y="474" font-size="9" class="text-secondary">404 if item not found</text>
+
+    <line x1="705" y1="426" x2="740" y2="426" stroke="#2563EB" stroke-width="1.5" class="flow-dash" marker-end="url(#arrBlue)"/>
+
+    <rect x="745" y="404" width="180" height="46" rx="8" fill="#2563EB" fill-opacity="0.06" stroke="#2563EB" stroke-width="1"/>
+    <text x="835" y="425" text-anchor="middle" font-size="11" font-weight="600" fill="#2563EB">GetItem</text>
+    <text x="835" y="442" text-anchor="middle" font-size="9" class="text-secondary">Key: { userId }</text>
+
+    <rect x="975" y="412" width="56" height="24" rx="12" fill="#2563EB" fill-opacity="0.15" stroke="#2563EB" stroke-width="1"/>
+    <text x="1003" y="429" text-anchor="middle" font-size="11" font-weight="700" fill="#2563EB">200</text>
+    <rect x="975" y="442" width="56" height="24" rx="12" fill="#EF4444" fill-opacity="0.12" stroke="#EF4444" stroke-width="0.8"/>
+    <text x="1003" y="459" text-anchor="middle" font-size="10" font-weight="600" fill="#EF4444">404</text>
+    <text x="1040" y="429" font-size="10" class="text-secondary">Found</text>
+    <text x="1040" y="459" font-size="10" class="text-secondary">Not Found</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- ROW 4: PUT /users/{id} — Update User                        -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <g class="fade-row fade-d4">
+    <rect x="25" y="524" width="1150" height="120" rx="12" class="lane-bg-even" stroke-width="0" filter="url(#shadow)"/>
+    <rect x="25" y="524" width="5" height="120" rx="2" fill="url(#putGrad)"/>
+
+    <rect x="45" y="544" width="70" height="28" rx="6" fill="url(#putGrad)" filter="url(#glow)"/>
+    <text x="80" y="563" text-anchor="middle" font-size="12" font-weight="800" class="text-white">PUT</text>
+    <text x="45" y="601" font-size="10" class="text-secondary">Update user fields</text>
+    <text x="45" y="616" font-size="9" class="text-secondary">partial update</text>
+
+    <line x1="130" y1="558" x2="245" y2="558" stroke="#F59E0B" stroke-width="1.5" class="flow-dash" marker-end="url(#arrPut)"/>
+
+    <rect x="250" y="541" width="185" height="34" rx="8" class="code-bg" stroke-width="1"/>
+    <text x="342" y="563" text-anchor="middle" font-size="12" font-family="monospace" class="text-primary">/users/{userId}</text>
+    <text x="260" y="596" font-size="9" class="text-secondary">Body: { name?, email? }</text>
+    <text x="260" y="611" font-size="9" class="text-secondary">Updates provided fields</text>
+
+    <line x1="445" y1="558" x2="490" y2="558" stroke="#FF9900" stroke-width="1.5" class="flow-dash" marker-end="url(#arrOrange)"/>
+
+    <rect x="495" y="536" width="200" height="46" rx="8" fill="#FF9900" fill-opacity="0.06" stroke="#FF9900" stroke-width="1"/>
+    <text x="595" y="557" text-anchor="middle" font-size="11" font-weight="600" fill="#FF9900">update_user(userId)</text>
+    <text x="595" y="574" text-anchor="middle" font-size="9" class="text-secondary">Build UpdateExpression</text>
+    <text x="505" y="606" font-size="9" class="text-secondary">Sets updatedAt timestamp</text>
+
+    <line x1="705" y1="558" x2="740" y2="558" stroke="#2563EB" stroke-width="1.5" class="flow-dash" marker-end="url(#arrBlue)"/>
+
+    <rect x="745" y="536" width="180" height="46" rx="8" fill="#2563EB" fill-opacity="0.06" stroke="#2563EB" stroke-width="1"/>
+    <text x="835" y="557" text-anchor="middle" font-size="11" font-weight="600" fill="#2563EB">UpdateItem</text>
+    <text x="835" y="574" text-anchor="middle" font-size="9" class="text-secondary">SET name, email, updatedAt</text>
+
+    <rect x="975" y="544" width="56" height="24" rx="12" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-width="1"/>
+    <text x="1003" y="561" text-anchor="middle" font-size="11" font-weight="700" fill="#F59E0B">200</text>
+    <rect x="975" y="574" width="56" height="24" rx="12" fill="#EF4444" fill-opacity="0.12" stroke="#EF4444" stroke-width="0.8"/>
+    <text x="1003" y="591" text-anchor="middle" font-size="10" font-weight="600" fill="#EF4444">404</text>
+    <text x="1040" y="561" font-size="10" class="text-secondary">Updated</text>
+    <text x="1040" y="591" font-size="10" class="text-secondary">Not Found</text>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- ROW 5: DELETE /users/{id} — Delete User                     -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <g class="fade-row fade-d5">
+    <rect x="25" y="656" width="1150" height="120" rx="12" class="lane-bg-odd" stroke-width="0" filter="url(#shadow)"/>
+    <rect x="25" y="656" width="5" height="120" rx="2" fill="url(#deleteGrad)"/>
+
+    <rect x="45" y="676" width="70" height="28" rx="6" fill="url(#deleteGrad)" filter="url(#glow)"/>
+    <text x="80" y="695" text-anchor="middle" font-size="12" font-weight="800" class="text-white">DEL</text>
+    <text x="45" y="733" font-size="10" class="text-secondary">Delete user</text>
+    <text x="45" y="748" font-size="9" class="text-secondary">permanent removal</text>
+
+    <line x1="130" y1="690" x2="245" y2="690" stroke="#EF4444" stroke-width="1.5" class="flow-dash" marker-end="url(#arrDel)"/>
+
+    <rect x="250" y="673" width="185" height="34" rx="8" class="code-bg" stroke-width="1"/>
+    <text x="342" y="695" text-anchor="middle" font-size="12" font-family="monospace" class="text-primary">/users/{userId}</text>
+    <text x="260" y="728" font-size="9" class="text-secondary">No request body</text>
+    <text x="260" y="743" font-size="9" class="text-secondary">userId from path</text>
+
+    <line x1="445" y1="690" x2="490" y2="690" stroke="#FF9900" stroke-width="1.5" class="flow-dash" marker-end="url(#arrOrange)"/>
+
+    <rect x="495" y="668" width="200" height="46" rx="8" fill="#FF9900" fill-opacity="0.06" stroke="#FF9900" stroke-width="1"/>
+    <text x="595" y="689" text-anchor="middle" font-size="11" font-weight="600" fill="#FF9900">delete_user(userId)</text>
+    <text x="595" y="706" text-anchor="middle" font-size="9" class="text-secondary">Check exists → DeleteItem</text>
+    <text x="505" y="738" font-size="9" class="text-secondary">404 if user doesn't exist</text>
+
+    <line x1="705" y1="690" x2="740" y2="690" stroke="#2563EB" stroke-width="1.5" class="flow-dash" marker-end="url(#arrBlue)"/>
+
+    <rect x="745" y="668" width="180" height="46" rx="8" fill="#2563EB" fill-opacity="0.06" stroke="#2563EB" stroke-width="1"/>
+    <text x="835" y="689" text-anchor="middle" font-size="11" font-weight="600" fill="#2563EB">DeleteItem</text>
+    <text x="835" y="706" text-anchor="middle" font-size="9" class="text-secondary">Key: { userId }</text>
+
+    <rect x="975" y="676" width="56" height="24" rx="12" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="1"/>
+    <text x="1003" y="693" text-anchor="middle" font-size="11" font-weight="700" fill="#10B981">200</text>
+    <rect x="975" y="706" width="56" height="24" rx="12" fill="#EF4444" fill-opacity="0.12" stroke="#EF4444" stroke-width="0.8"/>
+    <text x="1003" y="723" text-anchor="middle" font-size="10" font-weight="600" fill="#EF4444">404</text>
+    <text x="1040" y="693" font-size="10" class="text-secondary">Deleted</text>
+    <text x="1040" y="723" font-size="10" class="text-secondary">Not Found</text>
+  </g>
+
+  <!-- ════ FOOTER ════ -->
+  <rect x="25" y="795" width="1150" height="40" rx="8" class="footer-bg" stroke-width="1"/>
+  <text x="50" y="820" font-size="10" class="text-secondary">All responses include CORS headers: Access-Control-Allow-Origin: *</text>
+
+  <!-- Method legend -->
+  <rect x="530" y="805" width="40" height="16" rx="4" fill="url(#postGrad)"/>
+  <text x="550" y="817" text-anchor="middle" font-size="8" font-weight="700" class="text-white">POST</text>
+  <rect x="578" y="805" width="40" height="16" rx="4" fill="url(#getGrad)"/>
+  <text x="598" y="817" text-anchor="middle" font-size="8" font-weight="700" class="text-white">GET</text>
+  <rect x="626" y="805" width="40" height="16" rx="4" fill="url(#putGrad)"/>
+  <text x="646" y="817" text-anchor="middle" font-size="8" font-weight="700" class="text-white">PUT</text>
+  <rect x="674" y="805" width="40" height="16" rx="4" fill="url(#deleteGrad)"/>
+  <text x="694" y="817" text-anchor="middle" font-size="8" font-weight="700" class="text-white">DEL</text>
+
+  <text x="1150" y="820" text-anchor="end" font-size="8" class="text-secondary" opacity="0.5">Project 08 — Serverless REST API</text>
+</svg>
