@@ -1,0 +1,29 @@
+# Generated pipeline files
+pipeline-definition.json
+userdata-deploy.sh
+
+# AWS credentials — never commit
+.aws/
+credentials
+*.pem
+*.ppk
+
+# Secrets
+*.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# PowerShell temp
+*.tmp
+
+# Raw screenshots
+screenshots/raw-console-captures/
