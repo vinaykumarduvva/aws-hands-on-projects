@@ -68,20 +68,22 @@ The pipeline follows a **Source → Build → Deploy** pattern:
 - ✅ Security group restricting SSH to your IP only
 
 ## Project Structure
+
 my-web-app/
 ├── index.html # Web application
 ├── buildspec.yml # CodeBuild configuration
 ├── appspec.yml # CodeDeploy configuration
 ├── scripts/
-│ ├── before_install.sh # Pre-installation tasks
-│ ├── after_install.sh # Post-installation tasks
-│ ├── start_application.sh # Start web server
-│ └── validate_service.sh # Health check validation
+│   ├── before_install.sh # Pre-installation tasks
+│   ├── after_install.sh # Post-installation tasks
+│   ├── start_application.sh # Start web server
+│   └── validate_service.sh # Health check validation
 └── dist/ # Build output directory (created by CodeBuild)
-├── index.html
-├── appspec.yml
-├── build-info.txt
-└── scripts/
+    ├── index.html
+    ├── appspec.yml
+    ├── build-info.txt
+    └── scripts/
+```
 
 ## Success Metrics
 

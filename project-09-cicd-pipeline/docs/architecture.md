@@ -7,85 +7,91 @@ The CI/CD pipeline implements a three-stage deployment workflow using AWS manage
 ## Component Architecture
 
 ### 1. Source Control Layer
+```text
 ┌─────────────────────────────────────┐
-│ AWS CodeCommit │
-│ ┌─────────────────────────────┐ │
-│ │ Repository: my-web-app │ │
-│ │ Branch: main │ │
-│ │ Files: │ │
-│ │ - index.html │ │
-│ │ - buildspec.yml │ │
-│ │ - appspec.yml │ │
-│ │ - scripts/*.sh │ │
-│ └─────────────────────────────┘ │
+│ AWS CodeCommit                      │
+│ ┌─────────────────────────────────┐ │
+│ │ Repository: my-web-app          │ │
+│ │ Branch: main                    │ │
+│ │ Files:                          │ │
+│ │ - index.html                    │ │
+│ │ - buildspec.yml                 │ │
+│ │ - appspec.yml                   │ │
+│ │ - scripts/*.sh                  │ │
+│ └─────────────────────────────────┘ │
 └─────────────────────────────────────┘
-
+```
 
 ### 2. Build Layer
+```text
 ┌─────────────────────────────────────┐
-│ AWS CodeBuild │
-│ ┌─────────────────────────────┐ │
-│ │ Project: my-web-app-build │ │
-│ │ Image: aws/codebuild/ │ │
-│ │ standard:7.0 │ │
-│ │ Compute: BUILD_GENERAL1_ │ │
-│ │ SMALL │ │
-│ │ Phases: │ │
-│ │ - Install (Python 3.11) │ │
-│ │ - Pre-build (validation) │ │
-│ │ - Build (packaging) │ │
-│ │ - Post-build (finalize) │ │
-│ └─────────────────────────────┘ │
+│ AWS CodeBuild                       │
+│ ┌─────────────────────────────────┐ │
+│ │ Project: my-web-app-build       │ │
+│ │ Image: aws/codebuild/           │ │
+│ │        standard:7.0             │ │
+│ │ Compute: BUILD_GENERAL1_SMALL   │ │
+│ │ Phases:                         │ │
+│ │ - Install (Python 3.11)         │ │
+│ │ - Pre-build (validation)        │ │
+│ │ - Build (packaging)             │ │
+│ │ - Post-build (finalize)         │ │
+│ └─────────────────────────────────┘ │
 └─────────────────────────────────────┘
-### 3. Deployment Layer
-┌─────────────────────────────────────┐
-│ AWS CodeDeploy │
-│ ┌─────────────────────────────┐ │
-│ │ App: my-web-app │ │
-│ │ Group: production │ │
-│ │ Config: AllAtOnce │ │
-│ │ Hooks: │ │
-│ │ - BeforeInstall │ │
-│ │ - AfterInstall │ │
-│ │ - ApplicationStart │ │
-│ │ - ValidateService │ │
-│ └─────────────────────────────┘ │
-└─────────────────────────────────────┘
+```
 
+### 3. Deployment Layer
+```text
+┌─────────────────────────────────────┐
+│ AWS CodeDeploy                      │
+│ ┌─────────────────────────────────┐ │
+│ │ App: my-web-app                 │ │
+│ │ Group: production               │ │
+│ │ Config: AllAtOnce               │ │
+│ │ Hooks:                          │ │
+│ │ - BeforeInstall                 │ │
+│ │ - AfterInstall                  │ │
+│ │ - ApplicationStart              │ │
+│ │ - ValidateService               │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+```
 
 ### 4. Target Infrastructure
+```text
 ┌─────────────────────────────────────┐
-│ Amazon EC2 (t2.micro) │
-│ ┌─────────────────────────────┐ │
-│ │ OS: Amazon Linux 2023 │ │
-│ │ Agent: CodeDeploy Agent │ │
-│ │ Server: Apache HTTPD │ │
-│ │ Root: /var/www/html/ │ │
-│ │ Role: ec2-codedeploy-role │ │
-│ └─────────────────────────────┘ │
+│ Amazon EC2 (t2.micro)               │
+│ ┌─────────────────────────────────┐ │
+│ │ OS: Amazon Linux 2023           │ │
+│ │ Agent: CodeDeploy Agent         │ │
+│ │ Server: Apache HTTPD            │ │
+│ │ Root: /var/www/html/            │ │
+│ │ Role: ec2-codedeploy-role       │ │
+│ └─────────────────────────────────┘ │
 └─────────────────────────────────────┘
-
+```
 
 ## Network Architecture
+```text
 ┌──────────────────────────────────────────────────┐
-│ AWS Cloud (ap-south-1) │
-│ ┌────────────────────────────────────────────┐ │
-│ │ VPC (Default) │ │
-│ │ ┌──────────────────────────────────────┐ │ │
-│ │ │ Public Subnet │ │ │
-│ │ │ ┌────────────────────────────────┐ │ │ │
-│ │ │ │ Security Group: cicd-deploy-sg│ │ │ │
-│ │ │ │ - Port 80: 0.0.0.0/0 (HTTP) │ │ │ │
-│ │ │ │ - Port 22: YOUR_IP/32 (SSH) │ │ │ │
-│ │ │ │ │ │ │ │
-│ │ │ │ EC2 Instance │ │ │ │
-│ │ │ │ - Apache on port 80 │ │ │ │
-│ │ │ │ - CodeDeploy Agent │ │ │ │
-│ │ │ └────────────────────────────────┘ │ │ │
-│ │ └──────────────────────────────────────┘ │ │
-│ └────────────────────────────────────────────┘ │
+│ AWS Cloud (ap-south-1)                           │
+│ ┌──────────────────────────────────────────────┐ │
+│ │ VPC (Default)                                │ │
+│ │ ┌──────────────────────────────────────────┐ │ │
+│ │ │ Public Subnet                            │ │ │
+│ │ │ ┌──────────────────────────────────────┐ │ │ │
+│ │ │ │ Security Group: cicd-deploy-sg       │ │ │ │
+│ │ │ │ - Port 80: 0.0.0.0/0 (HTTP)          │ │ │ │
+│ │ │ │ - Port 22: YOUR_IP/32 (SSH)          │ │ │ │
+│ │ │ │                                      │ │ │ │
+│ │ │ │ EC2 Instance                         │ │ │ │
+│ │ │ │ - Apache on port 80                  │ │ │ │
+│ │ │ │ - CodeDeploy Agent                   │ │ │ │
+│ │ │ └──────────────────────────────────────┘ │ │ │
+│ │ └──────────────────────────────────────────┘ │ │
+│ └──────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────┘
-
+```
 
 ## Data Flow
 
@@ -116,6 +122,7 @@ The CI/CD pipeline implements a three-stage deployment workflow using AWS manage
 ## IAM Permission Model
 
 ### Service Roles
+```text
 codepipeline-service-role
 ├── AWSCodePipeline_FullAccess
 ├── AWSCodeCommitFullAccess
@@ -134,7 +141,7 @@ codedeploy-service-role
 ec2-codedeploy-role (Instance Profile)
 ├── AmazonSSMManagedInstanceCore
 └── AmazonS3ReadOnlyAccess
-
+```
 
 ## Scaling Considerations
 
