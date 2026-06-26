@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD Demo App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #232f3e 0%, #1a73e8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff9900;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #232f3e;
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .version {
+            background: #f0f7ff;
+            border: 2px solid #1a73e8;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .version h2 {
+            color: #1a73e8;
+            font-size: 20px;
+        }
+
+        .deploy-time {
+            margin: 0;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .pipeline {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .step {
+            background: #232f3e;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .arrow {
+            color: #ff9900;
+            font-size: 20px;
+            line-height: 36px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <span class="badge">Deployed via AWS CI/CD Pipeline</span>
+        <h1>🚀 CI/CD Demo Application</h1>
+        <p>This page was automatically built and deployed by
+            AWS CodePipeline — no manual steps required.</p>
+        <div class="version">
+            <h2>Version 1.0</h2>
+            <p class="deploy-time">
+                Deployed: <span id="ts"></span>
+            </p>
+        </div>
+        <div class="pipeline">
+            <span class="step">CodeCommit</span>
+            <span class="arrow">→</span>
+            <span class="step">CodeBuild</span>
+            <span class="arrow">→</span>
+            <span class="step">CodeDeploy</span>
+            <span class="arrow">→</span>
+            <span class="step">EC2</span>
+        </div>
+    </div>
+    <script>
+        document.getElementById('ts').textContent = new Date().toLocaleString();
+    </script>
+</body>
+
+</html>
