@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS CloudShell: Cloud Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        aws: {
+                            orange: '#FF9900',
+                            squid: '#232F3E',
+                            blue: '#007EBC',
+                            light: '#F2F3F3',
+                        },
+                        cloud: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- SEO & Open Graph Tags -->
+    <meta property="og:title" content="AWS CloudShell Explorer">
+    <meta property="og:description" content="A comprehensive, filterable reference guide for executing AWS CLI commands.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://aws-handy-book.s3.amazonaws.com/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+</head>
+<body id="top" class="antialiased min-h-screen bg-slate-50 dark:bg-cloud-900 text-slate-900 dark:text-slate-50 transition-colors duration-300">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 shadow-md bg-white/90 dark:bg-cloud-900/85 backdrop-blur border-b border-slate-200 dark:border-cloud-700 transition-colors" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-between items-center h-16">
+                <a href="#top" class="flex items-center gap-3 cursor-pointer group" aria-label="Home">
+                    <div class="w-10 h-10 bg-aws-squid rounded flex items-center justify-center text-white font-bold text-2xl group-hover:bg-aws-orange transition-colors border border-cloud-700 shadow-sm">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-aws-orange transition-colors">CloudShell<span class="text-sky-600 dark:text-sky-500 font-light">Explorer</span></span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <button type="button" id="theme-toggle" class="p-2 text-slate-500 dark:text-slate-400 hover:text-aws-orange dark:hover:text-aws-orange transition-colors" aria-label="Toggle Theme">
+                        <i class="fas fa-sun hidden dark:block text-xl"></i>
+                        <i class="fas fa-moon block dark:hidden text-xl"></i>
+                    </button>
+                    <div class="hidden sm:block text-xs font-mono text-sky-700 dark:text-sky-400 border border-sky-200 dark:border-sky-900 bg-sky-50 dark:bg-sky-950/30 px-3 py-1 rounded-full">
+                        Interactive Reference Guide v3
+                    </div>
+                    <!-- Quick links using details for a drop-down menu -->
+                    <details class="relative inline-block text-left group">
+                        <summary class="cursor-pointer p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors list-none" aria-label="Options">
+                            <i class="fas fa-bars text-xl"></i>
+                        </summary>
+                        <div class="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 shadow-xl z-50 overflow-hidden">
+                            <div class="py-1">
+                                <a href="../AWS_Handy_Book/website/index.html" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-cloud-700 transition-colors"><i class="fas fa-book w-5 text-aws-orange"></i> AWS Handy Book</a>
+                                <a href="#explore" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-cloud-700 transition-colors"><i class="fas fa-terminal w-5 text-sky-500"></i> Commands</a>
+                                <a href="#lore" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-cloud-700 transition-colors"><i class="fas fa-server w-5 text-aws-orange"></i> Architecture</a>
+                                <a href="#architect" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-cloud-700 transition-colors"><i class="fas fa-user-tie w-5 text-emerald-500"></i> Publisher</a>
+                                <a href="#faq" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-cloud-700 transition-colors"><i class="fas fa-question-circle w-5 text-purple-500"></i> FAQ</a>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
+
+        <!-- Header Section -->
+        <div class="mb-8 border-l-4 border-aws-orange pl-6">
+            <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">AWS CloudShell <span class="text-sky-600 dark:text-sky-500">Command Reference</span></h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
+                A comprehensive, filterable reference guide for executing critical operational commands across modern AWS cloud architectures. Designed for Cloud Engineers and DevOps professionals.
+            </p>
+        </div>
+
+        <!-- AWS Hands-on Project Details -->
+        <div class="mb-12 bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-500/30 rounded-xl p-6 shadow-md relative overflow-hidden group">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-sky-500/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-3">
+                <i class="fas fa-laptop-code text-aws-orange"></i> AWS Hands-On Project Environment
+            </h2>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4 text-sm max-w-4xl">
+                This CloudShell explorer is part of the broader <strong>AWS Hands-on Projects</strong> workspace. It serves as a live, interactive architecture reference to help you practice operational tasks securely. Use this interface to find the exact commands needed to orchestrate resources, configure IAM policies, and test deployments directly from your browser.
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <span class="px-3 py-1 bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-md text-xs font-mono text-sky-700 dark:text-sky-400 shadow-sm"><i class="fas fa-server mr-1"></i> EC2 Instances</span>
+                <span class="px-3 py-1 bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-md text-xs font-mono text-sky-700 dark:text-sky-400 shadow-sm"><i class="fas fa-database mr-1"></i> RDS / DynamoDB</span>
+                <span class="px-3 py-1 bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-md text-xs font-mono text-sky-700 dark:text-sky-400 shadow-sm"><i class="fas fa-shield-alt mr-1"></i> IAM Roles</span>
+                <span class="px-3 py-1 bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-md text-xs font-mono text-sky-700 dark:text-sky-400 shadow-sm"><i class="fas fa-network-wired mr-1"></i> VPC Configuration</span>
+            </div>
+        </div>
+
+        <!-- Lore Section (Drop-downs) -->
+        <div id="lore" class="mb-16 space-y-4">
+            <details class="group bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-xl hover:border-sky-300 dark:hover:border-sky-500/50 transition-colors shadow-sm">
+                <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-lg text-slate-800 dark:text-slate-200">
+                    <span class="flex items-center gap-3"><i class="fas fa-network-wired text-sky-600 dark:text-sky-500"></i> What is AWS CloudShell?</span>
+                    <span class="transition group-open:rotate-180 text-slate-500"><i class="fas fa-chevron-down"></i></span>
+                </summary>
+                <div class="p-5 border-t border-slate-200 dark:border-cloud-700 text-slate-600 dark:text-slate-400 text-sm leading-relaxed bg-slate-50 dark:bg-cloud-900/50 rounded-b-xl">
+                    AWS CloudShell is a browser-based shell that makes it easy to securely manage, explore, and interact with your AWS resources. CloudShell is pre-authenticated with your console credentials, providing a seamless transition from the graphical console to the command line interface without requiring local credential configuration.
+                </div>
+            </details>
+
+            <details class="group bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-xl hover:border-aws-orange/50 transition-colors shadow-sm">
+                <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-lg text-slate-800 dark:text-slate-200">
+                    <span class="flex items-center gap-3"><i class="fas fa-shield-alt text-aws-orange"></i> Security &amp; Persistence</span>
+                    <span class="transition group-open:rotate-180 text-slate-500"><i class="fas fa-chevron-down"></i></span>
+                </summary>
+                <div class="p-5 border-t border-slate-200 dark:border-cloud-700 text-slate-600 dark:text-slate-400 text-sm bg-slate-50 dark:bg-cloud-900/50 rounded-b-xl">
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 items-start"><i class="fas fa-check-circle text-emerald-500 mt-1"></i> <span><b>Pre-authenticated:</b> Inherits the IAM permissions of your active AWS Management Console session automatically.</span></li>
+                        <li class="flex gap-3 items-start"><i class="fas fa-check-circle text-emerald-500 mt-1"></i> <span><b>Persistent Storage:</b> Provides 1 GB of persistent storage per AWS Region within your home directory (<code>$HOME</code>), ensuring scripts and config files remain across sessions.</span></li>
+                        <li class="flex gap-3 items-start"><i class="fas fa-check-circle text-emerald-500 mt-1"></i> <span><b>Pre-installed Tools:</b> Comes equipped with the AWS CLI, Python, Node.js, and bash utilities out of the box.</span></li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- Left Pane: Chart and Warnings -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- Architecture / Chart -->
+                <div class="bg-white dark:bg-cloud-800 rounded-xl border border-slate-200 dark:border-cloud-700 p-6 relative overflow-hidden shadow-sm group hover:shadow-md transition-all">
+                    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-800 dark:text-slate-300 border-b border-slate-200 dark:border-cloud-700 pb-3 mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-pie text-sky-500"></i> Service Distribution
+                    </h2>
+                    <p class="text-xs text-slate-500 mb-6 font-mono">
+                        Visualizing the distribution of commands across various AWS operational domains.
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="serviceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-aws-squid border border-cloud-700 rounded-xl p-6 relative overflow-hidden shadow-sm">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-aws-orange"></div>
+                    <h2 class="text-sm font-bold text-white mb-2 flex items-center gap-2"><i class="fas fa-lightbulb text-aws-orange"></i> Best Practice</h2>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Always verify your active IAM identity using <code>aws sts get-caller-identity</code> before executing destructive commands to prevent accidental cross-account modifications.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Pane: Commands Grid -->
+            <div class="lg:col-span-8 flex flex-col space-y-6" id="explore">
+
+                <div class="bg-white dark:bg-cloud-800 rounded-xl border border-slate-200 dark:border-cloud-700 p-6 shadow-sm">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-6 flex items-center gap-2"><i class="fas fa-terminal text-sky-600 dark:text-sky-500"></i> Command Explorer</h2>
+
+                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
+                        <div class="flex bg-slate-100 dark:bg-cloud-900 p-1 rounded-lg border border-slate-200 dark:border-cloud-700 w-full md:w-auto overflow-x-auto shadow-inner" id="filter-container">
+                            <button type="button" class="filter-btn active px-4 py-2 text-sm font-medium rounded-md transition-colors bg-sky-600 dark:bg-cloud-700 text-white shadow-sm" data-filter="All">All</button>
+                            <button type="button" class="filter-btn px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-cloud-800 border border-transparent" data-filter="Beginner">Beginner</button>
+                            <button type="button" class="filter-btn px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-cloud-800 border border-transparent" data-filter="Intermediate">Intermediate</button>
+                            <button type="button" class="filter-btn px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-cloud-800 border border-transparent" data-filter="Advanced">Advanced</button>
+                        </div>
+
+                        <div class="relative w-full md:w-72">
+                            <input type="text" id="searchInput" placeholder="Search commands, services..." class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-cloud-900 border border-slate-300 dark:border-cloud-700 rounded-lg text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all placeholder-slate-400 dark:placeholder-slate-500 shadow-sm">
+                            <div class="absolute left-3 top-2.5 text-slate-400 dark:text-slate-500">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="commandsGrid" class="flex flex-col gap-3">
+                        <!-- Commands populated by JS -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div id="faq" class="mt-16 border-t border-slate-200 dark:border-cloud-700 pt-12 pb-8">
+            <h2 class="text-2xl font-bold text-center text-slate-900 dark:text-white mb-8">Frequently Asked Questions</h2>
+            <div class="max-w-4xl mx-auto space-y-4">
+                <details class="group bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-800 dark:text-slate-200">
+                        <span>Does CloudShell storage persist?</span>
+                        <span class="transition group-open:rotate-180 text-slate-500"><i class="fas fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="p-5 border-t border-slate-200 dark:border-cloud-700 text-slate-600 dark:text-slate-400 text-sm leading-relaxed bg-slate-50 dark:bg-cloud-900/50 rounded-b-xl">
+                        Yes, AWS CloudShell provides 1 GB of persistent storage per AWS Region within your home directory ($HOME). Any files saved outside of the home directory will be lost when the session ends.
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-800 dark:text-slate-200">
+                        <span>Do I need to run 'aws configure' before using the CLI?</span>
+                        <span class="transition group-open:rotate-180 text-slate-500"><i class="fas fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="p-5 border-t border-slate-200 dark:border-cloud-700 text-slate-600 dark:text-slate-400 text-sm leading-relaxed bg-slate-50 dark:bg-cloud-900/50 rounded-b-xl">
+                        No. AWS CloudShell is pre-authenticated with the same IAM credentials you used to log into the AWS Management Console.
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-xl shadow-sm">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-slate-800 dark:text-slate-200">
+                        <span>Can I install custom software in CloudShell?</span>
+                        <span class="transition group-open:rotate-180 text-slate-500"><i class="fas fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="p-5 border-t border-slate-200 dark:border-cloud-700 text-slate-600 dark:text-slate-400 text-sm leading-relaxed bg-slate-50 dark:bg-cloud-900/50 rounded-b-xl">
+                        Yes, you have sudo privileges and can use standard package managers like `yum` to install software. However, any software installed outside of `$HOME` will need to be reinstalled if the environment is recycled.
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- The Architect (About Publisher) using Drop-downs -->
+        <div id="architect" class="mt-8 border-t border-slate-200 dark:border-cloud-700 pt-12 pb-8">
+            <h2 class="text-2xl font-bold text-center text-slate-900 dark:text-white mb-8">About the Publisher</h2>
+
+            <div class="max-w-4xl mx-auto bg-white dark:bg-cloud-800 border border-slate-200 dark:border-cloud-700 rounded-xl overflow-hidden shadow-md">
+                <div class="p-8 flex flex-col md:flex-row items-center md:items-start gap-8 border-b border-slate-200 dark:border-cloud-700 bg-slate-50 dark:bg-cloud-800/50">
+                    <div class="w-24 h-24 bg-white dark:bg-cloud-900 border-2 border-aws-orange rounded-full flex items-center justify-center shadow-md">
+                        <i class="fas fa-user-astronaut text-4xl text-sky-600 dark:text-sky-500"></i>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Vinay Kumar Duvva</h3>
+                        <p class="text-sm font-mono text-sky-700 dark:text-sky-400 mb-4">Cloud Infrastructure Engineer</p>
+                        <div class="flex flex-wrap gap-2 justify-center md:justify-start font-mono text-xs">
+                            <span class="bg-aws-squid text-white border border-slate-300 dark:border-cloud-600 px-2.5 py-1 rounded-md">AWS</span>
+                            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-300 dark:border-blue-800 px-2.5 py-1 rounded-md">GCP</span>
+                            <span class="bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 border border-sky-300 dark:border-sky-800 px-2.5 py-1 rounded-md">Azure</span>
+                            <span class="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 px-2.5 py-1 rounded-md">DevOps</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divide-y divide-slate-200 dark:divide-cloud-700 bg-white dark:bg-cloud-900">
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-cloud-800 transition-colors">
+                            <span class="flex items-center gap-3"><i class="fas fa-briefcase text-aws-orange"></i> Professional Background</span>
+                            <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-slate-500"></i></span>
+                        </summary>
+                        <div class="p-5 bg-slate-50 dark:bg-cloud-900/50 text-slate-600 dark:text-slate-400 text-sm leading-relaxed border-t border-slate-200 dark:border-cloud-700">
+                            Based in Hyderabad, with two years at Cognizant as Senior Process Executive in Digital Content Services. Specialized in high-volume data curation and extraction for Google operations, maintaining 99.9% quality standards while managing tight turnaround requirements. Built strong discipline in ownership, troubleshooting under pressure, and customer-centric problem-solving.
+                        </div>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-cloud-800 transition-colors">
+                            <span class="flex items-center gap-3"><i class="fas fa-server text-sky-600 dark:text-sky-500"></i> Cloud Expertise</span>
+                            <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-slate-500"></i></span>
+                        </summary>
+                        <div class="p-5 bg-slate-50 dark:bg-cloud-900/50 text-slate-600 dark:text-slate-400 text-sm leading-relaxed border-t border-slate-200 dark:border-cloud-700">
+                            Hands-on experience across AWS, GCP, and Azure covering EC2, S3, VPCs, Kubernetes clusters, Terraform automation, monitoring, and network configuration. Certified AWS Solutions Architect Associate, Google Professional Cloud Architect, and Azure Network Engineer Associate.
+                        </div>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-5 text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-cloud-800 transition-colors">
+                            <span class="flex items-center gap-3"><i class="fas fa-link text-emerald-500"></i> Connect</span>
+                            <span class="transition group-open:rotate-180"><i class="fas fa-chevron-down text-slate-500"></i></span>
+                        </summary>
+                        <div class="p-5 bg-slate-50 dark:bg-cloud-900/50 text-slate-600 dark:text-slate-400 text-sm flex flex-wrap gap-6 border-t border-slate-200 dark:border-cloud-700">
+                            <a href="https://www.linkedin.com/in/vinay-kumar-duvva/" target="_blank" class="flex items-center gap-2 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"><i class="fab fa-linkedin text-lg"></i> LinkedIn</a>
+                            <a href="https://github.com/vinay1515" target="_blank" class="flex items-center gap-2 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"><i class="fab fa-github text-lg"></i> GitHub</a>
+                            <a href="mailto:duvvavinaykumar@gmail.com" class="flex items-center gap-2 hover:text-aws-orange transition-colors"><i class="fas fa-envelope text-lg"></i> Email</a>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-white dark:bg-aws-squid border-t border-slate-200 dark:border-cloud-700 mt-12 py-8 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-sm text-slate-500 dark:text-slate-400 text-center md:text-left">
+                &copy; 2023 AWS Hands-on Projects. Engineered by Vinay Kumar Duvva.
+            </div>
+            <div class="flex gap-4">
+                <a href="#top" class="text-sm text-sky-600 dark:text-sky-400 hover:text-aws-orange transition-colors flex items-center gap-1"><i class="fas fa-arrow-up"></i> Back to top</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copy notification -->
+    <div id="copyNotify" class="fixed bottom-5 right-5 bg-emerald-600 dark:bg-sky-600 text-white px-5 py-3 rounded-lg shadow-lg font-medium text-sm opacity-0 transform translate-y-4 transition-all duration-300 pointer-events-none z-[100] flex items-center gap-2">
+        <i class="fas fa-check-circle"></i> Command copied to clipboard
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
