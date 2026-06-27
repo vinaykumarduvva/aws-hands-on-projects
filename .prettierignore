@@ -1,0 +1,21 @@
+# Ignore artifacts and build folders
+node_modules/
+dist/
+build/
+.github/
+.vscode/
+
+# Ignore generated files and assets
+*.min.js
+*.min.css
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+
+# Ignore Python specific
+__pycache__/
+*.pyc

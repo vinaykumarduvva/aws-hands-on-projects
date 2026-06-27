@@ -10,11 +10,18 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="styles.css">
+
+    <!-- SEO & Open Graph Tags -->
+    <meta property="og:title" content="AWS Handy Book">
+    <meta property="og:description" content="A comprehensive, interactive reference guide covering 71 AWS services.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://aws-handy-book.s3.amazonaws.com/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 
   <!-- ===== NAVIGATION ===== -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar" aria-label="Main Navigation" id="navbar">
     <div class="nav-container">
       <a href="#" class="nav-logo">
         <span class="logo-icon">☁️</span>
@@ -33,7 +40,7 @@
       </ul>
 
       <div class="nav-right">
-        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <button type="button" class="theme-toggle" aria-label="Toggle Dark Mode" id="themeToggle" aria-label="Toggle theme">
           <span class="toggle-icons">
             <span>☀️</span>
             <span>🌙</span>
