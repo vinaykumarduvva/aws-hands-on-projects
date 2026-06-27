@@ -2,7 +2,7 @@
 
 > **An interactive, beautifully designed reference guide for mastering AWS CloudShell commands**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue?style=for-the-badge)](https://vinay-kumar-duvva-portfoilo.s3.ap-south-1.amazonaws.com/My+Portfoilo+Website/index.html)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue?style=for-the-badge)](https://aws-cloudshell-commands-website.s3.ap-south-1.amazonaws.com/index.html)
 [![Repository](https://img.shields.io/badge/GitHub-vinay1515-black?style=for-the-badge&logo=github)](https://github.com/vinay1515)
 [![AWS Services](https://img.shields.io/badge/AWS-Multi%20Service-FF9900?style=for-the-badge&logo=amazon-aws)](https://aws.amazon.com)
 

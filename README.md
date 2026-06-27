@@ -25,6 +25,13 @@ how I fixed it, and what I learned.
 
 ---
 
+## 🚀 Live Websites
+
+- **[AWS Handy Book - Interactive Reference Guide](https://aws-handy-book-reference-website.s3.ap-south-1.amazonaws.com/index.html)**
+- **[AWS CloudShell Commands - Interactive Explorer](https://aws-cloudshell-commands-website.s3.ap-south-1.amazonaws.com/index.html)**
+
+---
+
 ## 🗺️ Roadmap Overview
 
 <img width="1220" height="1550" alt="image" src="https://github.com/user-attachments/assets/6b08d752-7cf1-472d-9efa-fb886a509a9b" />
