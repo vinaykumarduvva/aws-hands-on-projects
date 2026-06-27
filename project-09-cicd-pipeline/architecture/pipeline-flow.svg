@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 900" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --bg-gradient-start: #0a0a1a;
+      --bg-gradient-end: #1a1a2e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --box-bg: #1a1a3a;
+      --box-bg-light: #2a2a4a;
+      --orange: #FF9900;
+      --blue: #1a73e8;
+      --green: #2E8B57;
+      --red: #cc3333;
+      --purple: #9B59B6;
+      --grid: #ffffff08;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --bg-gradient-start: #f8fafc;
+        --bg-gradient-end: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --box-bg: #ffffff;
+        --box-bg-light: #f1f5f9;
+        --orange: #e68a00;
+        --blue: #1557b0;
+        --green: #1f6b42;
+        --red: #b32424;
+        --purple: #7a4694;
+        --grid: #00000008;
+      }
+    }
+    svg {
+      background-color: var(--bg);
+      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+    }
+    text {
+      transition: fill 0.3s ease;
+    }
+    .text-title { fill: var(--orange); font-weight: 800; }
+    .text-main { fill: var(--text-main); }
+    .text-muted { fill: var(--text-muted); }
+    .box-bg { fill: var(--box-bg); transition: fill 0.3s ease, stroke 0.3s ease; }
+    .float { animation: float 6s ease-in-out infinite; }
+    .pulse { animation: pulse 2s ease-in-out infinite; }
+    .draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s forwards; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; filter: brightness(1.2); }
+      100% { opacity: 0.8; }
+    }
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+  </style>
+
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="var(--bg-gradient-start)"/>
+      <stop offset="100%" stop-color="var(--bg-gradient-end)"/>
+    </linearGradient>
+    <filter id="shadow" x="-3%" y="-3%" width="108%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--orange)"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="900" fill="url(#bg)" class="box-bg"/>
+
+  <!-- Title -->
+  <text x="500" y="40" text-anchor="middle" fill="var(--orange)" font-size="22" font-weight="bold" filter="url(#glow)">
+    CodePipeline Flow — End-to-End Sequence
+  </text>
+  <text x="500" y="60" text-anchor="middle" fill="var(--text-muted)" font-size="12">Trigger → Source → Build → Deploy → Validation</text>
+
+  <!-- ===== STEP 1: Developer Push ===== -->
+  <rect x="100" y="90" width="800" height="80" rx="10" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="100" y="90" width="80" height="80" rx="10" fill="url(#orangeGrad)" opacity="0.15"/>
+  <circle cx="140" cy="130" r="20" fill="var(--orange)" opacity="0.3"/>
+  <text x="140" y="136" text-anchor="middle" fill="var(--orange)" font-size="18">1</text>
+  <text x="200" y="120" fill="var(--text-main)" font-size="14" font-weight="bold">Git Push to CodeCommit</text>
+  <text x="200" y="142" fill="var(--text-muted)" font-size="11">Developer runs: git add .  →  git commit -m "feat: update"  →  git push origin main</text>
+  <text x="200" y="160" fill="var(--text-muted)" font-size="10">Repository: my-web-app  •  Branch: main  •  Files: index.html, buildspec.yml, appspec.yml, scripts/</text>
+
+  <!-- Arrow -->
+  <line x1="500" y1="170" x2="500" y2="210" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== STEP 2: CloudWatch Event Trigger ===== -->
+  <rect x="100" y="215" width="800" height="70" rx="10" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="100" y="215" width="80" height="70" rx="10" fill="var(--blue)" opacity="0.15"/>
+  <circle cx="140" cy="250" r="20" fill="var(--blue)" opacity="0.3"/>
+  <text x="140" y="256" text-anchor="middle" fill="var(--blue)" font-size="18">2</text>
+  <text x="200" y="245" fill="var(--text-main)" font-size="14" font-weight="bold">CloudWatch Events Detection</text>
+  <text x="200" y="267" fill="var(--text-muted)" font-size="11">Amazon CloudWatch Events detects code change in CodeCommit → Triggers Pipeline execution</text>
+
+  <!-- Arrow -->
+  <line x1="500" y1="285" x2="500" y2="325" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== STEP 3: Source Stage ===== -->
+  <rect x="100" y="330" width="800" height="100" rx="10" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="100" y="330" width="80" height="100" rx="10" fill="var(--orange)" opacity="0.15"/>
+  <circle cx="140" cy="380" r="20" fill="var(--orange)" opacity="0.3"/>
+  <text x="140" y="386" text-anchor="middle" fill="var(--orange)" font-size="18">3</text>
+  <text x="200" y="360" fill="var(--text-main)" font-size="14" font-weight="bold">Source Stage — CodeCommit → S3</text>
+  <text x="200" y="385" fill="var(--text-muted)" font-size="11">Pipeline pulls latest commit from CodeCommit main branch</text>
+  <text x="200" y="405" fill="var(--text-muted)" font-size="11">Output: SourceOutput artifact (ZIP) stored in S3 artifact bucket</text>
+  <text x="200" y="423" fill="var(--text-muted)" font-size="10">Artifact: my-web-app-pipeline/SourceOutput/{execution_id}</text>
+
+  <!-- Arrow -->
+  <line x1="500" y1="430" x2="500" y2="470" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== STEP 4: Build Stage ===== -->
+  <rect x="100" y="475" width="800" height="140" rx="10" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="100" y="475" width="80" height="140" rx="10" fill="var(--blue)" opacity="0.15"/>
+  <circle cx="140" cy="545" r="20" fill="var(--blue)" opacity="0.3"/>
+  <text x="140" y="551" text-anchor="middle" fill="var(--blue)" font-size="18">4</text>
+  <text x="200" y="505" fill="var(--text-main)" font-size="14" font-weight="bold">Build Stage — CodeBuild executes buildspec.yml</text>
+  <text x="200" y="530" fill="var(--text-muted)" font-size="11">1. Install Phase:  Sets up Python 3.11 runtime</text>
+  <text x="200" y="548" fill="var(--text-muted)" font-size="11">2. Pre-Build:     Validates HTML syntax, checks files exist</text>
+  <text x="200" y="566" fill="var(--text-muted)" font-size="11">3. Build:         Prepares deployment package → dist/ directory</text>
+  <text x="200" y="584" fill="var(--text-muted)" font-size="11">4. Post-Build:    Packages artifacts for deployment</text>
+  <text x="200" y="602" fill="var(--text-muted)" font-size="10">Output: BuildOutput artifact (dist/ ZIP) stored in S3 • Build info: Version 1.0.{BUILD_NUMBER}</text>
+
+  <!-- Arrow -->
+  <line x1="500" y1="615" x2="500" y2="655" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== STEP 5: Deploy Stage ===== -->
+  <rect x="100" y="660" width="800" height="160" rx="10" fill="var(--box-bg)" stroke="var(--green)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="100" y="660" width="80" height="160" rx="10" fill="var(--green)" opacity="0.15"/>
+  <circle cx="140" cy="740" r="20" fill="var(--green)" opacity="0.3"/>
+  <text x="140" y="746" text-anchor="middle" fill="var(--green)" font-size="18">5</text>
+  <text x="200" y="690" fill="var(--text-main)" font-size="14" font-weight="bold">Deploy Stage — CodeDeploy executes appspec.yml</text>
+  <text x="200" y="715" fill="var(--text-muted)" font-size="11">1. BeforeInstall:   Stop Apache, clean old deployment files</text>
+  <text x="200" y="733" fill="var(--text-muted)" font-size="11">2. AfterInstall:    Set file permissions (apache:apache, 644)</text>
+  <text x="200" y="751" fill="var(--text-muted)" font-size="11">3. ApplicationStart: Start Apache, enable on boot</text>
+  <text x="200" y="769" fill="var(--text-muted)" font-size="11">4. ValidateService:  HTTP 200 check on localhost</text>
+  <text x="200" y="787" fill="var(--text-muted)" font-size="11">Files deployed: /var/www/html/index.html, /var/www/html/build-info.txt</text>
+  <text x="200" y="805" fill="var(--text-muted)" font-size="10">Deployment Config: AllAtOnce • Tag Filter: Environment=production</text>
+
+  <!-- Arrow -->
+  <line x1="500" y1="820" x2="500" y2="860" stroke="var(--green)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== STEP 6: Success ===== -->
+  <rect x="300" y="865" width="400" height="28" rx="14" fill="var(--green)" opacity="0.2" stroke="var(--green)" stroke-width="1"/>
+  <text x="500" y="884" text-anchor="middle" fill="var(--green)" font-size="13" font-weight="bold"><tspan class="float">✅ Deployment Successful — App Live on EC2</tspan></text>
+
+  <!-- Timeline on left -->
+  <line x1="60" y1="130" x2="60" y2="880" stroke="var(--orange)" stroke-width="1" opacity="0.3" stroke-dasharray="4,4"/>
+  <circle cx="60" cy="130" r="4" fill="var(--orange)"/>
+  <circle cx="60" cy="250" r="4" fill="var(--blue)"/>
+  <circle cx="60" cy="380" r="4" fill="var(--orange)"/>
+  <circle cx="60" cy="545" r="4" fill="var(--blue)"/>
+  <circle cx="60" cy="740" r="4" fill="var(--green)"/>
+  <circle cx="60" cy="879" r="4" fill="var(--green)"/>
+
+  <!-- Duration estimates -->
+  <text x="850" y="375" fill="var(--text-muted)" font-size="9">~30 sec</text>
+  <text x="850" y="540" fill="var(--text-muted)" font-size="9">~2-3 min</text>
+  <text x="850" y="735" fill="var(--text-muted)" font-size="9">~1-2 min</text>
+  <text x="850" y="878" fill="var(--text-muted)" font-size="9">Total: ~3-5 min</text>
+</svg>

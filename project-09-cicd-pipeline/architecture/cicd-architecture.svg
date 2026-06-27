@@ -1,0 +1,245 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --bg-gradient-start: #0a0a1a;
+      --bg-gradient-end: #1a1a2e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --box-bg: #1a1a3a;
+      --box-bg-light: #2a2a4a;
+      --orange: #FF9900;
+      --blue: #1a73e8;
+      --green: #2E8B57;
+      --red: #cc3333;
+      --purple: #9B59B6;
+      --grid: #ffffff08;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --bg-gradient-start: #f8fafc;
+        --bg-gradient-end: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --box-bg: #ffffff;
+        --box-bg-light: #f1f5f9;
+        --orange: #e68a00;
+        --blue: #1557b0;
+        --green: #1f6b42;
+        --red: #b32424;
+        --purple: #7a4694;
+        --grid: #00000008;
+      }
+    }
+    svg {
+      background-color: var(--bg);
+      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+    }
+    text {
+      transition: fill 0.3s ease;
+    }
+    .text-title { fill: var(--orange); font-weight: 800; }
+    .text-main { fill: var(--text-main); }
+    .text-muted { fill: var(--text-muted); }
+    .box-bg { fill: var(--box-bg); transition: fill 0.3s ease, stroke 0.3s ease; }
+    .float { animation: float 6s ease-in-out infinite; }
+    .pulse { animation: pulse 2s ease-in-out infinite; }
+    .draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s forwards; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; filter: brightness(1.2); }
+      100% { opacity: 0.8; }
+    }
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+  </style>
+
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--bg-gradient-start)"/>
+      <stop offset="100%" stop-color="var(--bg-gradient-end)"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9900"/>
+      <stop offset="100%" style="stop-color:#FFB84D"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a73e8"/>
+      <stop offset="100%" style="stop-color:#4d94ff"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2E8B57"/>
+      <stop offset="100%" style="stop-color:#3CB371"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6C3483"/>
+      <stop offset="100%" style="stop-color:#9B59B6"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--orange)"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--blue)"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--green)"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#bg)" class="box-bg"/>
+
+  <!-- Grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--grid)" stroke-width="0.5"/>
+  </pattern>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+
+  <!-- Title -->
+  <text x="600" y="42" text-anchor="middle" fill="var(--orange)" font-size="24" font-weight="bold" filter="url(#glow)">
+    Project 9 — CI/CD Pipeline Architecture
+  </text>
+  <text x="600" y="66" text-anchor="middle" fill="var(--text-muted)" font-size="13">
+    ap-south-1 (Mumbai) • Fully Automated Deployment Pipeline
+  </text>
+  <line x1="200" y1="78" x2="1000" y2="78" stroke="var(--orange)" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- ====== DEVELOPER BOX ====== -->
+  <rect x="40" y="100" width="200" height="100" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="40" y="100" width="200" height="28" rx="8" fill="url(#orangeGrad)" opacity="0.9"/>
+  <rect x="40" y="120" width="200" height="8" fill="url(#orangeGrad)" opacity="0.9"/>
+  <text x="140" y="119" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="bold"><tspan class="float">💻 Developer Workstation</tspan></text>
+  <text x="140" y="150" text-anchor="middle" fill="var(--text-muted)" font-size="11">Windows PC</text>
+  <text x="140" y="168" text-anchor="middle" fill="var(--text-muted)" font-size="11">Git CLI + AWS CLI</text>
+  <text x="140" y="186" text-anchor="middle" fill="var(--orange)" font-size="10">git push → origin main</text>
+
+  <!-- Arrow: Developer to CodeCommit -->
+  <line x1="240" y1="150" x2="330" y2="150" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrowOrange)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ====== CODECOMMIT ====== -->
+  <rect x="340" y="95" width="200" height="110" rx="8" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="340" y="95" width="200" height="28" rx="8" fill="url(#blueGrad)" opacity="0.9"/>
+  <rect x="340" y="115" width="200" height="8" fill="url(#blueGrad)" opacity="0.9"/>
+  <text x="440" y="114" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="bold"><tspan class="float">📦 AWS CodeCommit</tspan></text>
+  <text x="440" y="145" text-anchor="middle" fill="var(--text-muted)" font-size="11">Repository: my-web-app</text>
+  <text x="440" y="163" text-anchor="middle" fill="var(--text-muted)" font-size="11">Branch: main</text>
+  <text x="440" y="181" text-anchor="middle" fill="var(--text-muted)" font-size="10">Managed Git Repo</text>
+  <text x="440" y="196" text-anchor="middle" fill="var(--blue)" font-size="10">CloudWatch Event Trigger</text>
+
+  <!-- Arrow: CodeCommit to CodePipeline -->
+  <line x1="540" y1="150" x2="660" y2="150" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrowBlue)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ====== CODEPIPELINE ORCHESTRATOR ====== -->
+  <rect x="670" y="80" width="490" height="580" rx="10" fill="var(--box-bg)" stroke="#6C3483" stroke-width="2" stroke-dasharray="8,4" filter="url(#shadow)"/>
+  <text x="915" y="65" text-anchor="middle" fill="var(--purple)" font-size="16" font-weight="bold">🚀 AWS CodePipeline</text>
+
+  <!-- Stage 1: Source -->
+  <rect x="700" y="110" width="430" height="120" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="700" y="110" width="430" height="26" rx="8" fill="var(--orange)" opacity="0.2"/>
+  <rect x="700" y="110" width="120" height="26" rx="8" fill="url(#orangeGrad)" opacity="0.8"/>
+  <text x="760" y="128" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold">STAGE 1 — Source</text>
+  <text x="720" y="158" fill="var(--text-muted)" font-size="10">Provider: AWS CodeCommit</text>
+  <text x="720" y="175" fill="var(--text-muted)" font-size="10">Repository: my-web-app (main)</text>
+  <text x="720" y="192" fill="var(--text-muted)" font-size="10">Output Artifact: SourceOutput</text>
+  <text x="720" y="209" fill="var(--text-muted)" font-size="9">Trigger: Amazon CloudWatch Events</text>
+
+  <!-- Arrow between Stage 1 and 2 -->
+  <line x1="915" y1="230" x2="915" y2="280" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrowOrange)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- Stage 2: Build -->
+  <rect x="700" y="290" width="430" height="140" rx="8" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="700" y="290" width="430" height="26" rx="8" fill="var(--blue)" opacity="0.2"/>
+  <rect x="700" y="290" width="120" height="26" rx="8" fill="url(#blueGrad)" opacity="0.8"/>
+  <text x="760" y="308" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold">STAGE 2 — Build</text>
+  <text x="720" y="338" fill="var(--text-muted)" font-size="10">Provider: AWS CodeBuild</text>
+  <text x="720" y="355" fill="var(--text-muted)" font-size="10">Project: my-web-app-build</text>
+  <text x="720" y="372" fill="var(--text-muted)" font-size="10">Input: SourceOutput</text>
+  <text x="720" y="389" fill="var(--text-muted)" font-size="10">buildspec.yml: install → pre_build → build → post_build</text>
+  <text x="720" y="406" fill="var(--text-muted)" font-size="10">Output Artifact: BuildOutput (S3 ZIP)</text>
+  <text x="720" y="423" fill="var(--text-muted)" font-size="9">Runtime: Python 3.11 • Container: aws/codebuild/standard:7.0</text>
+
+  <!-- Arrow between Stage 2 and 3 -->
+  <line x1="915" y1="430" x2="915" y2="480" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrowBlue)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- Stage 3: Deploy -->
+  <rect x="700" y="490" width="430" height="120" rx="8" fill="var(--box-bg)" stroke="var(--green)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="700" y="490" width="430" height="26" rx="8" fill="var(--green)" opacity="0.2"/>
+  <rect x="700" y="490" width="120" height="26" rx="8" fill="url(#greenGrad)" opacity="0.8"/>
+  <text x="760" y="508" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold">STAGE 3 — Deploy</text>
+  <text x="720" y="538" fill="var(--text-muted)" font-size="10">Provider: AWS CodeDeploy</text>
+  <text x="720" y="555" fill="var(--text-muted)" font-size="10">Application: my-web-app</text>
+  <text x="720" y="572" fill="var(--text-muted)" font-size="10">Deployment Group: production</text>
+  <text x="720" y="589" fill="var(--text-muted)" font-size="10">Config: AllAtOnce • Tag Filter: Environment=production</text>
+  <text x="720" y="606" fill="var(--text-muted)" font-size="9">appspec.yml hooks: BeforeInstall → AfterInstall → ApplicationStart → ValidateService</text>
+
+  <!-- Arrow: CodePipeline to EC2 -->
+  <line x1="1130" y1="180" x2="1250" y2="180" stroke="var(--green)" stroke-width="2" marker-end="url(#arrowGreen)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ====== EC2 DEPLOYMENT TARGET ====== -->
+  <rect x="930" y="100" width="250" height="180" rx="8" fill="var(--box-bg)" stroke="var(--green)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="930" y="100" width="250" height="28" rx="8" fill="url(#greenGrad)" opacity="0.9"/>
+  <rect x="930" y="120" width="250" height="8" fill="url(#greenGrad)" opacity="0.9"/>
+  <text x="1055" y="119" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="bold"><tspan class="float">🖥️ EC2 Instance</tspan></text>
+  <text x="1055" y="150" text-anchor="middle" fill="var(--text-muted)" font-size="11">Amazon Linux 2023</text>
+  <text x="1055" y="168" text-anchor="middle" fill="var(--text-muted)" font-size="11">Type: t2.micro</text>
+  <text x="1055" y="186" text-anchor="middle" fill="var(--text-muted)" font-size="11">Region: ap-south-1</text>
+  <text x="1055" y="204" text-anchor="middle" fill="var(--text-muted)" font-size="11">Apache HTTP Server</text>
+  <text x="1055" y="222" text-anchor="middle" fill="var(--green)" font-size="10">CodeDeploy Agent Running</text>
+  <text x="1055" y="240" text-anchor="middle" fill="var(--text-muted)" font-size="9">IAM Role: ec2-codedeploy-profile</text>
+  <text x="1055" y="258" text-anchor="middle" fill="var(--text-muted)" font-size="9">Security Group: HTTP(80), SSH(22)</text>
+  <text x="1055" y="276" text-anchor="middle" fill="var(--orange)" font-size="9">Tag: Environment=production</text>
+
+  <!-- ====== S3 ARTIFACT BUCKET (bottom) ====== -->
+  <rect x="40" y="650" width="350" height="100" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="40" y="650" width="350" height="28" rx="8" fill="url(#orangeGrad)" opacity="0.9"/>
+  <rect x="40" y="670" width="350" height="8" fill="url(#orangeGrad)" opacity="0.9"/>
+  <text x="215" y="669" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="bold"><tspan class="float">🗄️ S3 Artifact Bucket</tspan></text>
+  <text x="215" y="700" text-anchor="middle" fill="var(--text-muted)" font-size="11">codepipeline-artifacts-{ACCOUNT_ID}-ap-south-1</text>
+  <text x="215" y="718" text-anchor="middle" fill="var(--text-muted)" font-size="11">Versioning: Enabled</text>
+  <text x="215" y="736" text-anchor="middle" fill="var(--text-muted)" font-size="10">Stores: SourceOutput + BuildOutput ZIP files</text>
+
+  <!-- Connections from Pipeline to S3 -->
+  <path d="M 700 600 Q 500 640 390 650" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowOrange)" class="draw"/>
+  <path d="M 700 600 Q 500 680 390 700" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowOrange)" class="draw"/>
+
+  <!-- ====== IAM ROLES (bottom right) ====== -->
+  <rect x="650" y="650" width="510" height="100" rx="8" fill="var(--box-bg)" stroke="var(--purple)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="650" y="650" width="510" height="28" rx="8" fill="url(#purpleGrad)" opacity="0.9"/>
+  <rect x="650" y="670" width="510" height="8" fill="url(#purpleGrad)" opacity="0.9"/>
+  <text x="905" y="669" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="bold"><tspan class="float">🔑 IAM Service Roles</tspan></text>
+
+  <text x="670" y="700" fill="var(--text-muted)" font-size="10">1. codebuild-service-role</text>
+  <text x="670" y="716" fill="var(--text-muted)" font-size="9">   Policies: AWSCodeBuildAdminAccess, CloudWatchLogsFullAccess, AmazonS3FullAccess</text>
+
+  <text x="670" y="734" fill="var(--text-muted)" font-size="10">2. codedeploy-service-role • 3. codepipeline-service-role • 4. ec2-codedeploy-role</text>
+
+  <!-- Legend -->
+  <rect x="40" y="770" width="1120" height="22" rx="5" fill="var(--box-bg)" stroke="#333" stroke-width="0.5"/>
+  <circle cx="70" cy="781" r="5" fill="var(--orange)"/>
+  <text x="82" y="785" fill="var(--text-muted)" font-size="10">Source Flow</text>
+  <circle cx="190" cy="781" r="5" fill="var(--blue)"/>
+  <text x="202" y="785" fill="var(--text-muted)" font-size="10">Build Flow</text>
+  <circle cx="310" cy="781" r="5" fill="var(--green)"/>
+  <text x="322" y="785" fill="var(--text-muted)" font-size="10">Deploy Flow</text>
+  <line x1="430" y1="781" x2="470" y2="781" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="478" y="785" fill="var(--text-muted)" font-size="10">Artifact Flow</text>
+  <text x="680" y="785" fill="var(--text-muted)" font-size="10">All services in ap-south-1 (Mumbai) • Free Tier Eligible • Cost: $0.00–$0.01</text>
+</svg>

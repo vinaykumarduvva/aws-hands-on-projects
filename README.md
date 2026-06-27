@@ -41,7 +41,7 @@ how I fixed it, and what I learned.
 | 06 | [RDS MySQL + EC2 Two-Tier App](project-06-rds-ec2) | 🟢 Beginner | RDS, EC2, VPC, Secrets Manager | ✅ Done |
 | 07 | [CloudWatch Alarms + SNS Alerts](project-07-cloudwatch-monitoring) | 🟢 Beginner | CloudWatch, SNS | ✅ Done |
 | 08 | [Serverless REST API](project-08-serverless-rest-api) | 🟡 Intermediate | Lambda, API Gateway, DynamoDB | ✅ Done |
-| 09 | CI/CD Pipeline | 🟡 Intermediate | CodeCommit, CodeBuild, CodeDeploy | ⏳ Upcoming |
+| 09 | [CI/CD Pipeline](https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/tree/main/project-09-cicd-pipeline) | 🟡 Intermediate | CodeCommit, CodeBuild, CodeDeploy | ✅ Done |
 | 10 | Auto Scaling Group + ALB | 🟡 Intermediate | EC2, ALB, ASG | ⏳ Upcoming |
 | 11 | Infrastructure as Code | 🟡 Intermediate | CloudFormation | ⏳ Upcoming |
 | 12 | Event-Driven Pipeline | 🟡 Intermediate | S3, SQS, Lambda | ⏳ Upcoming |
@@ -104,7 +104,7 @@ Each project README includes:
 | Serverless | ⭐⭐⭐☆☆ |
 | Containers | ⭐☆☆☆☆ |
 | IaC | ⭐☆☆☆☆ |
-| DevOps / CI/CD | ⭐☆☆☆☆ |
+| DevOps / CI/CD | ⭐⭐⭐☆☆ |
 
 *(Updated after each project)*
 

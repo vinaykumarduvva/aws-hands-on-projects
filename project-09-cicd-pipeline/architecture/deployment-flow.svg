@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 800" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --bg-gradient-start: #0a0a1a;
+      --bg-gradient-end: #1a1a2e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --box-bg: #1a1a3a;
+      --box-bg-light: #2a2a4a;
+      --orange: #FF9900;
+      --blue: #1a73e8;
+      --green: #2E8B57;
+      --red: #cc3333;
+      --purple: #9B59B6;
+      --grid: #ffffff08;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --bg-gradient-start: #f8fafc;
+        --bg-gradient-end: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --box-bg: #ffffff;
+        --box-bg-light: #f1f5f9;
+        --orange: #e68a00;
+        --blue: #1557b0;
+        --green: #1f6b42;
+        --red: #b32424;
+        --purple: #7a4694;
+        --grid: #00000008;
+      }
+    }
+    svg {
+      background-color: var(--bg);
+      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+    }
+    text {
+      transition: fill 0.3s ease;
+    }
+    .text-title { fill: var(--orange); font-weight: 800; }
+    .text-main { fill: var(--text-main); }
+    .text-muted { fill: var(--text-muted); }
+    .box-bg { fill: var(--box-bg); transition: fill 0.3s ease, stroke 0.3s ease; }
+    .float { animation: float 6s ease-in-out infinite; }
+    .pulse { animation: pulse 2s ease-in-out infinite; }
+    .draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s forwards; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; filter: brightness(1.2); }
+      100% { opacity: 0.8; }
+    }
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+  </style>
+
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--bg-gradient-start)"/>
+      <stop offset="100%" stop-color="var(--bg-gradient-end)"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2E8B57"/>
+      <stop offset="100%" style="stop-color:#3CB371"/>
+    </linearGradient>
+    <filter id="shadow" x="-3%" y="-3%" width="108%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--green)"/>
+    </marker>
+    <marker id="arrowFile" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="var(--blue)"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="800" fill="url(#bg)" class="box-bg"/>
+
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" fill="var(--green)" font-size="22" font-weight="bold" filter="url(#shadow)">
+    CodeDeploy — Deployment to EC2 Flow
+  </text>
+  <text x="450" y="62" text-anchor="middle" fill="var(--text-muted)" font-size="12">How CodeDeploy agent deploys your application to EC2</text>
+
+  <!-- ===== CODEPIPELINE (Source) ===== -->
+  <rect x="50" y="90" width="250" height="60" rx="8" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="175" y="115" text-anchor="middle" fill="var(--blue)" font-size="13" font-weight="bold"><tspan class="float">📦 Build Artifact (S3)</tspan></text>
+  <text x="175" y="138" text-anchor="middle" fill="var(--text-muted)" font-size="10">BuildOutput ZIP from CodeBuild</text>
+
+  <!-- Arrow -->
+  <line x1="300" y1="120" x2="380" y2="120" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrowFile)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== CODEDEPLOY ===== -->
+  <rect x="390" y="75" width="400" height="90" rx="10" fill="var(--box-bg)" stroke="var(--green)" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="390" y="75" width="400" height="30" rx="10" fill="url(#greenGrad)" opacity="0.9"/>
+  <rect x="390" y="95" width="400" height="10" fill="url(#greenGrad)" opacity="0.9"/>
+  <text x="590" y="96" text-anchor="middle" fill="var(--text-main)" font-size="13" font-weight="bold">🚀 AWS CodeDeploy</text>
+  <text x="590" y="128" text-anchor="middle" fill="var(--text-muted)" font-size="10">Application: my-web-app</text>
+  <text x="590" y="146" text-anchor="middle" fill="var(--text-muted)" font-size="10">Deployment Group: production • Config: AllAtOnce</text>
+
+  <!-- appspec.yml label -->
+  <text x="425" y="180" fill="var(--orange)" font-size="10" font-style="italic">Reads appspec.yml</text>
+
+  <!-- Arrow -->
+  <line x1="590" y1="195" x2="590" y2="235" stroke="var(--green)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== EC2 INSTANCE ===== -->
+  <rect x="140" y="245" width="620" height="510" rx="12" fill="#0d1a0d" stroke="var(--green)" stroke-width="2" filter="url(#shadow)"/>
+  <text x="450" y="270" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="bold"><tspan class="float">🖥️ EC2 Instance — Amazon Linux 2023 (ap-south-1a)</tspan></text>
+  <text x="450" y="288" text-anchor="middle" fill="var(--text-muted)" font-size="10">t2.micro • IAM Profile: ec2-codedeploy-profile • Tag: Environment=production</text>
+
+  <!-- CodeDeploy Agent -->
+  <rect x="180" y="305" width="540" height="30" rx="6" fill="var(--green)" opacity="0.15" stroke="var(--green)" stroke-width="1"/>
+  <text x="450" y="325" text-anchor="middle" fill="var(--green)" font-size="12" font-weight="bold">🤖 CodeDeploy Agent (running as systemd service)</text>
+
+  <!-- ===== HOOK 1: BeforeInstall ===== -->
+  <rect x="180" y="360" width="540" height="70" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="180" y="360" width="30" height="70" rx="8" fill="var(--orange)"/>
+  <text x="195" y="405" text-anchor="middle" fill="var(--text-main)" font-size="14" font-weight="bold">1</text>
+  <text x="240" y="383" fill="var(--orange)" font-size="13" font-weight="bold">BeforeInstall Hook → scripts/before_install.sh</text>
+  <text x="240" y="403" fill="var(--text-muted)" font-size="10">systemctl stop httpd 2>/dev/null || true</text>
+  <text x="240" y="421" fill="var(--text-muted)" font-size="10">yum install -y httpd 2>/dev/null || true  •  rm -f /var/www/html/index.html</text>
+
+  <!-- Arrow -->
+  <line x1="450" y1="430" x2="450" y2="460" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== HOOK 2: AfterInstall ===== -->
+  <rect x="180" y="465" width="540" height="85" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="180" y="465" width="30" height="85" rx="8" fill="var(--orange)"/>
+  <text x="195" y="510" text-anchor="middle" fill="var(--text-main)" font-size="14" font-weight="bold">2</text>
+  <text x="240" y="488" fill="var(--orange)" font-size="13" font-weight="bold">AfterInstall Hook → scripts/after_install.sh</text>
+  <text x="240" y="508" fill="var(--text-muted)" font-size="10">chown -R apache:apache /var/www/html/</text>
+  <text x="240" y="526" fill="var(--text-muted)" font-size="10">chmod 644 /var/www/html/index.html</text>
+  <text x="240" y="544" fill="var(--text-muted)" font-size="10">cat /var/www/html/build-info.txt (display build metadata)</text>
+
+  <!-- Files deployed indicator -->
+  <rect x="620" y="475" width="80" height="20" rx="4" fill="var(--blue)" opacity="0.3"/>
+  <text x="660" y="489" text-anchor="middle" fill="var(--blue)" font-size="9">Files Deployed</text>
+
+  <!-- Arrow -->
+  <line x1="450" y1="550" x2="450" y2="580" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== HOOK 3: ApplicationStart ===== -->
+  <rect x="180" y="585" width="540" height="70" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="180" y="585" width="30" height="70" rx="8" fill="var(--orange)"/>
+  <text x="195" y="625" text-anchor="middle" fill="var(--text-main)" font-size="14" font-weight="bold">3</text>
+  <text x="240" y="608" fill="var(--orange)" font-size="13" font-weight="bold">ApplicationStart Hook → scripts/start_application.sh</text>
+  <text x="240" y="628" fill="var(--text-muted)" font-size="10">systemctl start httpd  •  systemctl enable httpd</text>
+  <text x="240" y="646" fill="var(--text-muted)" font-size="10">systemctl status httpd --no-pager (verify running)</text>
+
+  <!-- Arrow -->
+  <line x1="450" y1="655" x2="450" y2="685" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrow)" class="draw"/> <set attributeName="class" to="draw" />
+
+  <!-- ===== HOOK 4: ValidateService ===== -->
+  <rect x="180" y="690" width="540" height="55" rx="8" fill="var(--box-bg)" stroke="var(--green)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="180" y="690" width="30" height="55" rx="8" fill="var(--green)"/>
+  <text x="195" y="722" text-anchor="middle" fill="var(--text-main)" font-size="14" font-weight="bold">4</text>
+  <text x="240" y="712" fill="var(--green)" font-size="13" font-weight="bold">ValidateService Hook → scripts/validate_service.sh</text>
+  <text x="240" y="732" fill="var(--text-muted)" font-size="10">curl -s -o /dev/null -w "%{http_code}" http://localhost/  →  Expect HTTP 200</text>
+
+  <!-- ===== SUCCESS ===== -->
+  <rect x="300" y="760" width="300" height="28" rx="14" fill="var(--green)" opacity="0.2" stroke="var(--green)" stroke-width="1"/>
+  <text x="450" y="779" text-anchor="middle" fill="var(--green)" font-size="13" font-weight="bold"><tspan class="float">✅ Deployment Complete — App is Live!</tspan></text>
+
+  <!-- Web files directory indicator -->
+  <rect x="640" y="380" width="100" height="55" rx="6" fill="var(--box-bg)" stroke="#666" stroke-width="0.5"/>
+  <text x="690" y="398" text-anchor="middle" fill="var(--text-muted)" font-size="9">/var/www/html/</text>
+  <text x="690" y="414" text-anchor="middle" fill="var(--blue)" font-size="9">index.html</text>
+  <text x="690" y="430" text-anchor="middle" fill="var(--blue)" font-size="9">build-info.txt</text>
+</svg>

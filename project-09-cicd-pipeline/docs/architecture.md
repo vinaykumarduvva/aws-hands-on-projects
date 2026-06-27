@@ -1,186 +1,247 @@
-# Architecture Documentation
+# Architecture — Project 9 CI/CD Pipeline
 
 ## High-Level Architecture
 
-The CI/CD pipeline implements a three-stage deployment workflow using AWS managed services, eliminating the need for self-hosted CI/CD infrastructure.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Developer Workstation                        │
+│                    Windows PC — ap-south-1                      │
+│                                                                 │
+│   git push origin main                                          │
+│   (index.html, buildspec.yml, appspec.yml, scripts/)           │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ HTTPS push
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              CodeCommit — my-web-app                            │
+│              Region: ap-south-1                                 │
+│              Branch: main                                       │
+│              Trigger: CloudWatch Events rule                    │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ EventBridge trigger
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     CodePipeline                                │
+│                     my-web-app-pipeline                         │
+│                                                                 │
+│  ┌─────────────┐    ┌─────────────┐    ┌──────────────────┐    │
+│  │   Source    │───▶│    Build    │───▶│     Deploy       │    │
+│  │             │    │             │    │                  │    │
+│  │ CodeCommit  │    │  CodeBuild  │    │   CodeDeploy     │    │
+│  │ SourceOutput│    │ BuildOutput │    │   production     │    │
+│  └─────────────┘    └─────────────┘    └──────────────────┘    │
+│          │                 │                    │               │
+│          ▼                 ▼                    ▼               │
+│    S3 artifact       S3 artifact          EC2 Instance          │
+│    (source zip)      (built zip)          (deployed app)        │
+└─────────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              EC2 Instance — cicd-deploy-server                  │
+│              ap-south-1 · t2.micro · Amazon Linux 2023          │
+│              Tag: Environment=production                        │
+│                                                                 │
+│              CodeDeploy Agent (running)                         │
+│              Apache Web Server (httpd)                          │
+│              Application: /var/www/html/                        │
+│                                                                 │
+│              Public IP → http://YOUR_IP → live app ✅           │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ## Component Architecture
 
-### 1. Source Control Layer
-```text
-┌─────────────────────────────────────┐
-│ AWS CodeCommit                      │
-│ ┌─────────────────────────────────┐ │
-│ │ Repository: my-web-app          │ │
-│ │ Branch: main                    │ │
-│ │ Files:                          │ │
-│ │ - index.html                    │ │
-│ │ - buildspec.yml                 │ │
-│ │ - appspec.yml                   │ │
-│ │ - scripts/*.sh                  │ │
-│ └─────────────────────────────────┘ │
-└─────────────────────────────────────┘
+### Source Stage — CodeCommit
+
+```
+CodeCommit Repository: my-web-app
+├── main branch (production)
+│   ├── index.html          ← Application source
+│   ├── buildspec.yml       ← Build instructions
+│   ├── appspec.yml         ← Deploy instructions
+│   └── scripts/            ← Lifecycle hook scripts
+│
+└── CloudWatch Events Rule
+    └── Trigger: aws.codecommit referenceUpdated on main
+    └── Target: CodePipeline execution start
 ```
 
-### 2. Build Layer
-```text
-┌─────────────────────────────────────┐
-│ AWS CodeBuild                       │
-│ ┌─────────────────────────────────┐ │
-│ │ Project: my-web-app-build       │ │
-│ │ Image: aws/codebuild/           │ │
-│ │        standard:7.0             │ │
-│ │ Compute: BUILD_GENERAL1_SMALL   │ │
-│ │ Phases:                         │ │
-│ │ - Install (Python 3.11)         │ │
-│ │ - Pre-build (validation)        │ │
-│ │ - Build (packaging)             │ │
-│ │ - Post-build (finalize)         │ │
-│ └─────────────────────────────────┘ │
-└─────────────────────────────────────┘
+### Build Stage — CodeBuild
+
+```
+CodeBuild Project: my-web-app-build
+├── Environment: aws/codebuild/standard:7.0 (Linux)
+├── Compute: BUILD_GENERAL1_SMALL (3 GB RAM, 2 vCPU)
+├── Source: CodeCommit my-web-app (main)
+├── Buildspec: buildspec.yml (in repo root)
+│
+├── Phase: install    → set up Python 3.11 runtime
+├── Phase: pre_build  → validate HTML, check files exist
+├── Phase: build      → copy to dist/, generate build-info.txt
+├── Phase: post_build → confirm artifact ready
+│
+├── Artifacts:
+│   └── S3: codepipeline-artifacts-ACCOUNT-ap-south-1/
+│       └── my-web-app-build/BuildOutput.zip
+│
+└── Logs: /aws/codebuild/my-web-app-build (CloudWatch)
 ```
 
-### 3. Deployment Layer
-```text
-┌─────────────────────────────────────┐
-│ AWS CodeDeploy                      │
-│ ┌─────────────────────────────────┐ │
-│ │ App: my-web-app                 │ │
-│ │ Group: production               │ │
-│ │ Config: AllAtOnce               │ │
-│ │ Hooks:                          │ │
-│ │ - BeforeInstall                 │ │
-│ │ - AfterInstall                  │ │
-│ │ - ApplicationStart              │ │
-│ │ - ValidateService               │ │
-│ └─────────────────────────────────┘ │
-└─────────────────────────────────────┘
+### Deploy Stage — CodeDeploy
+
+```
+CodeDeploy Application: my-web-app
+└── Deployment Group: production
+    ├── EC2 tag filter: Environment=production
+    ├── Deployment config: CodeDeployDefault.AllAtOnce
+    ├── Auto-rollback: enabled on DEPLOYMENT_FAILURE
+    │
+    └── Lifecycle Hooks (appspec.yml):
+        ├── BeforeInstall    → before_install.sh
+        ├── AfterInstall     → after_install.sh
+        ├── ApplicationStart → start_application.sh
+        └── ValidateService  → validate_service.sh
 ```
 
-### 4. Target Infrastructure
-```text
-┌─────────────────────────────────────┐
-│ Amazon EC2 (t2.micro)               │
-│ ┌─────────────────────────────────┐ │
-│ │ OS: Amazon Linux 2023           │ │
-│ │ Agent: CodeDeploy Agent         │ │
-│ │ Server: Apache HTTPD            │ │
-│ │ Root: /var/www/html/            │ │
-│ │ Role: ec2-codedeploy-role       │ │
-│ └─────────────────────────────────┘ │
-└─────────────────────────────────────┘
+---
+
+## IAM Role Architecture
+
 ```
+┌─────────────────────────────────────────────────────────────┐
+│                    IAM Roles                                │
+│                                                             │
+│  codebuild-service-role                                     │
+│  ├── Trust: codebuild.amazonaws.com                         │
+│  ├── AWSCodeBuildAdminAccess                                │
+│  ├── CloudWatchLogsFullAccess                               │
+│  └── AmazonS3FullAccess                                     │
+│                                                             │
+│  codedeploy-service-role                                    │
+│  ├── Trust: codedeploy.amazonaws.com                        │
+│  └── AWSCodeDeployRole                                      │
+│                                                             │
+│  codepipeline-service-role                                  │
+│  ├── Trust: codepipeline.amazonaws.com                      │
+│  ├── AWSCodePipeline_FullAccess                             │
+│  ├── AWSCodeCommitFullAccess                                │
+│  ├── AWSCodeBuildAdminAccess                                │
+│  ├── AWSCodeDeployFullAccess                                │
+│  └── AmazonS3FullAccess                                     │
+│                                                             │
+│  ec2-codedeploy-role                                        │
+│  ├── Trust: ec2.amazonaws.com                               │
+│  ├── AmazonSSMManagedInstanceCore                           │
+│  └── AmazonS3ReadOnlyAccess                                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ## Network Architecture
-```text
-┌──────────────────────────────────────────────────┐
-│ AWS Cloud (ap-south-1)                           │
-│ ┌──────────────────────────────────────────────┐ │
-│ │ VPC (Default)                                │ │
-│ │ ┌──────────────────────────────────────────┐ │ │
-│ │ │ Public Subnet                            │ │ │
-│ │ │ ┌──────────────────────────────────────┐ │ │ │
-│ │ │ │ Security Group: cicd-deploy-sg       │ │ │ │
-│ │ │ │ - Port 80: 0.0.0.0/0 (HTTP)          │ │ │ │
-│ │ │ │ - Port 22: YOUR_IP/32 (SSH)          │ │ │ │
-│ │ │ │                                      │ │ │ │
-│ │ │ │ EC2 Instance                         │ │ │ │
-│ │ │ │ - Apache on port 80                  │ │ │ │
-│ │ │ │ - CodeDeploy Agent                   │ │ │ │
-│ │ │ └──────────────────────────────────────┘ │ │ │
-│ │ └──────────────────────────────────────────┘ │ │
-│ └──────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────┘
+
+```
+VPC: Default VPC (ap-south-1)
+│
+└── Public Subnet (ap-south-1a)
+    │
+    └── EC2: cicd-deploy-server
+        ├── Security Group: cicd-deploy-sg
+        │   ├── Inbound: SSH :22 from MY_IP/32
+        │   └── Inbound: HTTP :80 from 0.0.0.0/0
+        │
+        ├── IAM Role: ec2-codedeploy-role
+        │   (allows S3 read + SSM access)
+        │
+        └── CodeDeploy Agent
+            └── Polls CodeDeploy service for deployments
+            └── Pulls artifact from S3
+            └── Executes lifecycle hooks
 ```
 
-## Data Flow
+---
 
-### Normal Operation Flow
-1. Developer pushes code to CodeCommit (`git push`)
-2. CloudWatch Events detects branch update
-3. CodePipeline triggers automatically
-4. Source stage fetches code from CodeCommit
-5. Build stage:
-   - CodeBuild pulls source code
-   - Executes buildspec.yml phases
-   - Packages artifacts
-   - Uploads to S3 artifact bucket
-6. Deploy stage:
-   - CodeDeploy fetches artifacts from S3
-   - Executes appspec.yml hooks on EC2
-   - Deploys application to /var/www/html/
-   - Validates deployment health
+## S3 Artifact Flow
 
-### Error Handling Flow
-1. Pipeline stage fails
-2. CodePipeline stops execution
-3. SNS notification sent (if configured)
-4. CloudWatch Logs capture error details
-5. Automatic rollback (if configured in CodeDeploy)
-6. Developer can view logs and retry
-
-## IAM Permission Model
-
-### Service Roles
-```text
-codepipeline-service-role
-├── AWSCodePipeline_FullAccess
-├── AWSCodeCommitFullAccess
-├── AWSCodeBuildAdminAccess
-├── AWSCodeDeployFullAccess
-└── AmazonS3FullAccess
-
-codebuild-service-role
-├── AWSCodeBuildAdminAccess
-├── CloudWatchLogsFullAccess
-└── AmazonS3FullAccess
-
-codedeploy-service-role
-└── AWSCodeDeployRole
-
-ec2-codedeploy-role (Instance Profile)
-├── AmazonSSMManagedInstanceCore
-└── AmazonS3ReadOnlyAccess
+```
+S3 Bucket: codepipeline-artifacts-ACCOUNT-ap-south-1
+│
+├── Source artifacts (CodePipeline puts here)
+│   └── my-web-app-pipeline/SourceOutput/
+│       └── source.zip (index.html + buildspec + appspec + scripts)
+│
+└── Build artifacts (CodeBuild puts here)
+    └── my-web-app-pipeline/BuildOutput/
+        └── BuildOutput.zip
+            ├── index.html
+            ├── appspec.yml
+            ├── build-info.txt
+            └── scripts/
+                ├── before_install.sh
+                ├── after_install.sh
+                ├── start_application.sh
+                └── validate_service.sh
 ```
 
-## Scaling Considerations
+---
 
-### Current Configuration (Free Tier)
-- Single EC2 instance (t2.micro)
-- All-at-once deployment strategy
-- Single pipeline execution
+## Data Flow Summary
 
-### Production Scaling Options
-- **Horizontal**: Add instances to Auto Scaling Group
-- **Deployment Strategies**: 
-  - Blue/Green (zero-downtime)
-  - Canary (gradual rollout)
-  - Linear (controlled percentage)
-- **Multi-Region**: Pipeline per region deployment
-- **Multi-Environment**: Dev → Staging → Production pipelines
+```
+1. Developer edits index.html locally (Version 1.0 → 2.0)
+
+2. git push origin main
+   └── CodeCommit stores new commit
+
+3. CloudWatch Events detects push
+   └── Triggers CodePipeline execution
+
+4. Source Stage
+   └── CodePipeline fetches source from CodeCommit
+   └── Zips and stores in S3 as SourceOutput
+
+5. Build Stage
+   └── CodeBuild pulls SourceOutput from S3
+   └── Runs buildspec.yml phases
+   └── Validates HTML, copies to dist/
+   └── Zips dist/ and stores as BuildOutput in S3
+
+6. Deploy Stage
+   └── CodeDeploy pulls BuildOutput from S3
+   └── Finds EC2 instances tagged Environment=production
+   └── CodeDeploy agent on EC2 downloads artifact
+   └── Runs lifecycle hooks from appspec.yml
+   └── Validates HTTP 200 response
+
+7. Done — Version 2.0 live at http://EC2_PUBLIC_IP
+   Total time: ~3-4 minutes from git push
+```
+
+---
 
 ## Monitoring and Observability
 
-### CloudWatch Integration
-- **Build Logs**: /aws/codebuild/my-web-app-build
-- **Deployment Logs**: CodeDeploy agent logs on EC2
-- **Pipeline State**: Pipeline execution history
-- **Notifications**: SNS for pipeline failures
+| What to monitor | Where | Metric/Log |
+|---|---|---|
+| Pipeline executions | CodePipeline console | Stage status, duration |
+| Build logs | CloudWatch Logs | /aws/codebuild/my-web-app-build |
+| Deploy events | CodeDeploy console | Deployment history, hook logs |
+| EC2 agent status | EC2 SSH / SSM | `systemctl status codedeploy-agent` |
+| App availability | Browser / curl | HTTP 200 from EC2 public IP |
 
-### Health Checks
-- Deployment validation: HTTP 200 check
-- Apache service status verification
-- Build-time HTML syntax validation
-- File integrity verification
+---
 
-## Cost Optimization
+## Deployment Config Options
 
-| Resource | Free Tier | Cost/Month (if exceeded) |
-|----------|-----------|---------------------------|
-| CodeCommit | 5 active users (forever) | $1/user/month |
-| CodeBuild | 100 build.minutes | $0.005/minute |
-| CodePipeline | 1 active pipeline | $1/pipeline/month |
-| EC2 t2.micro | 750 hours | $0.0124/hour |
-| S3 | 5 GB storage | $0.023/GB |
-| **Total (best case)** | **$0.00** | |
-| **Total (worst case)** | **~$1.00** | |
+| Config | Behavior | Use Case |
+|---|---|---|
+| AllAtOnce | Deploy to all instances simultaneously | Dev/test, single instance |
+| HalfAtATime | Deploy to 50% then 50% | Rolling update |
+| OneAtATime | Deploy one instance at a time | Zero downtime (large fleet) |
+| Custom | You define percentage/count | Fine-grained control |
+
+This project uses `AllAtOnce` since we have a single EC2 instance.
+Production fleets typically use `HalfAtATime` or `OneAtATime`.

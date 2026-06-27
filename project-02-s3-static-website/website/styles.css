@@ -333,3 +333,35 @@ footer {
   .hero-title { font-size: 2.5rem; }
   .grid { grid-template-columns: 1fr; }
 }
+
+/* --- Modern Enhancements & Animations --- */
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.glass-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.glass-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(255, 153, 0, 0.5) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 153, 0, 0.15) !important;
+}
+
+.error-code {
+  animation: float 6s ease-in-out infinite;
+}
+
