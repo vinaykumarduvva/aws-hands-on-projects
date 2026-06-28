@@ -661,14 +661,16 @@ code, pre { font-family: var(--font-mono); }
 .service-section li {
   font-size: 0.88rem;
   color: var(--text-secondary);
+  padding: 6px 0 6px 20px;
   position: relative;
   line-height: 1.6;
-  list-style-type: disc;
-  margin-left: 20px;
-  padding: 4px 0;
 }
 .service-section li::before {
-  display: none;
+  content: '\25B8';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: 700;
 }
 
 /* Code blocks inside service cards */
@@ -1320,12 +1322,10 @@ code, pre { font-family: var(--font-mono); }
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-  }
-  .filter-container::-webkit-scrollbar {
-    display: none;
+    justify-content: stretch;
   }
   .category-pill {
-    flex-shrink: 0;
+    justify-content: flex-start;
   }
 
   .responsibility-table thead,

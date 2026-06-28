@@ -81,11 +81,27 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // Active nav link highlighting
-const sections = document.querySelectorAll('section[id], footer[id]');
+const sections = document.querySelectorAll('section[id]');
 const navItems = navLinks.querySelectorAll('a');
 
 function highlightNavOnScroll() {
   const scrollY = window.scrollY + SCROLL_OFFSET + 20;
+
+  // Check if footer is visible (user scrolled near bottom)
+  const footer = document.getElementById('footer');
+  const footerTop = footer ? footer.offsetTop : Infinity;
+  const isAtFooter = scrollY >= footerTop;
+
+  if (isAtFooter) {
+    navItems.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#footer') {
+        a.classList.add('active');
+      }
+    });
+    return;
+  }
+
   sections.forEach(section => {
     const top = section.offsetTop;
     const height = section.offsetHeight;
