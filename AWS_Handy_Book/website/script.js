@@ -81,7 +81,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // Active nav link highlighting
-const sections = document.querySelectorAll('section[id]');
+const sections = document.querySelectorAll('section[id], footer[id]');
 const navItems = navLinks.querySelectorAll('a');
 
 function highlightNavOnScroll() {

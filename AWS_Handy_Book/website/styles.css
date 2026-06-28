@@ -666,7 +666,7 @@ code, pre { font-family: var(--font-mono); }
   line-height: 1.6;
 }
 .service-section li::before {
-  content: 'â–¸';
+  content: '•';
   position: absolute;
   left: 0;
   color: var(--accent-primary);
@@ -1319,12 +1319,9 @@ code, pre { font-family: var(--font-mono); }
   }
 
   .filter-container {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding-bottom: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
   .filter-container::-webkit-scrollbar {
     display: none;
