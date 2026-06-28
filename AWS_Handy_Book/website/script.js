@@ -87,12 +87,10 @@ const navItems = navLinks.querySelectorAll('a');
 function highlightNavOnScroll() {
   const scrollY = window.scrollY + SCROLL_OFFSET + 20;
 
-  // Check if footer is visible (user scrolled near bottom)
-  const footer = document.getElementById('footer');
-  const footerTop = footer ? footer.offsetTop : Infinity;
-  const isAtFooter = scrollY >= footerTop;
+  // Check if user has scrolled to the bottom of the document
+  const isAtBottom = (window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight - 100;
 
-  if (isAtFooter) {
+  if (isAtBottom) {
     navItems.forEach(a => {
       a.classList.remove('active');
       if (a.getAttribute('href') === '#footer') {

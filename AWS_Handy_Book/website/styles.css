@@ -1320,12 +1320,18 @@ code, pre { font-family: var(--font-mono); }
 
   .filter-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    justify-content: stretch;
+    width: 100%;
   }
   .category-pill {
-    justify-content: flex-start;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 10px;
+    gap: 6px;
+  }
+  .category-pill .cat-count {
+    margin-left: 4px;
   }
 
   .responsibility-table thead,
