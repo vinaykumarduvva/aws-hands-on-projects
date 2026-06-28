@@ -2,7 +2,7 @@
 
 ## End-to-End Workflow: From Code to Production
 
-```
+```text
 Developer edits code on Windows PC
             │
             │ 1. Edit index.html locally
@@ -49,7 +49,8 @@ Result: Updated app live at http://EC2_PUBLIC_IP
 ## First Deployment vs Subsequent Deployments
 
 ### First deployment (triggered on pipeline creation)
-```
+
+```text
 Pipeline created
       │
       ▼ immediately
@@ -63,7 +64,8 @@ Version 1.0 live on EC2
 ```
 
 ### Subsequent deployments (triggered by code push)
-```
+
+```text
 git push origin main
       │
       ▼ within seconds
@@ -85,7 +87,7 @@ New version live on EC2
 
 When the CodeDeploy agent receives a deployment instruction:
 
-```
+```text
 Agent receives deployment notification
               │
               ▼
@@ -138,6 +140,7 @@ Executes: ValidateService hook
 This is the core demo of CI/CD working end-to-end:
 
 ### Step 1 — Edit code locally
+
 ```powershell
 cd C:\Users\YourName\my-web-app
 
@@ -150,6 +153,7 @@ Select-String "Version" index.html
 ```
 
 ### Step 2 — Commit and push
+
 ```powershell
 git add index.html
 git commit -m "feat: bump version to 2.0"
@@ -157,6 +161,7 @@ git push origin main
 ```
 
 ### Step 3 — Watch pipeline
+
 ```powershell
 # Poll every 30 seconds
 while ($true) {
@@ -169,6 +174,7 @@ while ($true) {
 ```
 
 ### Step 4 — Verify deployment
+
 ```powershell
 # Hit the endpoint
 $PUBLIC_IP = aws ec2 describe-instances `
@@ -189,7 +195,7 @@ Start-Process "http://$PUBLIC_IP"
 
 When a deployment fails (e.g., ValidateService returns HTTP 500):
 
-```
+```text
 Deployment D-NEW (Version 2.0) fails at ValidateService
                 │
                 ▼
@@ -220,7 +226,8 @@ Developer must fix code and push again
 ## Monitoring Deployments in Real Time
 
 ### Console approach
-```
+
+```text
 CodePipeline → my-web-app-pipeline → click Deploy stage
       └── Click "AWS CodeDeploy" link
            └── Deployments → latest deployment
@@ -233,6 +240,7 @@ CodePipeline → my-web-app-pipeline → click Deploy stage
 ```
 
 ### CLI approach
+
 ```powershell
 # Get latest deployment ID
 $DEPLOY_ID = aws deploy list-deployments `
@@ -282,7 +290,7 @@ aws deploy get-deployment `
 
 After a successful deployment, these files exist on EC2:
 
-```
+```text
 /var/www/html/
 ├── index.html        ← Your deployed application
 └── build-info.txt    ← Build metadata from CodeBuild
@@ -307,6 +315,7 @@ After a successful deployment, these files exist on EC2:
 ```
 
 ### Read deployment logs on EC2
+
 ```bash
 # SSH or SSM into EC2
 # Read hook output
@@ -317,4 +326,4 @@ sudo tail -50 /var/log/aws/codedeploy-agent/codedeploy-agent.log
 
 # Check build-info.txt
 cat /var/www/html/build-info.txt
-```
+```

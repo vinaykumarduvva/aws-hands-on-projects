@@ -4,6 +4,7 @@
 
 `appspec.yml` is the CodeDeploy deployment manifest.
 It tells the CodeDeploy agent on EC2 exactly:
+
 - Which files to copy and where to put them
 - What permissions to set on those files
 - Which scripts to run at each deployment lifecycle stage
@@ -15,7 +16,7 @@ and the deployment fails immediately.
 
 ## File Location
 
-```
+```text
 my-web-app/
 ├── index.html
 ├── buildspec.yml
@@ -145,7 +146,7 @@ hooks:
 CodeDeploy supports 7 lifecycle hooks for EC2 deployments.
 We used 4. Here is the complete list in execution order:
 
-```
+```text
 ApplicationStop
       ↓
 DownloadBundle         ← CodeDeploy downloads artifact from S3
@@ -164,7 +165,7 @@ ValidateService        ← We use this
 ### Hooks we did NOT use
 
 | Hook | When it runs | Typical use |
-|---|---|---|
+| --- | --- | --- |
 | ApplicationStop | Before download | Gracefully stop running application |
 | DownloadBundle | While downloading | Cannot use custom scripts here |
 | Install | While copying files | Cannot use custom scripts here |
@@ -174,6 +175,7 @@ ValidateService        ← We use this
 ## Deployment Hook Scripts Explained
 
 ### before_install.sh
+
 ```bash
 #!/bin/bash
 set -e
@@ -199,6 +201,7 @@ echo "BeforeInstall complete"
 ```
 
 ### after_install.sh
+
 ```bash
 #!/bin/bash
 set -e
@@ -223,6 +226,7 @@ echo "AfterInstall complete"
 ```
 
 ### start_application.sh
+
 ```bash
 #!/bin/bash
 set -e
@@ -243,6 +247,7 @@ echo "ApplicationStart complete"
 ```
 
 ### validate_service.sh
+
 ```bash
 #!/bin/bash
 set -e
@@ -278,7 +283,7 @@ echo "ValidateService complete — deployment successful!"
 
 ## What Happens When a Hook Fails
 
-```
+```text
 ValidateService returns exit code 1
               │
               ▼
@@ -331,11 +336,11 @@ sed -i 's/\r//' scripts/*.sh
 
 ## Common appspec.yml Errors
 
-| Error | Cause | Fix |
-|---|---|---|
-| `AppSpec file not found` | appspec.yml not at artifact root | Verify buildspec copies it to dist/ |
-| `Script failed with exit code 1` | Hook script error | SSH to EC2, check `/opt/codedeploy-agent/deployment-root/` logs |
-| `Script failed with exit code 127` | Script not found or not executable | Check location path and script exists in artifact |
-| `Permission denied` | Wrong runas user | Change `runas: root` for system operations |
-| `Timeout` | Script took longer than `timeout` | Increase timeout value or optimize script |
-| `YAML parse error` | Tab characters or bad indentation | Use spaces only, validate with `python -c "import yaml..."` |
+| Error                              | Cause                              | Fix                                                             |
+| ---------------------------------- | ---------------------------------- | --------------------------------------------------------------- |
+| `AppSpec file not found`           | appspec.yml not at artifact root   | Verify buildspec copies it to dist/                             |
+| `Script failed with exit code 1`   | Hook script error                  | SSH to EC2, check `/opt/codedeploy-agent/deployment-root/` logs |
+| `Script failed with exit code 127` | Script not found or not executable | Check location path and script exists in artifact               |
+| `Permission denied`                | Wrong runas user                   | Change `runas: root` for system operations                      |
+| `Timeout`                          | Script took longer than `timeout`  | Increase timeout value or optimize script                       |
+| `YAML parse error`                 | Tab characters or bad indentation  | Use spaces only, validate with `python -c "import yaml..."`     |

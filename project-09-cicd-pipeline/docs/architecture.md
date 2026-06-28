@@ -2,7 +2,7 @@
 
 ## High-Level Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Developer Workstation                        │
 │                    Windows PC — ap-south-1                      │
@@ -56,7 +56,7 @@
 
 ### Source Stage — CodeCommit
 
-```
+```text
 CodeCommit Repository: my-web-app
 ├── main branch (production)
 │   ├── index.html          ← Application source
@@ -71,7 +71,7 @@ CodeCommit Repository: my-web-app
 
 ### Build Stage — CodeBuild
 
-```
+```text
 CodeBuild Project: my-web-app-build
 ├── Environment: aws/codebuild/standard:7.0 (Linux)
 ├── Compute: BUILD_GENERAL1_SMALL (3 GB RAM, 2 vCPU)
@@ -92,7 +92,7 @@ CodeBuild Project: my-web-app-build
 
 ### Deploy Stage — CodeDeploy
 
-```
+```text
 CodeDeploy Application: my-web-app
 └── Deployment Group: production
     ├── EC2 tag filter: Environment=production
@@ -110,7 +110,7 @@ CodeDeploy Application: my-web-app
 
 ## IAM Role Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    IAM Roles                                │
 │                                                             │
@@ -143,7 +143,7 @@ CodeDeploy Application: my-web-app
 
 ## Network Architecture
 
-```
+```text
 VPC: Default VPC (ap-south-1)
 │
 └── Public Subnet (ap-south-1a)
@@ -166,7 +166,7 @@ VPC: Default VPC (ap-south-1)
 
 ## S3 Artifact Flow
 
-```
+```text
 S3 Bucket: codepipeline-artifacts-ACCOUNT-ap-south-1
 │
 ├── Source artifacts (CodePipeline puts here)
@@ -190,7 +190,7 @@ S3 Bucket: codepipeline-artifacts-ACCOUNT-ap-south-1
 
 ## Data Flow Summary
 
-```
+```text
 1. Developer edits index.html locally (Version 1.0 → 2.0)
 
 2. git push origin main
@@ -225,7 +225,7 @@ S3 Bucket: codepipeline-artifacts-ACCOUNT-ap-south-1
 ## Monitoring and Observability
 
 | What to monitor | Where | Metric/Log |
-|---|---|---|
+| --- | --- | --- |
 | Pipeline executions | CodePipeline console | Stage status, duration |
 | Build logs | CloudWatch Logs | /aws/codebuild/my-web-app-build |
 | Deploy events | CodeDeploy console | Deployment history, hook logs |
@@ -237,7 +237,7 @@ S3 Bucket: codepipeline-artifacts-ACCOUNT-ap-south-1
 ## Deployment Config Options
 
 | Config | Behavior | Use Case |
-|---|---|---|
+| --- | --- | --- |
 | AllAtOnce | Deploy to all instances simultaneously | Dev/test, single instance |
 | HalfAtATime | Deploy to 50% then 50% | Rolling update |
 | OneAtATime | Deploy one instance at a time | Zero downtime (large fleet) |
