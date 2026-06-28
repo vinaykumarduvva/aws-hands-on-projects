@@ -11,7 +11,7 @@ Build a fully serverless REST API from scratch — no servers to manage, no EC2 
 
 ## Architecture Overview
 
-```
+```text
 Client (Browser / curl / Postman)
          │
          │ HTTPS Request
@@ -48,7 +48,7 @@ Client (Browser / curl / Postman)
 ## AWS Services Used
 
 | Service | Role |
-|---|---|
+| --- | --- |
 | AWS Lambda | Serverless compute — runs Python code on demand |
 | API Gateway | HTTP endpoint — routes requests to Lambda |
 | DynamoDB | Serverless NoSQL database — stores user records |
@@ -61,7 +61,7 @@ Client (Browser / curl / Postman)
 ## API Endpoints
 
 | Method | Endpoint | Action | Status Codes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `POST` | `/users` | Create a new user | 201, 400, 500 |
 | `GET` | `/users` | List all users | 200, 500 |
 | `GET` | `/users/{userId}` | Get a single user | 200, 404, 500 |
@@ -73,7 +73,7 @@ Client (Browser / curl / Postman)
 ## Free Tier Status
 
 | Resource | Free Tier | Duration |
-|---|---|---|
+| --- | --- | --- |
 | Lambda | 1M requests/month + 400K GB-seconds | **Forever** |
 | API Gateway | 1M API calls/month | 12 months |
 | DynamoDB | 25 GB + 25 WCU + 25 RCU | **Forever** |
@@ -84,7 +84,7 @@ Client (Browser / curl / Postman)
 
 ## Project Structure
 
-```
+```text
 project-08-serverless-rest-api/
 ├── README.md
 ├── LICENSE
@@ -101,7 +101,7 @@ project-08-serverless-rest-api/
 ## Execution Order
 
 | Script | Part | Task |
-|---|---|---|
+| --- | --- | --- |
 | `01-create-dynamodb.ps1` | 1 | Create users table |
 | `02-create-lambda-role.ps1` | 2 | IAM role + DynamoDB policy |
 | `03-package-lambda.ps1` | 3 | Zip Lambda code |
@@ -126,7 +126,6 @@ project-08-serverless-rest-api/
 
 **CORS Headers**: Every response includes `Access-Control-Allow-Origin: *` so the API can be called from browser-based frontends without a proxy.
 
-
 ---
 
-*Part of the AWS Cloud Projects portfolio — hands-on infrastructure built and documented end to end.*
+*Part of the AWS Cloud Projects portfolio — hands-on infrastructure built and documented end to end.*
