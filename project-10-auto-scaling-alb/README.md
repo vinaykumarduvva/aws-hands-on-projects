@@ -100,26 +100,25 @@ project-10-auto-scaling-alb/
 │   ├── security-groups.svg
 │   └── health-check-flow.svg
 └── images/                  — Console screenshots
-    ├── 01-preflight-identity.png
-    ├── 02-vpc-subnets-azs.png
-    ├── 03-security-groups-created.png
-    ├── 04-launch-template-created.png
-    ├── 05-target-group-created.png
-    ├── 06-alb-active.png
-    ├── 07-alb-listener-rules.png
-    ├── 08-asg-created.png
-    ├── 09-asg-instances-running.png
-    ├── 10-target-health-all-healthy.png
-    ├── 11-web-app-instance-1.png
-    ├── 12-web-app-instance-2.png
-    ├── 13-load-balancing-verified.png
+    ├── 01-default-VPC.png
+    ├── 02-subnets.png
+    ├── 03-alb-Security-group.png
+    ├── 04-asg-ec2-sg.png
+    ├── 05-launch-template-created.png
+    ├── 06-target-group-created.png
+    ├── 07-alb-active.png
+    ├── 08-alb-listener-rules.png
+    ├── 09-asg-created.png
+    ├── 10-asg-instances-running.png
+    ├── 11-target-health-all-healthy.png
+    ├── 12-web-app-instance-1.png
+    ├── 13-web-app-instance-2.png
     ├── 14-stress-test-cpu.png
     ├── 15-cloudwatch-alarm-high.png
     ├── 16-scale-out-3-instances.png
     ├── 17-instance-failure-terminated.png
     ├── 18-self-healing-replacement.png
     ├── 19-scaling-activities-history.png
-    ├── 20-cleanup-complete.png
     └── raw-console-captures/
 ```
 
