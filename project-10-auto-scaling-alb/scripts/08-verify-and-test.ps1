@@ -38,18 +38,20 @@ while (-not $allHealthy -and $attempt -lt $maxAttempts) {
     $healthyCount = ($healthData | Where-Object { $_.State -eq "healthy" }).Count
     $totalCount = $healthData.Count
 
-    Write-Host "  Attempt $attempt`: $healthyCount/$totalCount healthy" -ForegroundColor $(if ($healthyCount -eq $totalCount -and $totalCount -gt 0) {"Green"} else {"Yellow"})
+    Write-Host "  Attempt $attempt`: $healthyCount/$totalCount healthy" -ForegroundColor $(if ($healthyCount -eq $totalCount -and $totalCount -gt 0) { "Green" } else { "Yellow" })
 
     if ($healthyCount -eq $totalCount -and $totalCount -gt 0) {
         $allHealthy = $true
-    } else {
+    }
+    else {
         Start-Sleep -Seconds 15
     }
 }
 
 if ($allHealthy) {
     Write-Host "  All targets healthy!" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "  Timeout — some targets may still be initializing." -ForegroundColor Red
 }
 
@@ -81,7 +83,8 @@ Write-Host ""
         $instanceId = [regex]::Match($response.Content, 'i-[0-9a-f]{8,17}').Value
         $statusCode = $response.StatusCode
         Write-Host "  Request $_`: Status $statusCode | Instance: $instanceId" -ForegroundColor Green
-    } catch {
+    }
+    catch {
         Write-Host "  Request $_`: FAILED — $($_.Exception.Message)" -ForegroundColor Red
     }
     Start-Sleep -Milliseconds 500

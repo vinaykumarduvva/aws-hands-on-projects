@@ -22,7 +22,8 @@ try {
         --min-size 0 --max-size 0 --desired-capacity 0 2>$null
     Write-Host "  Scaling down to 0..." -ForegroundColor Green
     Start-Sleep -Seconds 30
-} catch {
+}
+catch {
     Write-Host "  ASG not found or already deleted." -ForegroundColor Gray
 }
 
@@ -35,7 +36,8 @@ try {
         --force-delete 2>$null
     Write-Host "  ASG deleted." -ForegroundColor Green
     Start-Sleep -Seconds 15
-} catch {
+}
+catch {
     Write-Host "  ASG not found or already deleted." -ForegroundColor Gray
 }
 
@@ -66,7 +68,8 @@ try {
         Write-Host "  Waiting 30s for ALB to fully deregister..." -ForegroundColor Yellow
         Start-Sleep -Seconds 30
     }
-} catch {
+}
+catch {
     Write-Host "  ALB not found or already deleted." -ForegroundColor Gray
 }
 
@@ -82,7 +85,8 @@ try {
         aws elbv2 delete-target-group --target-group-arn $TG_ARN 2>$null
         Write-Host "  Target Group deleted." -ForegroundColor Green
     }
-} catch {
+}
+catch {
     Write-Host "  Target Group not found or already deleted." -ForegroundColor Gray
 }
 
@@ -98,7 +102,8 @@ try {
         aws ec2 delete-launch-template --launch-template-id $LT_ID 2>$null
         Write-Host "  Launch Template deleted." -ForegroundColor Green
     }
-} catch {
+}
+catch {
     Write-Host "  Launch Template not found or already deleted." -ForegroundColor Gray
 }
 
@@ -110,14 +115,15 @@ Write-Host "[6/6] Deleting Security Groups..." -ForegroundColor Yellow
 try {
     $EC2_SG = aws ec2 describe-security-groups `
         --filters "Name=group-name,Values=asg-ec2-sg" `
-          "Name=vpc-id,Values=$VPC_ID" `
+        "Name=vpc-id,Values=$VPC_ID" `
         --query "SecurityGroups[0].GroupId" --output text 2>$null
 
     if ($EC2_SG -and $EC2_SG -ne "None") {
         aws ec2 delete-security-group --group-id $EC2_SG 2>$null
         Write-Host "  EC2 SG deleted: $EC2_SG" -ForegroundColor Green
     }
-} catch {
+}
+catch {
     Write-Host "  EC2 SG not found or still in use — retry in 60s." -ForegroundColor Yellow
 }
 
@@ -125,14 +131,15 @@ try {
 try {
     $ALB_SG = aws ec2 describe-security-groups `
         --filters "Name=group-name,Values=alb-sg" `
-          "Name=vpc-id,Values=$VPC_ID" `
+        "Name=vpc-id,Values=$VPC_ID" `
         --query "SecurityGroups[0].GroupId" --output text 2>$null
 
     if ($ALB_SG -and $ALB_SG -ne "None") {
         aws ec2 delete-security-group --group-id $ALB_SG 2>$null
         Write-Host "  ALB SG deleted: $ALB_SG" -ForegroundColor Green
     }
-} catch {
+}
+catch {
     Write-Host "  ALB SG not found or still in use — retry in 60s." -ForegroundColor Yellow
 }
 
@@ -147,7 +154,8 @@ $asgCheck = aws autoscaling describe-auto-scaling-groups `
 
 if (-not $asgCheck) {
     Write-Host "  ASG: deleted" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "  ASG: still exists — may need manual deletion" -ForegroundColor Red
 }
 

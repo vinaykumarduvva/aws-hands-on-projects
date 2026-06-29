@@ -33,7 +33,8 @@ $KEY_NAME = aws ec2 describe-key-pairs `
 
 if ($KEY_NAME -eq "aws-ec2-keypair") {
     Write-Host "  Key pair: $KEY_NAME" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "  Key pair 'aws-ec2-keypair' not found!" -ForegroundColor Red
     Write-Host "  Create one: EC2 > Key Pairs > Create key pair" -ForegroundColor Yellow
     exit 1
@@ -48,7 +49,8 @@ $VPC_ID = aws ec2 describe-vpcs `
 
 if ($VPC_ID -and $VPC_ID -ne "None") {
     Write-Host "  Default VPC: $VPC_ID" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "  No default VPC found in ap-south-1!" -ForegroundColor Red
     exit 1
 }

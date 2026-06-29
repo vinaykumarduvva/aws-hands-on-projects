@@ -9,13 +9,13 @@ Write-Host ""
 
 # ── PRE-REQUISITES ────────────────────────────────────────────────────────────
 $VPC_ID = aws ec2 describe-vpcs `
-    --filters "Name=isDefault,Values=true" `
-    --query "Vpcs[0].VpcId" --output text
+  --filters "Name=isDefault,Values=true" `
+  --query "Vpcs[0].VpcId" --output text
 
 $EC2_SG = aws ec2 describe-security-groups `
-    --filters "Name=group-name,Values=asg-ec2-sg" `
-      "Name=vpc-id,Values=$VPC_ID" `
-    --query "SecurityGroups[0].GroupId" --output text
+  --filters "Name=group-name,Values=asg-ec2-sg" `
+  "Name=vpc-id,Values=$VPC_ID" `
+  --query "SecurityGroups[0].GroupId" --output text
 
 Write-Host "  EC2 SG: $EC2_SG" -ForegroundColor Green
 
@@ -24,12 +24,12 @@ Write-Host ""
 Write-Host "[1/3] Finding latest Amazon Linux 2023 AMI..." -ForegroundColor Yellow
 
 $AMI_ID = aws ec2 describe-images `
-    --owners amazon `
-    --filters "Name=name,Values=al2023-ami-*-x86_64" `
-      "Name=state,Values=available" `
-    --region ap-south-1 `
-    --query "sort_by(Images,&CreationDate)[-1].ImageId" `
-    --output text
+  --owners amazon `
+  --filters "Name=name,Values=al2023-ami-*-x86_64" `
+  "Name=state,Values=available" `
+  --region ap-south-1 `
+  --query "sort_by(Images,&CreationDate)[-1].ImageId" `
+  --output text
 
 Write-Host "  AMI: $AMI_ID" -ForegroundColor Green
 
@@ -86,7 +86,7 @@ echo "User data script completed" >> /tmp/setup.log
 
 # Encode user data to base64
 $USER_DATA_B64 = [Convert]::ToBase64String(
-    [System.Text.Encoding]::UTF8.GetBytes($USER_DATA)
+  [System.Text.Encoding]::UTF8.GetBytes($USER_DATA)
 )
 
 Write-Host "  User data prepared and base64 encoded." -ForegroundColor Green
@@ -96,9 +96,9 @@ Write-Host ""
 Write-Host "[3/3] Creating Launch Template..." -ForegroundColor Yellow
 
 $LT_ID = aws ec2 create-launch-template `
-    --launch-template-name web-server-lt `
-    --version-description "v1 - Apache web server" `
-    --launch-template-data "{
+  --launch-template-name web-server-lt `
+  --version-description "v1 - Apache web server" `
+  --launch-template-data "{
       `"ImageId`":`"$AMI_ID`",
       `"InstanceType`":`"t2.micro`",
       `"KeyName`":`"aws-ec2-keypair`",
@@ -112,8 +112,8 @@ $LT_ID = aws ec2 create-launch-template `
         ]
       }]
     }" `
-    --query "LaunchTemplate.LaunchTemplateId" `
-    --output text
+  --query "LaunchTemplate.LaunchTemplateId" `
+  --output text
 
 Write-Host "  Launch Template ID: $LT_ID" -ForegroundColor Green
 
@@ -121,9 +121,9 @@ Write-Host "  Launch Template ID: $LT_ID" -ForegroundColor Green
 Write-Host ""
 Write-Host "Verifying launch template..." -ForegroundColor Yellow
 aws ec2 describe-launch-templates `
-    --launch-template-ids $LT_ID `
-    --query "LaunchTemplates[0].{ID:LaunchTemplateId,Name:LaunchTemplateName,Version:LatestVersionNumber}" `
-    --output table
+  --launch-template-ids $LT_ID `
+  --query "LaunchTemplates[0].{ID:LaunchTemplateId,Name:LaunchTemplateName,Version:LatestVersionNumber}" `
+  --output table
 
 # ── SUMMARY ───────────────────────────────────────────────────────────────────
 Write-Host ""

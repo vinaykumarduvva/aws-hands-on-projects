@@ -40,10 +40,6 @@ Write-Host ""
 Write-Host "=== Monitoring ASG (Ctrl+C to stop) ===" -ForegroundColor Yellow
 Write-Host ""
 
-$TG_ARN = aws elbv2 describe-target-groups `
-    --names web-server-tg `
-    --query "TargetGroups[0].TargetGroupArn" --output text
-
 $iterations = 0
 $maxIterations = 40  # Monitor for ~20 minutes
 
@@ -68,8 +64,8 @@ while ($iterations -lt $maxIterations) {
     $asg.Instances | ForEach-Object {
         $stateColor = switch ($_.State) {
             "InService" { "Green" }
-            "Pending"   { "Yellow" }
-            default     { "Red" }
+            "Pending" { "Yellow" }
+            default { "Red" }
         }
         Write-Host "  $($_.ID): $($_.State)" -ForegroundColor $stateColor
     }

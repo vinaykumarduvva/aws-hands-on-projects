@@ -61,9 +61,9 @@ while ($iterations -lt $maxIterations) {
     $asg | ForEach-Object {
         $stateColor = switch ($_.State) {
             "InService" { "Green" }
-            "Pending"   { "Yellow" }
+            "Pending" { "Yellow" }
             "Terminating" { "Red" }
-            default     { "Gray" }
+            default { "Gray" }
         }
         $isNew = if ($_.ID -ne $FAILED_INSTANCE -and $_.State -eq "Pending") { " ← NEW" } else { "" }
         Write-Host "  $($_.ID): $($_.State) ($($_.Health))$isNew" -ForegroundColor $stateColor

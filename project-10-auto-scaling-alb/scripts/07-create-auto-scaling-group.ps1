@@ -9,26 +9,26 @@ Write-Host ""
 
 # ── PRE-REQUISITES ────────────────────────────────────────────────────────────
 $VPC_ID = aws ec2 describe-vpcs `
-    --filters "Name=isDefault,Values=true" `
-    --query "Vpcs[0].VpcId" --output text
+  --filters "Name=isDefault,Values=true" `
+  --query "Vpcs[0].VpcId" --output text
 
 $SUBNETS = aws ec2 describe-subnets `
-    --filters "Name=vpc-id,Values=$VPC_ID" `
-      "Name=defaultForAz,Values=true" `
-    --query "Subnets[*].SubnetId" `
-    --output text
+  --filters "Name=vpc-id,Values=$VPC_ID" `
+  "Name=defaultForAz,Values=true" `
+  --query "Subnets[*].SubnetId" `
+  --output text
 
 $SUBNET_LIST = $SUBNETS -split '\s+'
 $SUBNET_A = $SUBNET_LIST[0]
 $SUBNET_B = $SUBNET_LIST[1]
 
 $LT_ID = aws ec2 describe-launch-templates `
-    --launch-template-names web-server-lt `
-    --query "LaunchTemplates[0].LaunchTemplateId" --output text
+  --launch-template-names web-server-lt `
+  --query "LaunchTemplates[0].LaunchTemplateId" --output text
 
 $TG_ARN = aws elbv2 describe-target-groups `
-    --names web-server-tg `
-    --query "TargetGroups[0].TargetGroupArn" --output text
+  --names web-server-tg `
+  --query "TargetGroups[0].TargetGroupArn" --output text
 
 Write-Host "  VPC:              $VPC_ID" -ForegroundColor Green
 Write-Host "  Subnets:          $SUBNET_A, $SUBNET_B" -ForegroundColor Green
@@ -40,17 +40,17 @@ Write-Host ""
 Write-Host "[1/2] Creating Auto Scaling Group..." -ForegroundColor Yellow
 
 aws autoscaling create-auto-scaling-group `
-    --auto-scaling-group-name web-server-asg `
-    --launch-template "LaunchTemplateId=$LT_ID,Version=`$Latest" `
-    --min-size 2 `
-    --max-size 4 `
-    --desired-capacity 2 `
-    --vpc-zone-identifier "$SUBNET_A,$SUBNET_B" `
-    --target-group-arns $TG_ARN `
-    --health-check-type ELB `
-    --health-check-grace-period 120 `
-    --tags "Key=Name,Value=asg-web-server,PropagateAtLaunch=true" `
-      "Key=Project,Value=project-10-asg-alb,PropagateAtLaunch=true"
+  --auto-scaling-group-name web-server-asg `
+  --launch-template "LaunchTemplateId=$LT_ID,Version=`$Latest" `
+  --min-size 2 `
+  --max-size 4 `
+  --desired-capacity 2 `
+  --vpc-zone-identifier "$SUBNET_A,$SUBNET_B" `
+  --target-group-arns $TG_ARN `
+  --health-check-type ELB `
+  --health-check-grace-period 120 `
+  --tags "Key=Name,Value=asg-web-server,PropagateAtLaunch=true" `
+  "Key=Project,Value=project-10-asg-alb,PropagateAtLaunch=true"
 
 Write-Host "  ASG created: web-server-asg" -ForegroundColor Green
 Write-Host "  Min: 2 | Desired: 2 | Max: 4" -ForegroundColor Green
@@ -61,10 +61,10 @@ Write-Host ""
 Write-Host "[2/2] Adding CPU target tracking scaling policy..." -ForegroundColor Yellow
 
 aws autoscaling put-scaling-policy `
-    --auto-scaling-group-name web-server-asg `
-    --policy-name cpu-target-tracking `
-    --policy-type TargetTrackingScaling `
-    --target-tracking-configuration "{
+  --auto-scaling-group-name web-server-asg `
+  --policy-name cpu-target-tracking `
+  --policy-type TargetTrackingScaling `
+  --target-tracking-configuration "{
       `"PredefinedMetricSpecification`":{
         `"PredefinedMetricType`":`"ASGAverageCPUUtilization`"
       },
@@ -85,15 +85,15 @@ Start-Sleep -Seconds 60
 Write-Host ""
 Write-Host "Checking ASG status..." -ForegroundColor Yellow
 aws autoscaling describe-auto-scaling-groups `
-    --auto-scaling-group-names web-server-asg `
-    --query "AutoScalingGroups[0].{
+  --auto-scaling-group-names web-server-asg `
+  --query "AutoScalingGroups[0].{
       Name:AutoScalingGroupName,
       Min:MinSize,
       Max:MaxSize,
       Desired:DesiredCapacity,
       Instances:Instances[*].{ID:InstanceId,State:LifecycleState,Health:HealthStatus,AZ:AvailabilityZone}
     }" `
-    --output json
+  --output json
 
 # ── SUMMARY ───────────────────────────────────────────────────────────────────
 Write-Host ""

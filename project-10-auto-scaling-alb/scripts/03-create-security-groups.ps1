@@ -13,7 +13,7 @@ $VPC_ID = aws ec2 describe-vpcs `
     --query "Vpcs[0].VpcId" --output text
 
 $MY_IP = (Invoke-WebRequest -Uri "https://checkip.amazonaws.com" `
-    -UseBasicParsing).Content.Trim()
+        -UseBasicParsing).Content.Trim()
 
 Write-Host "  VPC: $VPC_ID" -ForegroundColor Green
 Write-Host "  My IP: $MY_IP" -ForegroundColor Green

@@ -20,7 +20,7 @@ Write-Host ""
 Write-Host "[2/3] Getting default subnets (one per AZ)..." -ForegroundColor Yellow
 $SUBNETS = aws ec2 describe-subnets `
     --filters "Name=vpc-id,Values=$VPC_ID" `
-      "Name=defaultForAz,Values=true" `
+    "Name=defaultForAz,Values=true" `
     --query "Subnets[*].SubnetId" `
     --output text
 

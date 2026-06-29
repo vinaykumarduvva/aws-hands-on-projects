@@ -14,7 +14,7 @@ $VPC_ID = aws ec2 describe-vpcs `
 
 $SUBNETS = aws ec2 describe-subnets `
     --filters "Name=vpc-id,Values=$VPC_ID" `
-      "Name=defaultForAz,Values=true" `
+    "Name=defaultForAz,Values=true" `
     --query "Subnets[*].SubnetId" `
     --output text
 
@@ -24,7 +24,7 @@ $SUBNET_B = $SUBNET_LIST[1]
 
 $ALB_SG = aws ec2 describe-security-groups `
     --filters "Name=group-name,Values=alb-sg" `
-      "Name=vpc-id,Values=$VPC_ID" `
+    "Name=vpc-id,Values=$VPC_ID" `
     --query "SecurityGroups[0].GroupId" --output text
 
 $TG_ARN = aws elbv2 describe-target-groups `
