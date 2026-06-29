@@ -45,50 +45,41 @@ echo ""
 iterations=0
 maxIterations=40  # Monitor for ~20 minutes
 
-while [ $iterations -lt $maxIterations ]; do
-    iterations=$((iterations + 1))
+while ($iterations -lt $maxIterations) {
+    $iterations++
 
     asg=$(aws autoscaling describe-auto-scaling-groups \
         --auto-scaling-group-names web-server-asg \
-        --query "AutoScalingGroups[0].{Desired:DesiredCapacity,Instances:Instances[*].{ID:InstanceId,State:LifecycleState}}" \
-        --output json)
+        --query "AutoScalingGroups[0].{)
+          Desired:DesiredCapacity,
+          Instances:Instances[*].{ID:InstanceId,State:LifecycleState}}" \
+        --output json | jq .
 
-    timestamp=$(date +"%T")
-    instanceCount=$(echo "$asg" | jq ".Instances | length")
-    desired=$(echo "$asg" | jq -r ".Desired")
+    $timestamp = date +"%T"
+    instanceCount=$(echo $asg | jq ".Instances | length")
+    desired=$(echo $asg | jq -r ".Desired")
 
     # Color based on change
-    if [ "$instanceCount" -gt 2 ]; then
-        color="\e[32m" # Green
-    else
-        color="\e[97m" # White
-    fi
+    color=if ($instanceCount -gt 2) { "Green" } else { "White" }
 
-    echo -e "${color}${timestamp} — Instances: ${instanceCount} (Desired: ${desired})\e[0m"
-    
-    # Loop over instances in bash
-    instance_ids=$(echo "$asg" | jq -r '.Instances[].ID')
-    
-    for id in $instance_ids; do
-        state=$(echo "$asg" | jq -r ".Instances[] | select(.ID==\"$id\") | .State")
-        if [ "$state" == "InService" ]; then
-            stateColor="\e[32m" # Green
-        elif [ "$state" == "Pending" ]; then
-            stateColor="\e[33m" # Yellow
-        else
-            stateColor="\e[31m" # Red
-        fi
-        echo -e "  $id: ${stateColor}${state}\e[0m"
-    done
-    echo ""
+echo "$timestamp — Instances: $instanceCount (Desired: $desired)"
+    $asg.Instances | ForEach-Object {
+        stateColor=switch ($_.State) {
+            "InService" { "Green" }
+            "Pending" { "Yellow" }
+            default { "Red" }
+        }
+echo "  $($_.ID): $($_.State)"
+    }
+echo ""
 
     sleep 30
-done
+}
 
 echo ""
 echo -e "\e[36m=== Monitoring Complete ===\e[0m"
 echo ""
 echo -e "\e[33m  Check scaling history:\e[0m"
-echo -e "\e[97m    aws autoscaling describe-scaling-activities --auto-scaling-group-name web-server-asg --query \"Activities[0:5].[StartTime,Cause,StatusCode]\" --output table\e[0m"
+echo -e "\e[97m    aws autoscaling describe-scaling-activities --auto-scaling-group-name web-server-asg --query \e[0m"
 echo ""
-echo -e "\e[36mNext step: Run 10-simulate-failure.sh OR 11-cleanup.sh\e[0m"
+echo -e "\e[36mNext step: Run 10-simulate-failure.ps1 OR 11-cleanup.ps1\e[0m"

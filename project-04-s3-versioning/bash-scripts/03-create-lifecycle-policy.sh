@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SOURCE_BUCKET="s3-versioning-lab-yourname"
+
+aws s3api put-bucket-lifecycle-configuration \
+  --bucket $SOURCE_BUCKET \
+  --lifecycle-configuration file://scripts/lifecycle-policy.json
+
+echo -e "\e[32m\e[0m"
