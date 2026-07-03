@@ -1,44 +1,46 @@
-# Project 1 — AWS Account Setup & IAM Foundations
+<div align="center">
+  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-01-iam-setup/architecture/architecture.svg" alt="Project 01 Architecture" width="800">
+  <br/>
+  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="32" height="32" style="vertical-align: middle"/> Project 01: AWS Account Setup & IAM Foundations</h1>
+  <p><b>Beginner/Intermediate &nbsp; • &nbsp; 1-2 Hours &nbsp; • &nbsp; Cost: $0.00 (Free Tier)</b></p>
+  <p>
+    <a href="#purpose">Purpose</a> • 
+    <a href="#architecture">Architecture</a> • 
+    <a href="#deployment">Deployment</a> • 
+    <a href="#docs">Docs</a>
+  </p>
+</div>
 
-## Overview
+<br/>
+
+## 🎯 Purpose
 Secured an AWS account using IAM best practices: disabled root user for daily use,
 enabled MFA, created a least-privilege IAM admin user, configured billing alerts,
 and set up AWS CLI v2 on Windows.
 
-## Architecture
-Root Account (MFA secured)
-    └── IAM User: admin-yourname (AdministratorAccess)
-        └── AWS CLI v2 (Windows PowerShell)
-CloudWatch Billing Alarm → SNS Topic → Email notification
+This project transforms standard infrastructure concepts into a high-end, production-ready implementation, providing extensive hands-on experience with IAM, SNS, CloudWatch.
 
-## Prerequisites
-- AWS account (free tier)
-- Windows PC
-- Smartphone (for MFA authenticator app)
+## 🚀 Learning Objectives
+- Master **IAM** configuration and best practices.
+- Implement secure, scalable infrastructure using AWS native tools.
+- Understand the integration points between various AWS services.
+- Automate deployment using cross-platform scripts.
 
-## Setup Steps
-1. Enable MFA on root account (Authenticator app)
-2. Enable billing alerts in Billing Preferences
-3. Create CloudWatch billing alarm at $5 threshold
-4. Create IAM admin user with console + programmatic access
-5. Install AWS CLI v2 on Windows
-6. Run `aws configure` with IAM access keys
-7. Verify with `aws sts get-caller-identity`
+## 📚 Documentation Suite
+Dive deep into the specific mechanics of this project:
+- 📄 [Project Overview](docs/project-overview.md)
+- 🏗️ [Architecture Details](docs/architecture.md)
+- 🚀 [Deployment Guide](docs/deployment-guide.md)
+- 🔐 [Security Protocols](docs/security-protocols.md)
+- 🧪 [Testing Procedures](docs/testing-procedures.md)
+- 🛠️ [Troubleshooting](docs/troubleshooting.md)
 
-## Expected Output
-```json
-{
-    "UserId": "AIDA...",
-    "Account": "123456789012",
-    "Arn": "arn:aws:iam::123456789012:user/admin-yourname"
-}
-```
+## 💻 Automation Scripts
+This project contains ready-to-run automation scripts for both **PowerShell** and **Bash**.
+- 🖥️ **Windows Users:** Use `scripts/powershell/`
+- 🐧 **Linux/Mac Users:** Use `scripts/bash/`
 
-## Cost Estimate
-$0.00 — IAM and billing alerts are always free.
-
-## Known Issues
-- Billing CloudWatch metrics only available in us-east-1 region
-
-## Next Steps
-- Project 2: Host a static website on S3 + CloudFront
+---
+<div align="center">
+  <b> &nbsp; | &nbsp; [Next Project ➡️](../project-02-s3-static-website)</b>
+</div>

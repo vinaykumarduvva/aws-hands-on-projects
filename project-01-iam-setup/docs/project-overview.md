@@ -1,6 +1,9 @@
-# Project Overview
+# Project 01 Overview
 
-## Overview
-Secured an AWS account using IAM best practices: disabled root user for daily use,
-enabled MFA, created a least-privilege IAM admin user, configured billing alerts,
-and set up AWS CLI v2 on Windows.
+## 🎯 Business Problem
+
+Organizations need robust solutions for IAM. This project simulates a real-world enterprise scenario.
+
+## 🚀 Solution
+
+We leverage IAM, SNS, CloudWatch to build a secure, highly available environment.

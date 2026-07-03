@@ -1,54 +1,45 @@
-# Project 2 — Static Website on S3 + CloudFront
+<div align="center">
+  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-02-s3-static-website/architecture/architecture.svg" alt="Project 02 Architecture" width="800">
+  <br/>
+  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="32" height="32" style="vertical-align: middle"/> Project 02: Static Website on S3 + CloudFront</h1>
+  <p><b>Beginner/Intermediate &nbsp; • &nbsp; 2-3 Hours &nbsp; • &nbsp; Cost: $0.00 (Free Tier)</b></p>
+  <p>
+    <a href="#purpose">Purpose</a> • 
+    <a href="#architecture">Architecture</a> • 
+    <a href="#deployment">Deployment</a> • 
+    <a href="#docs">Docs</a>
+  </p>
+</div>
 
-## Overview
+<br/>
+
+## 🎯 Purpose
 Hosted a static portfolio website on Amazon S3 with CloudFront as a global CDN,
 enabling HTTPS delivery from 400+ edge locations worldwide at near-zero cost.
 
-## Architecture
-```
-Browser → CloudFront (HTTPS, CDN) → S3 Bucket (origin, HTTP)
-```
+This project transforms standard infrastructure concepts into a high-end, production-ready implementation, providing extensive hands-on experience with S3, CloudFront.
 
-## Services Used
-- Amazon S3 — static file storage and website hosting
-- Amazon CloudFront — CDN, SSL termination, caching
-- AWS CLI v2 — file sync and cache invalidation
+## 🚀 Learning Objectives
+- Master **S3** configuration and best practices.
+- Implement secure, scalable infrastructure using AWS native tools.
+- Understand the integration points between various AWS services.
+- Automate deployment using cross-platform scripts.
 
-## Live URL
-S3 static website: https://aws-sample-webiste-2026.s3.ap-south-1.amazonaws.com/index.html
+## 📚 Documentation Suite
+Dive deep into the specific mechanics of this project:
+- 📄 [Project Overview](docs/project-overview.md)
+- 🏗️ [Architecture Details](docs/architecture.md)
+- 🚀 [Deployment Guide](docs/deployment-guide.md)
+- 🔐 [Security Protocols](docs/security-protocols.md)
+- 🧪 [Testing Procedures](docs/testing-procedures.md)
+- 🛠️ [Troubleshooting](docs/troubleshooting.md)
 
-CloudFront: https://d2qfvpm2acd8sv.cloudfront.net/
+## 💻 Automation Scripts
+This project contains ready-to-run automation scripts for both **PowerShell** and **Bash**.
+- 🖥️ **Windows Users:** Use `scripts/powershell/`
+- 🐧 **Linux/Mac Users:** Use `scripts/bash/`
 
-## Setup Steps
-1. Create S3 bucket, disable block public access
-2. Enable static website hosting (index.html / error.html)
-3. Apply public read bucket policy
-4. Upload files: `aws s3 sync ./website/ s3://BUCKET/`
-5. Create CloudFront distribution pointing to S3 website endpoint
-6. Set viewer protocol to redirect HTTP → HTTPS
-7. Test HTTPS URL, then invalidate cache after updates
-
-## Key Commands
-```powershell
-# Upload files
-aws s3 sync .\website\ s3://YOUR-BUCKET/ --region us-east-1
-
-# Invalidate cache
-aws cloudfront create-invalidation --distribution-id YOUR_ID --paths "/*"
-
-# Check files in bucket
-aws s3 ls s3://YOUR-BUCKET/
-```
-
-## Cost Estimate
-$0.00 — S3 and CloudFront both within Free Tier limits for this project.
-
-## Cleanup
-1. Disable and delete CloudFront distribution
-2. `aws s3 rm s3://YOUR-BUCKET --recursive`
-3. `aws s3api delete-bucket --bucket YOUR-BUCKET --region us-east-1`
-
-## Next Steps
-- Add a custom domain with Route 53
-- Add a contact form using API Gateway + Lambda (Project 8)
-- Automate deploys with CodePipeline (Project 9)
+---
+<div align="center">
+  <b>[⬅️ Previous Project](../project-01-iam-setup) &nbsp; | &nbsp; [Next Project ➡️](../project-03-Launch-EC2-Connect-via-SSH)</b>
+</div>
