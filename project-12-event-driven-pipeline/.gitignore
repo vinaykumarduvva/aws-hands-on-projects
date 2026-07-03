@@ -1,0 +1,27 @@
+# Lambda / Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Packages
+*.zip
+lambda/function.zip
+
+# Test files
+*.csv
+*.json
+!test-*.csv
+!test-*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Environment variables
+.env
+.env.local
