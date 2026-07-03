@@ -1,102 +1,87 @@
-
 <div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Event-Driven Data Pipeline</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Build an asynchronous, decoupled architecture where actions (S3 uploads) trigger downstream processing (SQS, Lambda).</text>
-  </svg>
+  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-12-event-driven-pipeline/architecture/architecture.svg" alt="Project 12 Architecture" width="800">
+  <br/>
+  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="32" height="32" style="vertical-align: middle"/> Project 12: Event-Driven Pipeline</h1>
+  <p><b>Beginner/Intermediate &nbsp; • &nbsp; 4-5 Hours &nbsp; • &nbsp; Cost: $0.00 (Free Tier)</b></p>
+  <p>
+    <a href="#purpose">Purpose</a> • 
+    <a href="#architecture">Architecture</a> • 
+    <a href="#deployment">Deployment</a> • 
+    <a href="#docs">Docs</a>
+  </p>
 </div>
 
+<br/>
+## 🚀 Essentials
+**Description:** Event-Driven Pipeline – a hands‑on lab that demonstrates S3, SQS, Lambda integration on AWS.
 
+**Badges:** | Build Status | License |
+|---|---|
+| ![Build Status](https://img.shields.io/badge/build‑passing-brightgreen) | ![License](https://img.shields.io/badge/license-MIT-blue) |
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../project-11-infrastructure-as-code/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Infrastructure As Code</b></a></td>
-      <td style="width: 33%; border: none;"><a href="README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><i>(Final Project)</i></td>
-    </tr>
-  </table>
-</div>
+**Live Demo:** (coming soon – host on AWS Console or provide a static URL)
+## 🛠️ Setup & Installation
+**Prerequisites:**
+- AWS CLI v2 installed and configured
+- Appropriate IAM permissions for the services listed
+- Python 3.9+ (if using Lambda layer scripts)
 
+**Installation Steps:**
+```bash
+# Clone the repository
+git clone https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects.git
+cd project-12-event-driven-pipeline
+# Run the provided automation scripts (choose PowerShell or Bash)
+# For Bash (Linux/macOS)
+./scripts/bash/01-create-s3.sh   # example step
+```
 
+**Environment Variables:** (example placeholders)
+```bash
+export AWS_REGION=ap-south-1
+export PROJECT_TAG=project-12
+```
+
+**Run Commands:**
+```bash
+# Deploy the full stack
+./scripts/bash/05-deploy-all.sh
+```
+## 📖 Usage & Features
+**Core Features:**
+- End‑to‑end provisioning of S3, SQS, Lambda
+- Automated teardown scripts for clean‑up
+- Inline documentation and comments
+
+**Code Example:**
+```bash
+# List created resources
+aws resourcegroupstaggingapi get-resources --tag-filters Key=Project,Values=project-12
+```
+
+**Visual Preview:**
+![Architecture Diagram](https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-12-event-driven-pipeline/architecture/architecture.svg)
+## 🤝 Contribution & Maintenance
+**Testing Instructions:**
+```bash
+# Run unit tests (if any)
+pytest tests/
+```
+
+**Deployment Guide:**
+- Follow the Deployment Guide in `docs/deployment-guide.md` for production.
+
+**Contributing Guidelines:**
+- Fork the repo, create a feature branch, and submit a PR.
+- Follow the existing code style and linting rules.
+- Ensure all new scripts are added to both `scripts/powershell/` and `scripts/bash/`.
+
+**License:** MIT License (see LICENSE file).
+
+**Contact / Credits:**
+- Author: Vinay Kumar (GitHub: [vinay1515](https://github.com/vinay1515))
+- For questions, open an issue or reach out via email.
+---
 <div align="center">
-  <img src="architecture/architecture.svg" alt="Project Architecture" width="800"/>
+  <b>[⬅️ Previous Project](../project-11-) &nbsp; | &nbsp; </b>
 </div>
-
----
-
-## 🌟 Expansive Overview
-> **Core Purpose:** Build an asynchronous, decoupled architecture where actions (S3 uploads) trigger downstream processing (SQS, Lambda).
-
-Event-Driven Data Pipeline is designed to reflect enterprise-grade cloud engineering. This project moves beyond the console basics, demonstrating how AWS services are stitched together to form resilient, scalable, and highly available architectures.
-
-### 💼 Real-World Usage Scenarios
-Companies around the globe use this exact architectural pattern for:
-- **Image Processing:** Automatically generating thumbnails when a user uploads a profile picture.
-- **Order Processing:** Placing customer orders into an SQS queue to handle database throttling during peaks.
-- **Log Analytics:** Streaming logs into S3, triggering Lambda to transform and push to OpenSearch.
-
----
-
-## ⚙️ Infrastructure Specifications
-
-<details>
-<summary><b>💡 Click to Expand Technical Specifications</b></summary>
-<br>
-
-| Component | Specification |
-|-----------|---------------|
-| **Event Source** | ** Amazon S3 (s3:ObjectCreated:* events) |
-| **Queueing** | ** Amazon SQS (Standard Queue, Dead Letter Queue configured) |
-| **Compute** | ** AWS Lambda (Event Source Mapping to SQS, Batch Size 10) |
-| **Notification** | ** Amazon SNS (For processing failures/alerts) |
-
-</details>
-
----
-
-## 📂 Project Structure & Performance
-
-To optimize your execution of this project, adhere strictly to the following folder topology. 
-
-| Directory | Core Function |
-|-----------|---------------|
-| `👉 lambda/` | Python logic for reading and acknowledging SQS messages. |
-| `👉 docs/` | Event tracing, queue configuration, and decoupled architecture guides. |
-| `👉 scripts/` | Scripts to upload test data and monitor the queue. |
-
----
-
-## 📚 Granular Documentation Suite
-We have broken down the technical manuals into granular, highly detailed Markdown files. Start with the Project Overview and proceed sequentially:
-
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
-- 🧹 [Cleanup Guide](docs/cleanup-guide.md)
-
----
-*✨ Modernized & Enhanced for the AWS Hands-On Portfolio ✨*

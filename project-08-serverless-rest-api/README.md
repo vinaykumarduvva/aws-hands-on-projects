@@ -12,33 +12,76 @@
 </div>
 
 <br/>
+## 🚀 Essentials
+**Description:** Serverless REST API – a hands‑on lab that demonstrates API Gateway, Lambda, DynamoDB integration on AWS.
 
-## 🎯 Purpose
-Standard overview.
+**Badges:** | Build Status | License |
+|---|---|
+| ![Build Status](https://img.shields.io/badge/build‑passing-brightgreen) | ![License](https://img.shields.io/badge/license-MIT-blue) |
 
-This project transforms standard infrastructure concepts into a high-end, production-ready implementation, providing extensive hands-on experience with API Gateway, Lambda, DynamoDB.
+**Live Demo:** (coming soon – host on AWS Console or provide a static URL)
+## 🛠️ Setup & Installation
+**Prerequisites:**
+- AWS CLI v2 installed and configured
+- Appropriate IAM permissions for the services listed
+- Python 3.9+ (if using Lambda layer scripts)
 
-## 🚀 Learning Objectives
-- Master **API Gateway** configuration and best practices.
-- Implement secure, scalable infrastructure using AWS native tools.
-- Understand the integration points between various AWS services.
-- Automate deployment using cross-platform scripts.
+**Installation Steps:**
+```bash
+# Clone the repository
+git clone https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects.git
+cd project-08-serverless-rest-api
+# Run the provided automation scripts (choose PowerShell or Bash)
+# For Bash (Linux/macOS)
+./scripts/bash/01-create-s3.sh   # example step
+```
 
-## 📚 Documentation Suite
-Dive deep into the specific mechanics of this project:
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
+**Environment Variables:** (example placeholders)
+```bash
+export AWS_REGION=ap-south-1
+export PROJECT_TAG=project-08
+```
 
-## 💻 Automation Scripts
-This project contains ready-to-run automation scripts for both **PowerShell** and **Bash**.
-- 🖥️ **Windows Users:** Use `scripts/powershell/`
-- 🐧 **Linux/Mac Users:** Use `scripts/bash/`
+**Run Commands:**
+```bash
+# Deploy the full stack
+./scripts/bash/05-deploy-all.sh
+```
+## 📖 Usage & Features
+**Core Features:**
+- End‑to‑end provisioning of API Gateway, Lambda, DynamoDB
+- Automated teardown scripts for clean‑up
+- Inline documentation and comments
 
+**Code Example:**
+```bash
+# List created resources
+aws resourcegroupstaggingapi get-resources --tag-filters Key=Project,Values=project-08
+```
+
+**Visual Preview:**
+![Architecture Diagram](https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-08-serverless-rest-api/architecture/architecture.svg)
+## 🤝 Contribution & Maintenance
+**Testing Instructions:**
+```bash
+# Run unit tests (if any)
+pytest tests/
+```
+
+**Deployment Guide:**
+- Follow the Deployment Guide in `docs/deployment-guide.md` for production.
+
+**Contributing Guidelines:**
+- Fork the repo, create a feature branch, and submit a PR.
+- Follow the existing code style and linting rules.
+- Ensure all new scripts are added to both `scripts/powershell/` and `scripts/bash/`.
+
+**License:** MIT License (see LICENSE file).
+
+**Contact / Credits:**
+- Author: Vinay Kumar (GitHub: [vinay1515](https://github.com/vinay1515))
+- For questions, open an issue or reach out via email.
 ---
 <div align="center">
-  <b>[⬅️ Previous Project](../project-07-cloudwatch-monitoring) &nbsp; | &nbsp; [Next Project ➡️](../project-09-cicd-pipeline)</b>
+  <b>[⬅️ Previous Project](../project-07-) &nbsp; | &nbsp; [Next Project ➡️](../project-09-)</b>
 </div>
