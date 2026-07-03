@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&amp;display=swap');
+      :root {
+        --bg-color: #f8fafc; 
+        --text-color: #1e293b; 
+        --card-bg: #ffffff;
+        --card-border: #e2e8f0; 
+        --line-color: #94a3b8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-color: #0f172a; 
+          --text-color: #f1f5f9; 
+          --card-bg: #1e293b;
+          --card-border: #334155; 
+          --line-color: #475569;
+        }
+      }
+      text { font-family: 'Outfit', sans-serif; fill: var(--text-color); }
+      .bg { fill: var(--bg-color); }
+      .card { fill: var(--card-bg); stroke: var(--card-border); stroke-width: 2px; rx: 12px; }
+      .icon-box { rx: 8px; }
+      
+      /* Typography */
+      .title { font-size: 28px; font-weight: 600; }
+      .subtitle { font-size: 16px; font-weight: 300; opacity: 0.8; }
+      .group-title { font-size: 20px; font-weight: 600; opacity: 0.9; }
+      .card-title { font-size: 18px; font-weight: 600; }
+      .card-desc { font-size: 14px; opacity: 0.8; }
+      .label { font-size: 14px; font-weight: 600; fill: var(--line-color); }
+      
+      /* Animations */
+      .line { stroke: var(--line-color); stroke-width: 2px; fill: none; stroke-dasharray: 6; animation: dash 20s linear infinite; }
+      .line-alert { stroke: #ef4444; stroke-width: 2px; fill: none; stroke-dasharray: 6; animation: dash 10s linear infinite; }
+      .arrow { fill: var(--line-color); }
+      .arrow-alert { fill: #ef4444; }
+      
+      @keyframes dash { to { stroke-dashoffset: -400; } }
+      
+      @keyframes pulse {
+        0% { filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.2)); stroke: var(--card-border); }
+        50% { filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.8)); stroke: #ef4444; }
+        100% { filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.2)); stroke: var(--card-border); }
+      }
+      @keyframes pulse-blue {
+        0% { filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.2)); stroke: var(--card-border); }
+        50% { filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.6)); stroke: #3b82f6; }
+        100% { filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.2)); stroke: var(--card-border); }
+      }
+      
+      .pulse-obj { animation: pulse 2.5s infinite; }
+      .pulse-obj-blue { animation: pulse-blue 4s infinite; }
+    </style>
+
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow" />
+    </marker>
+    <marker id="arrowhead-alert" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow-alert" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1000" height="650" />
+  
+  <text x="50" y="60" class="title">Project 07 Architecture</text>
+  <text x="50" y="85" class="subtitle">CloudWatch Monitoring, Alarms &amp; SNS Notifications</text>
+
+  <!-- AWS CloudWatch Boundary -->
+  <rect x="330" y="150" width="360" height="420" class="card" stroke-dasharray="8" fill-opacity="0.3" />
+  <text x="350" y="190" class="group-title">Amazon CloudWatch</text>
+
+  <!-- EC2 Instance -->
+  <g transform="translate(50, 300)">
+    <rect x="0" y="0" width="200" height="120" class="card pulse-obj-blue" />
+    <rect x="20" y="20" width="40" height="40" fill="#F68536" class="icon-box" />
+    <text x="40" y="47" fill="white" font-size="20" font-weight="bold" text-anchor="middle">EC</text>
+    <text x="75" y="40" class="card-title">EC2 Instance</text>
+    <text x="75" y="60" class="card-desc">Web Server App</text>
+    <text x="20" y="95" class="card-desc">Emits Metrics &amp; Logs</text>
+  </g>
+
+  <!-- CloudWatch Logs -->
+  <g transform="translate(360, 220)">
+    <rect x="0" y="0" width="280" height="80" class="card" />
+    <rect x="20" y="20" width="40" height="40" fill="#E7157B" class="icon-box" />
+    <text x="40" y="47" fill="white" font-size="20" font-weight="bold" text-anchor="middle">CW</text>
+    <text x="75" y="40" class="card-title">CloudWatch Logs</text>
+    <text x="75" y="60" class="card-desc">Stores /aws/ec2/app-logs</text>
+  </g>
+
+  <!-- CloudWatch Metrics & Dashboards -->
+  <g transform="translate(360, 330)">
+    <rect x="0" y="0" width="280" height="80" class="card pulse-obj-blue" />
+    <rect x="20" y="20" width="40" height="40" fill="#E7157B" class="icon-box" />
+    <text x="40" y="47" fill="white" font-size="20" font-weight="bold" text-anchor="middle">CW</text>
+    <text x="75" y="40" class="card-title">CloudWatch Dashboard</text>
+    <text x="75" y="60" class="card-desc">Visualizes CPU, Net, Disk</text>
+  </g>
+
+  <!-- CloudWatch Alarms -->
+  <g transform="translate(360, 440)">
+    <rect x="0" y="0" width="280" height="90" class="card pulse-obj" />
+    <rect x="20" y="25" width="40" height="40" fill="#E7157B" class="icon-box" />
+    <text x="40" y="52" fill="white" font-size="20" font-weight="bold" text-anchor="middle">CW</text>
+    <text x="75" y="45" class="card-title">CloudWatch Alarms</text>
+    <text x="75" y="65" class="card-desc">CPU &gt; 80% or Status Failed</text>
+  </g>
+
+  <!-- Amazon SNS -->
+  <g transform="translate(750, 440)">
+    <rect x="0" y="0" width="200" height="90" class="card pulse-obj" />
+    <rect x="20" y="25" width="40" height="40" fill="#FF4F8B" class="icon-box" />
+    <text x="40" y="52" fill="white" font-size="20" font-weight="bold" text-anchor="middle">SN</text>
+    <text x="75" y="45" class="card-title">SNS Topic</text>
+    <text x="75" y="65" class="card-desc">ops-critical-alerts</text>
+  </g>
+
+  <!-- Email / SMS Notification -->
+  <g transform="translate(750, 260)">
+    <rect x="0" y="0" width="200" height="100" class="card" />
+    <rect x="20" y="30" width="40" height="40" fill="#3B82F6" class="icon-box" />
+    <text x="40" y="57" fill="white" font-size="20" font-weight="bold" text-anchor="middle">@</text>
+    <text x="75" y="45" class="card-title">Administrators</text>
+    <text x="75" y="65" class="card-desc">Receive Email &amp; SMS</text>
+  </g>
+
+  <!-- Lines -->
+  <!-- EC2 to Logs -->
+  <path d="M 250 330 L 305 330 L 305 260 L 350 260" class="line" marker-end="url(#arrowhead)" />
+  <text x="260" y="245" class="label">Logs</text>
+  
+  <!-- EC2 to Metrics -->
+  <path d="M 250 360 L 350 360" class="line" marker-end="url(#arrowhead)" />
+  <text x="270" y="350" class="label">Metrics</text>
+
+  <!-- EC2 to Alarms (Status Check / CPU) -->
+  <path d="M 250 390 L 305 390 L 305 485 L 350 485" class="line" marker-end="url(#arrowhead)" />
+  <text x="260" y="475" class="label">Threshold</text>
+
+  <!-- Logs to Metrics (Metric Filter) -->
+  <path d="M 500 300 L 500 320" class="line" marker-end="url(#arrowhead)" />
+  <text x="510" y="315" class="label">Metric Filter</text>
+
+  <!-- Metrics to Alarms -->
+  <path d="M 500 410 L 500 430" class="line" marker-end="url(#arrowhead)" />
+  <text x="510" y="425" class="label">Trigger</text>
+
+  <!-- Alarms to SNS -->
+  <path d="M 640 485 L 740 485" class="line-alert" marker-end="url(#arrowhead-alert)" />
+  <text x="660" y="475" class="label" style="fill:#ef4444;">ALARM</text>
+
+  <!-- SNS to Admins (Email/SMS) -->
+  <path d="M 850 440 L 850 370" class="line-alert" marker-end="url(#arrowhead-alert)" />
+  <text x="860" y="410" class="label" style="fill:#ef4444;">Push Notification</text>
+
+</svg>

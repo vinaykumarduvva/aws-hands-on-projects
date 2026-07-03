@@ -27,7 +27,7 @@
 
 ## 🏗️ Architecture Overview
 
-<img src="./architecture/alarm-flow.svg" alt="CloudWatch Monitoring, Alarms & SNS Notifications — System Architecture" width="800"/>
+<img src="./architecture/architecture.svg" alt="CloudWatch Monitoring, Alarms & SNS Notifications — System Architecture" width="800"/>
 
 <p><i>▲ High-level architecture diagram showing the interaction between CloudWatch, SNS, EC2, Lambda services</i></p>
 
