@@ -18,13 +18,13 @@ $PUB_SUBNET_B = aws ec2 create-subnet `
   --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=public-subnet-b}]" `
   --query "Subnet.SubnetId" --output text
 
-$PRI_SUBNET_A = aws ec2 create-subnet `
+aws ec2 create-subnet `
   --vpc-id $VPC_ID --cidr-block 10.0.3.0/24 `
   --availability-zone us-east-1a `
   --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=private-subnet-a}]" `
   --query "Subnet.SubnetId" --output text
 
-$PRI_SUBNET_B = aws ec2 create-subnet `
+aws ec2 create-subnet `
   --vpc-id $VPC_ID --cidr-block 10.0.4.0/24 `
   --availability-zone us-east-1b `
   --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=private-subnet-b}]" `
@@ -33,4 +33,6 @@ $PRI_SUBNET_B = aws ec2 create-subnet `
 aws ec2 modify-subnet-attribute --subnet-id $PUB_SUBNET_A --map-public-ip-on-launch
 aws ec2 modify-subnet-attribute --subnet-id $PUB_SUBNET_B --map-public-ip-on-launch
 
-Write-Host -ForegroundColor Green "VPC and Subnets created. VPC ID: $VPC_ID"
+Write-Host -ForegroundColor Green "VPC and Subnets created."
+Write-Host "VPC ID: $VPC_ID"
+Write-Host "Public Subnets: $PUB_SUBNET_A, $PUB_SUBNET_B"
