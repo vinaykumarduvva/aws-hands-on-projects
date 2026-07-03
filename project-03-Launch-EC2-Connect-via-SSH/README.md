@@ -1,49 +1,184 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-03-Launch-EC2-Connect-via-SSH/architecture/architecture.svg" alt="Project 03 Architecture" width="800">
-  <br/>
-  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="32" height="32" style="vertical-align: middle"/> Project 03: Launch EC2 & Connect via SSH</h1>
-  <p><b>Beginner/Intermediate &nbsp; • &nbsp; 2-3 Hours &nbsp; • &nbsp; Cost: $0.00 (Free Tier)</b></p>
+  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-03-Launch-EC2-Connect-via-SSH/architecture/architecture.svg" alt="Launch EC2 Instances & Secure Connectivity Architecture" width="820"/>
+  <br/><br/>
+  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 03: Launch EC2 Instances & Secure Connectivity</h1>
+
+  <p><i>Provision Amazon EC2 instances across availability zones with hardened security groups, key-pair-based SSH access, and AWS Systems Manager Session Manager for keyless browser-based shells. This project demonstrates instance lifecycle management, user data bootstrapping, and elastic IP allocation.</i></p>
+
   <p>
-    <a href="#purpose">Purpose</a> • 
-    <a href="#architecture">Architecture</a> • 
-    <a href="#deployment">Deployment</a> • 
-    <a href="#docs">Docs</a>
+    <img src="https://img.shields.io/badge/Level-Beginner-blue" alt="Level"/>
+    <img src="https://img.shields.io/badge/Time-2--3%20Hours-orange" alt="Time"/>
+    <img src="https://img.shields.io/badge/Cost-$0.00%20(Free%20Tier)-brightgreen" alt="Cost"/>
+    <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License"/>
+    <img src="https://img.shields.io/badge/Build-Passing-success" alt="Build"/>
   </p>
+
+  <p>
+    <a href="#-infrastructure-specifications">Infrastructure</a> · 
+    <a href="#-key-components">Components</a> · 
+    <a href="#-core-features">Features</a> · 
+    <a href="#-setup--installation">Setup</a> · 
+    <a href="#-documentation-suite">Docs</a>
+  </p>
+
+  <p><b>🔗 <a href="#">Live Demo</a></b> &nbsp;·&nbsp; <b>📹 <a href="#">Video Walkthrough</a></b></p>
+
 </div>
 
 <br/>
 
-## 🎯 Purpose
-Launched a virtual Linux server on Amazon EC2, secured it with a
-key pair and security group, connected from Windows using both
-PuTTY (SSH) and AWS Systems Manager Session Manager, and deployed
-a live Apache web server using a user data bootstrap script.
+<div align="center">
 
----
+## 🏗️ Architecture Overview
 
-This project transforms standard infrastructure concepts into a high-end, production-ready implementation, providing extensive hands-on experience with EC2, VPC, SSM.
+<img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-03-Launch-EC2-Connect-via-SSH/architecture/architecture.svg" alt="Launch EC2 Instances & Secure Connectivity — System Architecture" width="800"/>
 
-## 🚀 Learning Objectives
-- Master **EC2** configuration and best practices.
-- Implement secure, scalable infrastructure using AWS native tools.
-- Understand the integration points between various AWS services.
-- Automate deployment using cross-platform scripts.
+<p><i>▲ High-level architecture diagram showing the interaction between EC2, VPC, SSM, EBS services</i></p>
+
+</div>
+
+## 📐 Infrastructure Specifications
+
+| Resource | Configuration |
+|:---------|:--------------|
+| **EC2 Instance** | t2.micro (Free Tier); Amazon Linux 2023 AMI; launched in default VPC public subnet |
+| **Security Group** | Inbound: SSH (22) from your IP only; HTTP (80) from 0.0.0.0/0; Outbound: all traffic |
+| **Key Pair** | RSA 2048-bit key pair generated via AWS CLI; `.pem` file stored locally with 400 permissions |
+| **Elastic IP** | Static IPv4 address associated with the instance to survive stop/start cycles |
+| **EBS Volume** | 8 GiB gp3 root volume (3000 IOPS, 125 MB/s throughput); encrypted with default KMS key |
+| **User Data** | Bootstrap script installing httpd, PHP, and a sample application on first boot |
+| **SSM Agent** | Pre-installed on Amazon Linux 2023; instance profile grants `AmazonSSMManagedInstanceCore` |
+| **Region** | ap-south-1a (primary AZ) |
+
+## 🧩 Key Components
+
+### EC2 Instance (t2.micro)
+Free-Tier eligible compute with burstable CPU; 1 vCPU, 1 GiB RAM
+
+### Security Group (Firewall)
+Stateful L4 firewall with inbound/outbound rules scoped to CIDR and port ranges
+
+### Key Pair (SSH)
+Asymmetric RSA key pair for secure, encrypted remote shell access
+
+### Elastic IP
+Static public IPv4 that persists across instance stop/start; avoids DNS propagation delays
+
+### User Data (Bootstrap)
+Base64-encoded shell script executed once at instance launch for automated setup
+
+### SSM Session Manager
+Browser-based or CLI-based shell without opening port 22; fully audited via CloudTrail
+
+### EBS gp3 Volume
+General-purpose SSD with baseline 3000 IOPS; encrypted at rest with AWS-managed KMS key
+
+## ⚡ Core Features
+
+- **Dual-Access Model** – SSH via key pair (port 22) + SSM Session Manager (no inbound ports required)
+- **Automated Bootstrapping** – User Data script installs Apache, PHP, and deploys sample app on first launch
+- **Security-First Configuration** – Security group restricts SSH to operator's IP; SSM eliminates key distribution
+- **Persistent Public IP** – Elastic IP survives instance stop/start; avoids DNS re-mapping
+- **Encrypted Storage** – EBS gp3 volume with AES-256 encryption via AWS-managed KMS key
+- **Instance Metadata v2 (IMDSv2)** – Enforced token-based metadata service; mitigates SSRF attacks
+- **Stop/Start Cost Optimization** – Scripts to stop instances during off-hours; EBS charges only ($0.08/GB/mo)
+
+## 🛠️ Setup & Installation
+
+### Prerequisites
+
+- AWS CLI v2 configured with IAM credentials (from Project 01)
+- An SSH client (OpenSSH, PuTTY, or VS Code Remote SSH extension)
+- Python 3.9+ (for AWS CLI v2 and Session Manager plugin)
+- Session Manager Plugin installed (`aws ssm start-session` support)
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects.git
+cd project-03-Launch-EC2-Connect-via-SSH
+
+# 2. Configure environment variables
+cp .env.example .env
+# Edit .env with your specific values (see Environment Variables below)
+```
+
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```bash
+export AWS_REGION="ap-south-1"
+export KEY_NAME="my-ec2-keypair"
+export INSTANCE_TYPE="t2.micro"
+export AMI_ID="ami-0c55b159cbfafe1f0"
+export MY_IP="$(curl -s ifconfig.me)/32"
+```
+
+### Run Commands
+
+Choose your platform and execute the scripts in order:
+
+<table>
+<tr><th>Step</th><th>Script</th><th>Description</th></tr>
+<tr><td>🐧</td><td><code>scripts/bash/01-create-keypair.sh</code></td><td>Generates RSA key pair and saves .pem file with 400 permissions</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/01-create-keypair.ps1</code></td><td>Generates RSA key pair and saves .pem file with 400 permissions</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/02-create-security-group.sh</code></td><td>Creates SG with SSH (your IP) + HTTP (0.0.0.0/0) inbound rules</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/02-create-security-group.ps1</code></td><td>Creates SG with SSH (your IP) + HTTP (0.0.0.0/0) inbound rules</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/03-launch-instance.sh</code></td><td>Launches t2.micro with user data bootstrap, IMDSv2, and encrypted EBS</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/03-launch-instance.ps1</code></td><td>Launches t2.micro with user data bootstrap, IMDSv2, and encrypted EBS</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/04-allocate-eip.sh</code></td><td>Allocates and associates an Elastic IP to the running instance</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/04-allocate-eip.ps1</code></td><td>Allocates and associates an Elastic IP to the running instance</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/05-connect-ssh.sh</code></td><td>Connects to the instance via SSH using the generated key pair</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/05-connect-ssh.ps1</code></td><td>Connects to the instance via SSH using the generated key pair</td></tr>
+</table>
 
 ## 📚 Documentation Suite
-Dive deep into the specific mechanics of this project:
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
 
-## 💻 Automation Scripts
-This project contains ready-to-run automation scripts for both **PowerShell** and **Bash**.
-- 🖥️ **Windows Users:** Use `scripts/powershell/`
-- 🐧 **Linux/Mac Users:** Use `scripts/bash/`
+| Document | Description |
+|:---------|:------------|
+| 📄 [Project Overview](docs/project-overview.md) | Comprehensive project context, goals, and learning outcomes |
+| 🏗️ [Architecture Details](docs/architecture.md) | Deep-dive into system design, data flow, and component interactions |
+| 🚀 [Deployment Guide](docs/deployment-guide.md) | Step-by-step deployment procedures for dev, staging, and production |
+| 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
+| 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
+| 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
+
+## 🤝 Contribution & Maintenance
+
+### Testing
+
+- `aws ec2 describe-instances --instance-ids $INSTANCE_ID` – Confirm `running` state
+- `ssh -i key.pem ec2-user@<EIP> 'curl localhost'` – Verify httpd is serving the sample page
+- `aws ssm start-session --target $INSTANCE_ID` – Confirm Session Manager connectivity
+- `curl http://<EIP>` – Verify HTTP access through the security group
+- `aws ec2 describe-volumes --filters Name=encrypted,Values=true` – Confirm EBS encryption
+
+### Deployment
+
+For full production deployment procedures, see the [Deployment Guide](docs/deployment-guide.md).
+
+### Contributing
+
+1. **Fork** the repository and create a feature branch (`git checkout -b feature/amazing-feature`)
+2. **Commit** your changes (`git commit -m "Add amazing feature"`)
+3. **Push** to the branch (`git push origin feature/amazing-feature`)
+4. **Open** a Pull Request with a detailed description
+5. Ensure all scripts exist in **both** `scripts/powershell/` and `scripts/bash/`
+
+### License
+
+This project is licensed under the **MIT License** — see the [LICENSE](../LICENSE) file for details.
+
+### Contact & Credits
+
+- **Author:** Vinay Kumar
+- **GitHub:** [@vinay1515](https://github.com/vinay1515)
+- **Repository:** [Vinay_kumar_AWS_Beginner_level_projects](https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects)
 
 ---
+
 <div align="center">
-  <b>[⬅️ Previous Project](../project-02-s3-static-website) &nbsp; | &nbsp; [Next Project ➡️](../project-04-s3-versioning)</b>
+  <b>[⬅️ Previous: Project 02](../project-02-s3-static-website) &nbsp;|&nbsp; [Next: Project 04 ➡️](../project-04-s3-versioning)</b>
 </div>

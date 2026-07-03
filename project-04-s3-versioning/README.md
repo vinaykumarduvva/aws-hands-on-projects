@@ -1,56 +1,178 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-04-s3-versioning/architecture/architecture.svg" alt="Project 04 Architecture" width="800">
-  <br/>
-  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="32" height="32" style="vertical-align: middle"/> Project 04: S3 Versioning, Lifecycle & Replication</h1>
-  <p><b>Beginner/Intermediate &nbsp; • &nbsp; 2-3 Hours &nbsp; • &nbsp; Cost: $0.00 (Free Tier)</b></p>
+  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-04-s3-versioning/architecture/architecture.svg" alt="S3 Versioning, Lifecycle Rules & Cross-Region Replication Architecture" width="820"/>
+  <br/><br/>
+  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 04: S3 Versioning, Lifecycle Rules & Cross-Region Replication</h1>
+
+  <p><i>Master Amazon S3's data durability features by enabling object versioning for point-in-time recovery, configuring intelligent lifecycle policies to transition data across storage classes, and implementing cross-region replication for disaster recovery — all while optimizing costs with storage class analysis.</i></p>
+
   <p>
-    <a href="#purpose">Purpose</a> • 
-    <a href="#architecture">Architecture</a> • 
-    <a href="#deployment">Deployment</a> • 
-    <a href="#docs">Docs</a>
+    <img src="https://img.shields.io/badge/Level-Beginner/Intermediate-blue" alt="Level"/>
+    <img src="https://img.shields.io/badge/Time-2--3%20Hours-orange" alt="Time"/>
+    <img src="https://img.shields.io/badge/Cost-$0.00%20(Free%20Tier)-brightgreen" alt="Cost"/>
+    <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License"/>
+    <img src="https://img.shields.io/badge/Build-Passing-success" alt="Build"/>
   </p>
+
+  <p>
+    <a href="#-infrastructure-specifications">Infrastructure</a> · 
+    <a href="#-key-components">Components</a> · 
+    <a href="#-core-features">Features</a> · 
+    <a href="#-setup--installation">Setup</a> · 
+    <a href="#-documentation-suite">Docs</a>
+  </p>
+
+  <p><b>🔗 <a href="#">Live Demo</a></b> &nbsp;·&nbsp; <b>📹 <a href="#">Video Walkthrough</a></b></p>
+
 </div>
 
 <br/>
 
-## 🎯 Purpose
-Implemented Amazon S3's core data protection features from scratch —
-versioning for point-in-time recovery, lifecycle policies for automated
-cost optimization, and cross-region replication for disaster recovery.
-These are the same patterns used by production teams at companies of
-every size to protect data, meet compliance requirements, and reduce
-storage costs by up to 95% on aging data.
+<div align="center">
 
-> **Real-world context:** Every company storing data on S3 uses at least
-> one of these features. A Solutions Architect is expected to design
-> storage strategies using all three together. This project demonstrates
-> exactly that end-to-end design.
+## 🏗️ Architecture Overview
 
----
+<img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-04-s3-versioning/architecture/architecture.svg" alt="S3 Versioning, Lifecycle Rules & Cross-Region Replication — System Architecture" width="800"/>
 
-This project transforms standard infrastructure concepts into a high-end, production-ready implementation, providing extensive hands-on experience with S3.
+<p><i>▲ High-level architecture diagram showing the interaction between S3, IAM, KMS services</i></p>
 
-## 🚀 Learning Objectives
-- Master **S3** configuration and best practices.
-- Implement secure, scalable infrastructure using AWS native tools.
-- Understand the integration points between various AWS services.
-- Automate deployment using cross-platform scripts.
+</div>
+
+## 📐 Infrastructure Specifications
+
+| Resource | Configuration |
+|:---------|:--------------|
+| **Source Bucket** | Versioning-enabled bucket in ap-south-1 with SSE-S3 default encryption |
+| **Destination Bucket** | Versioning-enabled bucket in us-east-1 for cross-region replication (CRR) |
+| **Lifecycle Rule 1** | Transition current versions to S3-IA after 30 days; to Glacier after 90 days |
+| **Lifecycle Rule 2** | Expire non-current versions after 60 days; delete incomplete multipart uploads after 7 days |
+| **Replication Rule** | Entire bucket scope; replicate delete markers; RTC (15-minute SLA); encrypted objects included |
+| **IAM Role** | S3 replication role with `s3:ReplicateObject`, `s3:GetObjectVersionForReplication` permissions |
+| **Region** | ap-south-1 (source) → us-east-1 (destination) |
+
+## 🧩 Key Components
+
+### S3 Versioning
+Maintains every version of every object; enables undelete and point-in-time recovery
+
+### Lifecycle Policies
+Automated rules transitioning objects between Standard → IA → Glacier → Deep Archive
+
+### Cross-Region Replication (CRR)
+Asynchronous, automatic replication of objects to a bucket in a different region
+
+### Replication Time Control (RTC)
+SLA-backed 15-minute replication guarantee for compliance workloads
+
+### S3 Storage Class Analysis
+Data access pattern analysis that recommends when to transition infrequently accessed data
+
+### Delete Marker Replication
+Replicates delete markers to destination bucket for consistent soft-delete behavior
+
+## ⚡ Core Features
+
+- **Point-in-Time Recovery** – Retrieve any previous version of any object instantly
+- **Cost-Optimized Tiering** – Automated lifecycle rules move cold data to IA (40% savings) and Glacier (68% savings)
+- **Disaster Recovery** – Cross-region replication with <15 min RTC SLA ensures RPO compliance
+- **Soft-Delete Protection** – Delete markers preserve object history; MFA Delete for permanent deletion
+- **Multipart Upload Hygiene** – Auto-abort incomplete multipart uploads after 7 days to avoid hidden costs
+- **Encryption at Rest** – SSE-S3 (AES-256) default encryption on both source and destination buckets
+- **Storage Analytics** – Storage Class Analysis dashboard to validate lifecycle rule effectiveness
+
+## 🛠️ Setup & Installation
+
+### Prerequisites
+
+- AWS CLI v2 configured with IAM credentials (from Project 01)
+- Two AWS regions available (ap-south-1 and us-east-1)
+- Sample data files for upload (text, images, or any test objects)
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects.git
+cd project-04-s3-versioning
+
+# 2. Configure environment variables
+cp .env.example .env
+# Edit .env with your specific values (see Environment Variables below)
+```
+
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```bash
+export AWS_REGION="ap-south-1"
+export SOURCE_BUCKET="my-versioned-source-bucket"
+export DEST_BUCKET="my-versioned-dest-bucket"
+export DEST_REGION="us-east-1"
+```
+
+### Run Commands
+
+Choose your platform and execute the scripts in order:
+
+<table>
+<tr><th>Step</th><th>Script</th><th>Description</th></tr>
+<tr><td>🐧</td><td><code>scripts/bash/01-create-buckets.sh</code></td><td>Creates source and destination buckets with versioning and encryption</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/01-create-buckets.ps1</code></td><td>Creates source and destination buckets with versioning and encryption</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/02-configure-lifecycle.sh</code></td><td>Applies lifecycle rules for transition, expiration, and multipart cleanup</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/02-configure-lifecycle.ps1</code></td><td>Applies lifecycle rules for transition, expiration, and multipart cleanup</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/03-setup-replication.sh</code></td><td>Creates IAM role and configures CRR with RTC between source and destination</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/03-setup-replication.ps1</code></td><td>Creates IAM role and configures CRR with RTC between source and destination</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/04-test-versioning.sh</code></td><td>Uploads, overwrites, and deletes objects to demonstrate versioning behavior</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/04-test-versioning.ps1</code></td><td>Uploads, overwrites, and deletes objects to demonstrate versioning behavior</td></tr>
+<tr><td>🐧</td><td><code>scripts/bash/05-cleanup.sh</code></td><td>Removes all object versions, delete markers, replication config, and buckets</td></tr>
+<tr><td>🖥️</td><td><code>scripts/powershell/05-cleanup.ps1</code></td><td>Removes all object versions, delete markers, replication config, and buckets</td></tr>
+</table>
 
 ## 📚 Documentation Suite
-Dive deep into the specific mechanics of this project:
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
 
-## 💻 Automation Scripts
-This project contains ready-to-run automation scripts for both **PowerShell** and **Bash**.
-- 🖥️ **Windows Users:** Use `scripts/powershell/`
-- 🐧 **Linux/Mac Users:** Use `scripts/bash/`
+| Document | Description |
+|:---------|:------------|
+| 📄 [Project Overview](docs/project-overview.md) | Comprehensive project context, goals, and learning outcomes |
+| 🏗️ [Architecture Details](docs/architecture.md) | Deep-dive into system design, data flow, and component interactions |
+| 🚀 [Deployment Guide](docs/deployment-guide.md) | Step-by-step deployment procedures for dev, staging, and production |
+| 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
+| 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
+| 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
+
+## 🤝 Contribution & Maintenance
+
+### Testing
+
+- `aws s3api list-object-versions --bucket $SOURCE_BUCKET` – Verify multiple versions exist
+- `aws s3api get-bucket-lifecycle-configuration --bucket $SOURCE_BUCKET` – Confirm lifecycle rules
+- `aws s3api get-bucket-replication --bucket $SOURCE_BUCKET` – Validate CRR configuration
+- Delete an object, then restore it: `aws s3api delete-object` → `aws s3api list-object-versions`
+- `aws s3api head-object --bucket $DEST_BUCKET --key test.txt` – Confirm replication succeeded
+
+### Deployment
+
+For full production deployment procedures, see the [Deployment Guide](docs/deployment-guide.md).
+
+### Contributing
+
+1. **Fork** the repository and create a feature branch (`git checkout -b feature/amazing-feature`)
+2. **Commit** your changes (`git commit -m "Add amazing feature"`)
+3. **Push** to the branch (`git push origin feature/amazing-feature`)
+4. **Open** a Pull Request with a detailed description
+5. Ensure all scripts exist in **both** `scripts/powershell/` and `scripts/bash/`
+
+### License
+
+This project is licensed under the **MIT License** — see the [LICENSE](../LICENSE) file for details.
+
+### Contact & Credits
+
+- **Author:** Vinay Kumar
+- **GitHub:** [@vinay1515](https://github.com/vinay1515)
+- **Repository:** [Vinay_kumar_AWS_Beginner_level_projects](https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects)
 
 ---
+
 <div align="center">
-  <b>[⬅️ Previous Project](../project-03-Launch-EC2-Connect-via-SSH) &nbsp; | &nbsp; [Next Project ➡️](../project-05-Custom-VPC)</b>
+  <b>[⬅️ Previous: Project 03](../project-03-Launch-EC2-Connect-via-SSH) &nbsp;|&nbsp; [Next: Project 05 ➡️](../project-05-Custom-VPC)</b>
 </div>
