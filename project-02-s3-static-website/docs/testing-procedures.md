@@ -1,45 +1,48 @@
-# Testing Procedures
+# Testing & Validation Procedures
 
-Follow these procedures to test the different stages of your deployment.
+To ensure your S3 Static Website is configured correctly and securely, follow these validation steps.
 
-## 1. Test S3 Bucket Website Endpoint (HTTP)
+---
 
-After completing Checkpoint B (uploading files to S3):
-1. Retrieve your S3 bucket website endpoint URL (e.g., `http://aws-portfolio-yourname-2024.s3-website-us-east-1.amazonaws.com`).
-2. Paste the URL into your browser.
-3. **Verify:** You should see your portfolio page served over HTTP.
+## 🧪 Scenario 1: Validate Website Accessibility
 
-## 2. Test CloudFront Distribution (HTTPS)
+**Goal:** Prove that the website is accessible via the internet without requiring AWS credentials.
 
-After completing Checkpoint C (creating the CloudFront distribution):
-1. Wait for the distribution status to change from `Deploying` to `Enabled` (5-10 minutes).
-2. Retrieve your CloudFront Distribution domain name (e.g., `https://d1abc2defg3hij.cloudfront.net`).
-3. Paste the URL into your browser.
-4. **Verify:** Your site should load over HTTPS with a valid SSL certificate, served from the CDN edge location.
+1. Obtain your **Bucket website endpoint URL** from the S3 Console Properties tab (e.g., `http://portfolio-website.s3-website-us-east-1.amazonaws.com`).
+2. Open an Incognito/Private browsing window. This ensures your browser isn't using any cached AWS login tokens.
+3. Navigate to the URL.
+4. **Expected Outcome:** The HTML portfolio page loads perfectly, displaying the text and CSS styles.
 
-## 3. Test Content Update + Cache Invalidation
+---
 
-Make a change to your site's content:
-```powershell
-# Edit index.html — add Project 3 to the list
-notepad .\website\index.html
-# Add: <li>⏳ Project 3 — EC2 & SSH</li>
-# Save the file
-```
+## 🧪 Scenario 2: Validate the Index Document Routing
 
-Re-sync to S3:
-```powershell
-aws s3 sync .\website\ s3://$BUCKET/ --region us-east-1
-```
+**Goal:** Prove that S3 is correctly routing root requests to `index.html`.
 
-Invalidate CloudFront cache:
-```powershell
-$DIST_ID = "YOUR_DISTRIBUTION_ID"
+1. In your browser, explicitly append `/index.html` to your URL (e.g., `http://...amazonaws.com/index.html`).
+2. **Expected Outcome:** The exact same page loads. S3's static hosting engine is correctly masking the `/index.html` path when you visit the root domain.
 
-aws cloudfront create-invalidation `
-  --distribution-id $DIST_ID `
-  --paths "/*"
-```
+---
 
-Wait ~30 seconds and refresh your CloudFront URL.
-**Verify:** Your updated site with the new list item should be live.
+## 🧪 Scenario 3: Validate the Error Document (404)
+
+**Goal:** Prove that S3 handles bad URLs gracefully.
+
+1. In your browser, navigate to a path that does not exist in your bucket (e.g., `http://...amazonaws.com/doesnotexist.html`).
+2. **Expected Outcome:**
+   - If you uploaded an `error.html` file and configured it in the Static Website properties, you should see that custom error page.
+   - If you did not, S3 will return a default `404 Not Found` XML error response. This proves S3 is actively evaluating the request path.
+
+---
+
+## 🧪 Scenario 4: Validate Security Boundaries (Write Protection)
+
+**Goal:** Prove that while the public can read your website, they cannot deface it.
+
+1. Open your terminal.
+2. Attempt to write a file anonymously to your bucket using the `curl` command (or simply understand that without AWS credentials, an upload API call will fail).
+3. If you have the AWS CLI configured, run:
+   ```powershell
+   aws s3 rm s3://<YOUR_BUCKET_NAME>/index.html --no-sign-request
+   ```
+4. **Expected Outcome:** `Access Denied`. The Bucket Policy strictly enforces `s3:GetObject` and rejects `s3:DeleteObject` for anonymous users. Your website is safe from defacement.

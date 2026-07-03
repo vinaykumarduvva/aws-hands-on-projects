@@ -83,6 +83,19 @@ Replicates delete markers to destination bucket for consistent soft-delete behav
 - Two AWS regions available (ap-south-1 and us-east-1)
 - Sample data files for upload (text, images, or any test objects)
 
+### Pre-flight Checks
+Run these commands in PowerShell to confirm your environment is ready:
+```powershell
+# Confirm CLI working
+aws sts get-caller-identity
+
+# Confirm region
+aws configure get region
+
+# Check existing buckets
+aws s3 ls
+```
+
 ### Installation
 
 ```bash
@@ -172,5 +185,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](../LICE
 ---
 
 <div align="center">
-  <b>[⬅️ Previous: Project 03](../project-03-Launch-EC2-Connect-via-SSH) &nbsp;|&nbsp; [Next: Project 05 ➡️](../project-05-Custom-VPC)</b>
+  <b><a href="../project-03-Launch-EC2-Connect-via-SSH">⬅️ Previous: Project 03</a> &nbsp;|&nbsp; <a href="../project-05-Custom-VPC">Next: Project 05 ➡️</a></b>
 </div>

@@ -1,9 +1,52 @@
 #!/bin/bash
-
 SOURCE_BUCKET="s3-versioning-lab-yourname"
 
+# Create the lifecycle policy JSON
+cat << 'EOF' > lifecycle-policy.json
+{
+  "Rules": [
+    {
+      "ID": "cost-optimization-policy",
+      "Status": "Enabled",
+      "Filter": {"Prefix": ""},
+      "Transitions": [
+        {
+          "Days": 30,
+          "StorageClass": "STANDARD_IA"
+        },
+        {
+          "Days": 90,
+          "StorageClass": "GLACIER"
+        }
+      ],
+      "NoncurrentVersionTransitions": [
+        {
+          "NoncurrentDays": 30,
+          "StorageClass": "STANDARD_IA"
+        },
+        {
+          "NoncurrentDays": 90,
+          "StorageClass": "GLACIER"
+        }
+      ],
+      "Expiration": {
+        "Days": 365
+      },
+      "NoncurrentVersionExpiration": {
+        "NoncurrentDays": 90
+      },
+      "AbortIncompleteMultipartUpload": {
+        "DaysAfterInitiation": 7
+      }
+    }
+  ]
+}
+EOF
+
+# Apply the lifecycle policy
 aws s3api put-bucket-lifecycle-configuration \
   --bucket $SOURCE_BUCKET \
-  --lifecycle-configuration file://scripts/lifecycle-policy.json
+  --lifecycle-configuration file://lifecycle-policy.json
 
-echo -e "\e[32m\e[0m"
+# Verify the policy was applied
+aws s3api get-bucket-lifecycle-configuration --bucket $SOURCE_BUCKET

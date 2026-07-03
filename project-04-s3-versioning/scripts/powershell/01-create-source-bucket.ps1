@@ -1,14 +1,16 @@
+# Set variables
 $SOURCE_BUCKET = "s3-versioning-lab-yourname"
-$SOURCE_REGION = "ap-south-1"
+$SOURCE_REGION = "us-east-1"
 
+# Create source bucket
 aws s3api create-bucket `
   --bucket $SOURCE_BUCKET `
-  --region $SOURCE_REGION `
-  --create-bucket-configuration LocationConstraint=$SOURCE_REGION
+  --region $SOURCE_REGION
 
+# Enable versioning on source bucket
 aws s3api put-bucket-versioning `
   --bucket $SOURCE_BUCKET `
   --versioning-configuration Status=Enabled
 
-$status = aws s3api get-bucket-versioning --bucket $SOURCE_BUCKET | ConvertFrom-Json
-Write-Host -ForegroundColor Green "Created Source Bucket with Versioning: $($status.Status)"
+# Verify versioning is enabled
+aws s3api get-bucket-versioning --bucket $SOURCE_BUCKET

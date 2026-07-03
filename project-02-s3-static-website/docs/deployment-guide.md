@@ -1,203 +1,104 @@
-# Deployment Guide
+# Comprehensive Deployment Guide
 
-Follow these step-by-step instructions to deploy your static website using S3 and CloudFront.
+This guide details the complete process for deploying a serverless static website to Amazon S3, mimicking how frontend applications are hosted in production.
 
-## Prerequisites: Website Files — Create These First
+---
 
-Before touching AWS, create your website files locally. In PowerShell:
+## 🚀 PRE-FLIGHT CHECKS
 
+Before deploying cloud infrastructure, always validate your terminal session identity to ensure you are not accidentally deploying resources to the wrong AWS account.
+
+Run these commands in PowerShell or Bash:
 ```powershell
-# Navigate to your repo
-cd aws-cloud-projects
-mkdir project-02-s3-static-website
-cd project-02-s3-static-website
-mkdir website screenshots
-```
+# Confirm you are authenticated as the IAM Administrator (from Project 01)
+aws sts get-caller-identity
 
-Create `website\index.html` — paste this content:
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My AWS Portfolio</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 60px auto; padding: 0 20px; background: #f5f5f5; }
-    h1   { color: #232f3e; }
-    .badge { background: #ff9900; color: white; padding: 4px 12px; border-radius: 4px; font-size: 14px; }
-    p    { color: #444; line-height: 1.6; }
-  </style>
-</head>
-<body>
-  <h1>☁️ My AWS Cloud Portfolio</h1>
-  <span class="badge">Hosted on AWS S3 + CloudFront</span>
-  <p>This static website is served from Amazon S3 and distributed globally via CloudFront CDN.</p>
-  <p>Built as part of a 14-project AWS Cloud Engineering bootcamp.</p>
-  <h2>Projects Completed</h2>
-  <ul>
-    <li>✅ Project 1 — IAM Setup & Billing Alerts</li>
-    <li>✅ Project 2 — Static Website on S3 + CloudFront</li>
-  </ul>
-</body>
-</html>
-```
-
-Create `website\error.html`:
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <title>404 - Page Not Found</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; background: #f5f5f5; }
-    h1   { color: #d13212; }
-  </style>
-</head>
-<body>
-  <h1>404 — Page Not Found</h1>
-  <p>This page doesn't exist on my AWS portfolio site.</p>
-  <a href="/">← Back to Home</a>
-</body>
-</html>
+# Confirm your default region
+aws configure get region
 ```
 
 ---
 
-## 🪣 CHECKPOINT A — Create & configure the S3 bucket
+## 🏗️ PART 1 — PROVISION THE S3 BUCKET
 
-### Console Steps:
-1. Sign in as your IAM user → search bar → **S3** → **Create bucket**
-2. Fill in: 
-   - **Bucket name:** `aws-portfolio-yourname-2024` (must be globally unique — add your name and a number)
-   - **Region:** `us-east-1`
-   - Uncheck **"Block all public access"** → check the acknowledgement box that appears
-   - Everything else: leave as default
-   - Click **Create bucket**
-3. Click your new bucket → **Properties** tab → scroll to **Static website hosting** → **Edit**: 
-   - **Enable:** ✅
-   - **Hosting type:** Host a static website
-   - **Index document:** `index.html`
-   - **Error document:** `error.html`
-   - Click **Save changes**
-4. Still in **Properties** → scroll down → copy the **Bucket website endpoint URL** (looks like `http://aws-portfolio-yourname-2024.s3-website-us-east-1.amazonaws.com`) — save it somewhere.
-5. Now go to the **Permissions** tab → **Bucket policy** → **Edit** → paste this (replace `YOUR-BUCKET-NAME`):
+We must first create the logical container for our website code.
+
+### Console Execution
+1. Navigate to **S3** → **Create bucket**.
+2. **Bucket name**: `portfolio-website-yourname` (Must be globally unique. Do not use spaces or uppercase letters).
+3. **Region**: `US East (N. Virginia) us-east-1` (or your preferred region).
+4. **Object Ownership**: ACLs disabled (default).
+5. **Block Public Access settings for this bucket**: 
+   - **CRITICAL:** Uncheck the box that says "Block *all* public access".
+   - Check the warning box acknowledging that the current settings might result in this bucket and the objects within becoming public.
+6. Click **Create bucket**.
+
+---
+
+## ⚙️ PART 2 — ENABLE STATIC WEBSITE HOSTING
+
+By default, S3 acts as a storage drive. We must tell it to act as a web server.
+
+### Console Execution
+1. Click your newly created bucket to open it.
+2. Navigate to the **Properties** tab.
+3. Scroll all the way to the bottom to **Static website hosting**.
+4. Click **Edit**.
+5. Select **Enable**.
+6. **Hosting type:** Host a static website.
+7. **Index document:** Type `index.html` (This tells S3 which file to load when a user hits the root URL).
+8. **Error document:** Type `error.html` (Optional, but best practice for custom 404 pages).
+9. Click **Save changes**.
+10. Scroll back down to **Static website hosting** and **copy the Bucket website endpoint URL**. You will need this later.
+
+---
+
+## 🔐 PART 3 — APPLY THE PUBLIC BUCKET POLICY
+
+Even though we turned off the "Block Public Access" kill-switch, the files inside the bucket are still private by default. We must apply a JSON policy to grant the world read-access.
+
+### Console Execution
+1. Navigate to the **Permissions** tab of your bucket.
+2. Scroll to **Bucket policy** and click **Edit**.
+3. Paste the following JSON policy. **You MUST replace `YOUR-BUCKET-NAME` with your actual bucket name.**
 
 ```json
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "PublicReadGetObject",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
+        }
+    ]
 }
 ```
-Click **Save changes**.
-
-> ✅ **Verify**: The bucket should now show an orange **Public** badge in S3.
+4. Click **Save changes**. You will now see a red "Public" tag attached to your bucket. This is expected and desired for a public website.
 
 ---
 
-## 📤 CHECKPOINT B — Upload website files via CLI
+## 🚀 PART 4 — DEPLOY THE WEBSITE CODE
 
-```powershell
-# Set your bucket name as a variable (easier to reuse)
-$BUCKET = "aws-portfolio-yourname-2024"
+We will use the AWS CLI to rapidly sync a local directory of code to the S3 bucket.
 
-# Upload all files in the website folder
-aws s3 sync .\website\ s3://$BUCKET/ --region us-east-1
-
-# Expected output:
-# upload: website\index.html to s3://aws-portfolio-yourname-2024/index.html
-# upload: website\error.html to s3://aws-portfolio-yourname-2024/error.html
-```
-
-Verify the files are in S3:
-```powershell
-aws s3 ls s3://$BUCKET/
-# Expected output:
-# 2024-01-01 10:00:00    852 error.html
-# 2024-01-01 10:00:00   1243 index.html
-```
-
-> Test the S3 website URL — paste your bucket website endpoint into a browser.
-> ✅ You should see your portfolio page served over HTTP (not HTTPS yet — CloudFront fixes that).
+### Local Execution (PowerShell or Bash)
+1. Open your terminal and navigate to the `src/` folder of this project, which contains the provided HTML/CSS files.
+   ```powershell
+   cd "e:\AWS Hands-on Projects\project-02-s3-static-website\src"
+   ```
+2. Run the `aws s3 sync` command to upload all files to the bucket. Replace `<YOUR-BUCKET-NAME>` with your bucket.
+   ```powershell
+   aws s3 sync . s3://<YOUR-BUCKET-NAME>
+   ```
+   *Expected Output: You should see the CLI uploading `index.html`, `style.css`, etc.*
 
 ---
 
-## 🌐 CHECKPOINT C — Create CloudFront distribution
+## 🌐 PART 5 — VALIDATE THE LIVE WEBSITE
 
-### Console Steps:
-1. Search bar → **CloudFront** → **Create distribution**
-2. **Origin settings:** 
-   - **Origin domain:** click the dropdown → select your **S3 bucket website endpoint** — *important: choose the one ending in `.s3-website-us-east-1.amazonaws.com`, NOT the plain `.s3.amazonaws.com` one*
-   - **Origin protocol:** HTTP only (S3 static website hosting is HTTP)
-   - Leave other origin settings as default
-3. **Default cache behavior:** 
-   - **Viewer protocol policy:** Redirect HTTP to HTTPS
-   - **Cache policy:** CachingOptimized (default)
-   - Leave everything else as default
-4. **Settings:** 
-   - **Price class:** Use only North America and Europe (cheapest, still fine for testing)
-   - **Default root object:** `index.html`
-   - Leave everything else as default
-5. Click **Create distribution**
-
-⏳ *Wait 5–10 minutes — CloudFront deploys globally. Status changes from Deploying to Enabled.*
-
-6. Once enabled, copy your **Distribution domain name** — looks like `d1abc2defg3hij.cloudfront.net`
-
-> ✅ **Test**: Paste `https://d1abc2defg3hij.cloudfront.net` in your browser — your site loads over HTTPS with a valid SSL certificate, served from a CDN edge location near you.
-
----
-
-## CLI-only alternative — create the bucket entirely via CLI
-
-If you want to practice doing Checkpoint A purely from PowerShell:
-
-```powershell
-$BUCKET = "aws-portfolio-yourname-2024"
-$REGION = "us-east-1"
-
-# 1. Create bucket
-aws s3api create-bucket `
-  --bucket $BUCKET `
-  --region $REGION
-
-# 2. Disable block public access
-aws s3api put-public-access-block `
-  --bucket $BUCKET `
-  --public-access-block-configuration `
-  "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
-
-# 3. Enable static website hosting
-aws s3api put-bucket-website `
-  --bucket $BUCKET `
-  --website-configuration '{
-    "IndexDocument": {"Suffix": "index.html"},
-    "ErrorDocument": {"Key": "error.html"}
-  }'
-
-# 4. Apply bucket policy
-aws s3api put-bucket-policy `
-  --bucket $BUCKET `
-  --policy '{
-    "Version":"2012-10-17",
-    "Statement":[{
-      "Sid":"PublicReadGetObject",
-      "Effect":"Allow",
-      "Principal":"*",
-      "Action":"s3:GetObject",
-      "Resource":"arn:aws:s3:::'"$BUCKET"'/*"
-    }]
-  }'
-
-# 5. Verify website config
-aws s3api get-bucket-website --bucket $BUCKET
-```
+1. Open your web browser.
+2. Paste the **Bucket website endpoint URL** you copied in Part 2. (Format: `http://<bucket-name>.s3-website-<region>.amazonaws.com`).
+3. You should see the custom HTML portfolio page rendered perfectly in your browser!

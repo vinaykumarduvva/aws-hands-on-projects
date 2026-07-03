@@ -1,30 +1,66 @@
-# Architecture & Component Details
+# Architecture Details & System Design
 
-This project establishes the foundational security architecture for an AWS environment. Because this is day-one account setup, the "architecture" focuses on identity management, access control, and cost monitoring rather than typical application infrastructure (like VPCs or EC2 instances).
+This document outlines the high-level architecture of your foundational AWS identity setup and how administrative access is structured.
 
-## Core Components
+## 🏗️ System Overview & Access Flow
 
-### 1. Identity and Access Management (IAM)
-IAM is the central nervous system for AWS security. In this project, it handles:
-- **Root User Hardening:** Securing the overarching account owner with Multi-Factor Authentication (MFA).
-- **IAM User Provisioning:** Creating a daily-driver admin user, allowing you to avoid using the root account for administrative tasks.
-- **Policies:** Attaching the `AdministratorAccess` AWS managed policy to our new IAM user to grant full permissions securely.
-- **Access Keys:** Generating long-term credentials for programmatic (CLI/SDK) access.
+```mermaid
+flowchart TD
+    subgraph "The Human Operator"
+        Human([You])
+    end
 
-### 2. Amazon CloudWatch (Billing Metrics)
-CloudWatch monitors AWS resources and applications. For this project, we specifically use the **Billing** namespace (which is only available in the `us-east-1` region) to monitor our estimated charges.
-- **Metrics Evaluated:** `EstimatedCharges` in USD.
-- **Alarms:** Configured to trigger when the metric exceeds our static threshold (e.g., $5.00).
+    subgraph "Identity Providers"
+        Root["Root User Account\n(Locked Away)"]
+        MFA1{Hardware/Virtual MFA}
+        
+        IAMUser["IAM User\n(e.g., 'admin')"]
+        MFA2{Virtual MFA}
+    end
 
-### 3. Amazon Simple Notification Service (SNS)
-SNS is a fully managed pub/sub messaging service.
-- **Topics:** We create a `billing-alert-topic` to act as the communication channel for CloudWatch.
-- **Subscriptions:** An email subscription is attached to the topic. When CloudWatch breaches the billing threshold, it publishes a message to SNS, which then pushes an email notification to the subscriber.
+    subgraph "AWS Infrastructure (Control Plane)"
+        IAMGroup["IAM Group\n(e.g., 'Administrators')"]
+        Policy["AWS Managed Policy\n(AdministratorAccess)"]
+        
+        CLIConfig["Local AWS CLI Config\n(~/.aws/credentials)"]
+        Budgets["AWS Budgets\n(Billing Alarm)"]
+    end
 
-## Architecture Flow
+    Human -- "Break-Glass Only" --> Root
+    Root -. "Requires" .-> MFA1
+    
+    Human -- "Daily Console Login" --> IAMUser
+    IAMUser -. "Requires" .-> MFA2
+    
+    Human -- "Daily CLI Usage" --> CLIConfig
+    CLIConfig -- "Uses Access Keys" --> IAMUser
+    
+    IAMUser -- "Is a member of" --> IAMGroup
+    IAMGroup -- "Has attached" --> Policy
+    Policy -- "Grants Permissions to" --> IAMUser
+    
+    Budgets -. "Monitors Spend & Emails" .-> Human
+```
 
-1. **User Access:** The admin user interacts with the AWS environment via the Management Console (using a password) or the AWS CLI (using Access Keys).
-2. **Cost Monitoring:** As AWS services are used over the month, cost data is sent to CloudWatch.
-3. **Alert Trigger:** If CloudWatch detects that estimated charges > $5.00, it changes the alarm state to `ALARM`.
-4. **Notification Routing:** CloudWatch triggers the linked SNS Topic.
-5. **Delivery:** SNS dispatches an alert email to the configured email address, warning the administrator of the overage.
+---
+
+## 🧩 Architectural Components & Technical Deep Dive
+
+### 1. The Root User
+The Root User is created when you first register for AWS. It is authenticated via the email address and password used during registration. 
+- **Capabilities:** It has unrestricted access to all resources. It is the only identity that can close an AWS account, change AWS Support plans, or modify root account details.
+- **Security Posture:** In our architecture, the Root User is secured with MFA and then deliberately abandoned for daily use. This is known as "Break-Glass" access.
+
+### 2. IAM Groups and Role-Based Access Control (RBAC)
+Instead of attaching the `AdministratorAccess` policy directly to the IAM user `admin`, we attach the policy to a Group called `Administrators`, and then place the user in that group.
+- **Scalability:** If a new administrator joins the team, we simply add them to the group. If they leave, we remove them. We don't have to manually attach and detach individual JSON policies to every single user. This is a foundational best practice for enterprise architecture.
+
+### 3. Programmatic Access vs. Console Access
+IAM Users can be granted two types of access:
+- **Management Console Access:** Allows logging into the web interface via a password and MFA.
+- **Programmatic Access:** Provides an `Access Key ID` and a `Secret Access Key`. These cryptographic keys are used by the AWS CLI, SDKs (like Boto3 for Python), and infrastructure-as-code tools (like Terraform) to authenticate API requests to AWS. In this architecture, the keys are stored locally on your machine in the `~/.aws/credentials` file.
+
+### 4. AWS Budgets (Financial Architecture)
+AWS Budgets monitors your estimated charges dynamically. 
+- The budget is set to a specific threshold (e.g., $5.00). 
+- If forecasted or actual costs exceed this threshold, the service triggers an Amazon Simple Notification Service (SNS) topic under the hood, which delivers an alert to your registered email address. This ensures continuous financial observability without requiring daily manual checks.
