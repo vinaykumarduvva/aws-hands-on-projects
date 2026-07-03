@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="S3 Versioning, Lifecycle Rules & Cross-Region Replication Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 04: S3 Versioning, Lifecycle Rules & Cross-Region Replication</h1>
 
   <p><i>Master Amazon S3's data durability features by enabling object versioning for point-in-time recovery, configuring intelligent lifecycle policies to transition data across storage classes, and implementing cross-region replication for disaster recovery — all while optimizing costs with storage class analysis.</i></p>

@@ -37,17 +37,17 @@
 
 ## 📐 Infrastructure Specifications
 
-| Resource | Configuration |
-|:---------|:--------------|
-| **IAM Users** | Admin user with console + programmatic access; developer user with scoped permissions |
-| **IAM Groups** | `Admins` (full access), `Developers` (EC2/S3/Lambda read-write), `ReadOnly` (view-only) |
-| **IAM Policies** | Custom JSON policies enforcing least-privilege; AWS-managed `AdministratorAccess` for bootstrap only |
-| **IAM Roles** | Cross-service role for Lambda → S3 access; EC2 instance profile for SSM Session Manager |
-| **MFA** | Virtual MFA device enforced on root and all IAM users via `aws:MultiFactorAuthPresent` condition key |
-| **Password Policy** | 14-char minimum, uppercase + lowercase + number + symbol, 90-day rotation, no reuse of last 5 |
-| **SNS Topic** | Billing alarm notification topic (`billing-alerts`) with email subscription |
-| **CloudWatch Alarm** | EstimatedCharges ≥ $5 threshold → SNS notification |
-| **Region** | us-east-1 (required for billing metrics); global for IAM |
+| Resource             | Configuration                                                                                        |
+| :---------------------| :-----------------------------------------------------------------------------------------------------|
+| **IAM Users**        | Admin user with console + programmatic access; developer user with scoped permissions                |
+| **IAM Groups**       | `Admins` (full access), `Developers` (EC2/S3/Lambda read-write), `ReadOnly` (view-only)              |
+| **IAM Policies**     | Custom JSON policies enforcing least-privilege; AWS-managed `AdministratorAccess` for bootstrap only |
+| **IAM Roles**        | Cross-service role for Lambda → S3 access; EC2 instance profile for SSM Session Manager              |
+| **MFA**              | Virtual MFA device enforced on root and all IAM users via `aws:MultiFactorAuthPresent` condition key |
+| **Password Policy**  | 14-char minimum, uppercase + lowercase + number + symbol, 90-day rotation, no reuse of last 5        |
+| **SNS Topic**        | Billing alarm notification topic (`billing-alerts`) with email subscription                          |
+| **CloudWatch Alarm** | EstimatedCharges ≥ $5 threshold → SNS notification                                                   |
+| **Region**           | us-east-1 (required for billing metrics); global for IAM                                             |
 
 ## 🧩 Key Components
 

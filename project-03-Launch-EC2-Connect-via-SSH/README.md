@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="Launch EC2 Instances & Secure Connectivity Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 03: Launch EC2 Instances & Secure Connectivity</h1>
 
   <p><i>Provision Amazon EC2 instances across availability zones with hardened security groups, key-pair-based SSH access, and AWS Systems Manager Session Manager for keyless browser-based shells. This project demonstrates instance lifecycle management, user data bootstrapping, and elastic IP allocation.</i></p>

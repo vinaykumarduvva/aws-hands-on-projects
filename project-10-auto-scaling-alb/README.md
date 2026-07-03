@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="Auto Scaling Group with Application Load Balancer Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 10: Auto Scaling Group with Application Load Balancer</h1>
 
   <p><i>Implement elastic compute infrastructure using an Auto Scaling Group (ASG) behind an Application Load Balancer (ALB). This project covers launch templates, scaling policies (target tracking, step, and scheduled), health checks, sticky sessions, and cross-zone load balancing — the backbone of every highly-available AWS deployment.</i></p>

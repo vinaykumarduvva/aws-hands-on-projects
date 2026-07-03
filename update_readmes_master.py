@@ -843,8 +843,6 @@ def build_readme(num: str, p: dict) -> str:
 
     # Title + description + badges
     lines.append(f'<div align="center">\n')
-    lines.append(f'  <img src="{svg_url}" alt="{p["title"]} Architecture" width="820"/>\n')
-    lines.append(f'  <br/><br/>\n')
     lines.append(f'  <h1>')
     lines.append(f'<img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> ')
     lines.append(f'Project {num}: {p["title"]}')

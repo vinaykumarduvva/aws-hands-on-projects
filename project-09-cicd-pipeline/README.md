@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="CI/CD Pipeline with CodeCommit, CodeBuild & CodeDeploy Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 09: CI/CD Pipeline with CodeCommit, CodeBuild & CodeDeploy</h1>
 
   <p><i>Construct an end-to-end Continuous Integration and Continuous Deployment pipeline using AWS-native developer tools. Code pushed to CodeCommit triggers CodeBuild for compilation and testing, then CodeDeploy performs rolling deployments to EC2 instances — enabling automated, repeatable, and auditable software delivery.</i></p>

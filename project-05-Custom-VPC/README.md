@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="Custom VPC with Public & Private Subnets Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 05: Custom VPC with Public & Private Subnets</h1>
 
   <p><i>Architect a production-grade Virtual Private Cloud (VPC) with multi-AZ public and private subnets, an Internet Gateway for public-facing resources, a NAT Gateway for secure outbound access from private subnets, and custom route tables — implementing the foundational network topology used by Fortune 500 companies.</i></p>

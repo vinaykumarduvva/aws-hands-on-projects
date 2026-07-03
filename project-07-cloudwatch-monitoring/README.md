@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="CloudWatch Monitoring, Alarms & SNS Notifications Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 07: CloudWatch Monitoring, Alarms & SNS Notifications</h1>
 
   <p><i>Implement comprehensive AWS monitoring using CloudWatch metrics, custom dashboards, composite alarms, and SNS fan-out notifications. This project builds an observability layer that detects anomalies, triggers automated responses, and delivers real-time alerts via email and SMS — essential for production readiness.</i></p>

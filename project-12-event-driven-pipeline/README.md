@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="Event-Driven Data Pipeline with S3, SQS & Lambda Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 12: Event-Driven Data Pipeline with S3, SQS & Lambda</h1>
 
   <p><i>Architect a fully event-driven data processing pipeline where S3 object uploads trigger SQS messages consumed by Lambda functions for transformation and loading. This project implements dead-letter queues, batch processing windows, message visibility timeouts, and idempotent processing — the foundation of modern serverless data engineering on AWS.</i></p>

@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="./architecture/architecture.svg" alt="RDS MySQL + EC2 Two-Tier Web Application Architecture" width="820"/>
-  <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 06: RDS MySQL + EC2 Two-Tier Web Application</h1>
 
   <p><i>Build a classic two-tier architecture with an Amazon EC2 web server in a public subnet connecting to an Amazon RDS MySQL database in a private subnet. This project covers DB subnet groups, parameter groups, automated backups, multi-AZ deployment options, and connection pooling best practices.</i></p>
