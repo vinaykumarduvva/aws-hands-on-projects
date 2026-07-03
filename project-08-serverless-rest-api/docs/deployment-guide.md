@@ -1,81 +1,182 @@
+# Deployment Guide — Serverless REST API
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Serverless REST API</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Step-by-Step Deployment Guide</text>
-  </svg>
-</div>
+## Prerequisites
 
+Before running any scripts, verify:
 
+```powershell
+# AWS CLI configured
+aws sts get-caller-identity
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-07-cloudwatch-monitoring/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Cloudwatch Monitoring</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-09-cicd-pipeline/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Cicd Pipeline</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+# Region set to us-east-1
+aws configure get region
 
+# Python installed (needed to inspect/edit Lambda code locally)
+python --version
+# Expected: Python 3.12.x
 
-<br>
+# Store account ID for use in scripts
+$ACCOUNT_ID = aws sts get-caller-identity --query "Account" --output text
+Write-Host "Account: $ACCOUNT_ID"
+```
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+---
 
-<br>
+## Part 1 — DynamoDB Table
 
-## Step 1: Create DynamoDB Table
-1. Navigate to DynamoDB. Create table `users`.
-2. Partition key: `userId` (String). Settings: On-Demand.
+Script: `scripts/01-create-dynamodb.ps1`
 
-## Step 2: Create IAM Role for Lambda
-1. Create a new Role for Lambda.
-2. Attach `AWSLambdaBasicExecutionRole`.
-3. Create an inline policy allowing `dynamodb:PutItem`, `GetItem`, `Scan`, `DeleteItem` on the ARN of your `users` table.
+```powershell
+aws dynamodb create-table `
+  --table-name users `
+  --attribute-definitions AttributeName=userId,AttributeType=S `
+  --key-schema AttributeName=userId,KeyType=HASH `
+  --billing-mode PAY_PER_REQUEST `
+  --tags Key=Project,Value=project-08-serverless
 
-## Step 3: Create Lambda Function
-1. Create a function `users-api` using Python 3.12. Attach the IAM role from Step 2.
-2. Paste the Python backend code. Deploy.
+aws dynamodb wait table-exists --table-name users
+```
 
-## Step 4: Create API Gateway
-1. Navigate to API Gateway > REST API > Build.
-2. Create Resource `users`. Create Method `ANY`.
-3. Integration Type: Lambda Function. **Check "Use Lambda Proxy integration"**.
-4. Deploy API to a new stage called `prod`. Copy the Invoke URL.
+**Checkpoint**: `aws dynamodb describe-table --table-name users --query "Table.TableStatus"` returns `ACTIVE`.
 
-<br>
+---
 
+## Part 2 — IAM Role
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-07-cloudwatch-monitoring/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Cloudwatch Monitoring</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-09-cicd-pipeline/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Cicd Pipeline</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+Script: `scripts/02-create-lambda-role.ps1`
 
+Creates `lambda-users-api-role` with:
+- Trust policy allowing Lambda to assume the role
+- `AWSLambdaBasicExecutionRole` managed policy (CloudWatch Logs)
+- Inline `dynamodb-users-access` policy (6 DynamoDB actions on `table/users`)
+
+**IAM propagation**: After creating a role, wait 10 seconds before using the ARN in Lambda creation. IAM changes are eventually consistent and immediately-created Lambda functions using a brand-new role may get `InvalidParameterValueException`.
+
+**Checkpoint**: `aws iam get-role --role-name lambda-users-api-role` returns the role ARN.
+
+---
+
+## Part 3 — Package and Deploy Lambda
+
+Script: `scripts/03-package-lambda.ps1` then `scripts/04-deploy-lambda.ps1`
+
+**Package**:
+```powershell
+Compress-Archive `
+  -Path lambda\lambda_function.py `
+  -DestinationPath lambda\function.zip `
+  -Force
+```
+
+**Deploy**:
+```powershell
+$LAMBDA_ARN = aws lambda create-function `
+  --function-name users-api `
+  --runtime python3.12 `
+  --role $LAMBDA_ROLE_ARN `
+  --handler lambda_function.lambda_handler `
+  --zip-file fileb://lambda/function.zip `
+  --timeout 30 `
+  --memory-size 128 `
+  --query "FunctionArn" --output text
+```
+
+**Handler format**: `filename.function_name` — the file is `lambda_function.py` and the entry point is `lambda_handler`, so the handler is `lambda_function.lambda_handler`.
+
+**Checkpoint**: `aws lambda get-function --function-name users-api --query "Configuration.State"` returns `Active`.
+
+---
+
+## Part 4 — Direct Lambda Test
+
+Before API Gateway, verify Lambda logic works:
+
+```powershell
+$PAYLOAD = '{"body":"{\"name\":\"Vinay Kumar\",\"email\":\"vinay@example.com\"}","httpMethod":"POST","path":"/users"}'
+
+aws lambda invoke `
+  --function-name users-api `
+  --payload $PAYLOAD `
+  --cli-binary-format raw-in-base64-out `
+  response.json
+
+cat response.json
+```
+
+Expected: `{"statusCode": 201, "body": "{\"message\": \"User created\", ...}"}`
+
+If you see a 500 or an error, check CloudWatch Logs before proceeding to API Gateway:
+```powershell
+aws logs tail /aws/lambda/users-api --follow
+```
+
+---
+
+## Part 5 — API Gateway
+
+Script: `scripts/05-create-api-gateway.ps1`
+
+Steps performed:
+1. Create REST API (`users-api`, Regional endpoint)
+2. Get root resource ID (`/`)
+3. Create `/users` resource
+4. Create `/users/{userId}` resource
+5. Add POST + GET methods to `/users`
+6. Add GET + PUT + DELETE methods to `/users/{userId}`
+7. Add Lambda permission for API Gateway invoke
+8. Deploy to `prod` stage
+
+**Lambda proxy integration**: All methods use `type=AWS_PROXY` with `integration-http-method=POST`. The HTTP method in the integration is always POST regardless of the API method — this is how Lambda proxy integration works.
+
+**Checkpoint**: `$API_URL` is printed. Curl or browser `GET $API_URL/users` returns `{"message":"Found 0 users","count":0,"users":[]}`.
+
+---
+
+## Part 6 — Full API Test
+
+Script: `scripts/06-test-api.ps1`
+
+Set your API URL first:
+```powershell
+$API_URL = "https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/prod"
+```
+
+Then run `06-test-api.ps1`. All 8 test cases should pass with expected status codes and response bodies.
+
+---
+
+## Updating Lambda Code
+
+When you modify `lambda/lambda_function.py`:
+
+```powershell
+# 1. Repackage
+Compress-Archive `
+  -Path lambda\lambda_function.py `
+  -DestinationPath lambda\function.zip `
+  -Force
+
+# 2. Deploy update
+aws lambda update-function-code `
+  --function-name users-api `
+  --zip-file fileb://lambda/function.zip
+
+# 3. Wait for update
+aws lambda wait function-updated --function-name users-api
+```
+
+No API Gateway changes needed — the Lambda ARN stays the same across code updates.
+
+---
+
+## Console Paths Summary
+
+| Resource | Console Path |
+|---|---|
+| DynamoDB table | DynamoDB → Tables → users |
+| Lambda function | Lambda → Functions → users-api |
+| API Gateway | API Gateway → APIs → users-api |
+| API stages | API Gateway → users-api → Stages → prod |
+| IAM role | IAM → Roles → lambda-users-api-role |
+| Lambda logs | CloudWatch → Log groups → /aws/lambda/users-api |
+| Lambda metrics | Lambda → Monitor tab or CloudWatch → Metrics → Lambda |

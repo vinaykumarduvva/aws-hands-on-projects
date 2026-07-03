@@ -1,102 +1,134 @@
+# Project 9 — CI/CD Pipeline: CodeCommit + CodeBuild + CodeDeploy + CodePipeline
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">CI/CD Pipeline (CodePipeline)</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Automate software delivery by building a pipeline that compiles, tests, and deploys code on every git push.</text>
-  </svg>
-</div>
+![AWS](https://img.shields.io/badge/AWS-Developer%20Tools%20Suite-orange?logo=amazonaws)
+![Level](https://img.shields.io/badge/Level-Intermediate-blue)
+![Region](https://img.shields.io/badge/Region-ap--south--1%20Mumbai-yellow)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![Free Tier](https://img.shields.io/badge/Cost-Free%20Tier%20Eligible-green)
 
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Serverless Rest Api</b></a></td>
-      <td style="width: 33%; border: none;"><a href="README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Auto Scaling Alb</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-
-
-<div align="center">
-  <img src="architecture/architecture.svg" alt="Project Architecture" width="800"/>
-</div>
+Build a fully automated CI/CD pipeline that detects code changes, automatically builds and tests your application, and deploys it to an EC2 server — the same pipeline pattern used by engineering teams at every scale.
 
 ---
 
-## 🌟 Expansive Overview
-> **Core Purpose:** Automate software delivery by building a pipeline that compiles, tests, and deploys code on every git push.
+## Architecture Overview
 
-CI/CD Pipeline (CodePipeline) is designed to reflect enterprise-grade cloud engineering. This project moves beyond the console basics, demonstrating how AWS services are stitched together to form resilient, scalable, and highly available architectures.
+```
+Developer (git push)
+        │
+        ▼
+┌─────────────────────┐
+│   CodeCommit        │  Managed Git repository
+│   my-web-app        │  main branch
+└──────────┬──────────┘
+           │ triggers automatically
+           ▼
+┌─────────────────────────────────────────────────────┐
+│                  CodePipeline                       │
+│                                                     │
+│  Stage 1: Source  → pulls from CodeCommit           │
+│       │                                             │
+│       ▼                                             │
+│  Stage 2: Build   → CodeBuild runs buildspec.yml    │
+│       │            validates HTML, packages dist/   │
+│       ▼                                             │
+│  Stage 3: Deploy  → CodeDeploy runs appspec.yml     │
+│                    lifecycle hooks on EC2           │
+└──────────────────────┬──────────────────────────────┘
+                       │
+                       ▼
+        ┌──────────────────────────┐
+        │   EC2 (ap-south-1)       │
+        │   Amazon Linux 2023      │
+        │   t2.micro               │
+        │   CodeDeploy Agent       │
+        │   Apache web server      │
+        └──────────────────────────┘
+                       │
+                       ▼
+        S3 Artifact Bucket
+        (pipeline stores build outputs)
+```
 
-### 💼 Real-World Usage Scenarios
-Companies around the globe use this exact architectural pattern for:
-- **Agile Engineering:** Allowing developers to deploy to staging multiple times a day effortlessly.
-- **Automated Testing:** Rejecting builds that fail unit tests before they reach production.
-- **Fleet Management:** Updating hundreds of EC2 instances simultaneously via CodeDeploy.
+---
+
+## AWS Services Used
+
+| Service | Role |
+|---|---|
+| CodeCommit | Managed Git repository — stores source code |
+| CodeBuild | Managed build server — validates, packages |
+| CodeDeploy | Deployment service — pushes to EC2 with lifecycle hooks |
+| CodePipeline | Orchestrator — Source → Build → Deploy |
+| EC2 | Deployment target running the web application |
+| S3 | Artifact store between pipeline stages |
+| IAM | Service roles for each pipeline component |
 
 ---
 
-## ⚙️ Infrastructure Specifications
+## Free Tier Status
 
-<details>
-<summary><b>💡 Click to Expand Technical Specifications</b></summary>
-<br>
+| Resource | Free Tier | Region |
+|---|---|---|
+| CodeCommit | 5 active users free forever | ap-south-1 ✅ |
+| CodeBuild | 100 build minutes/month (12 months) | ap-south-1 ✅ |
+| CodeDeploy to EC2 | Always free | ap-south-1 ✅ |
+| CodePipeline | 1 active pipeline free (12 months) | ap-south-1 ✅ |
+| EC2 t2.micro | 750 hrs/month (12 months) | ap-south-1 ✅ |
+| S3 | 5 GB free (12 months) | ap-south-1 ✅ |
 
-| Component | Specification |
-|-----------|---------------|
-| **Source** | ** AWS CodeCommit (Private Git Repository) |
-| **Build** | ** AWS CodeBuild (Amazon Linux 2 image, buildspec.yml) |
-| **Deploy** | ** AWS CodeDeploy (In-place deployment, appspec.yml, EC2 tag targeting) |
-| **Orchestration** | ** AWS CodePipeline |
-
-</details>
+**Cost estimate: $0.00** — all within free tier.
 
 ---
 
-## 📂 Project Structure & Performance
+## Project Structure
 
-To optimize your execution of this project, adhere strictly to the following folder topology. 
+```
+project-09-cicd-pipeline/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── docs/               — architecture, design, guides
+├── application/        — source code pushed to CodeCommit
+│   ├── index.html
+│   ├── buildspec.yml
+│   ├── appspec.yml
+│   └── scripts/        — CodeDeploy lifecycle hooks
+├── scripts/            — PowerShell deployment scripts
+├── architecture/       — SVG diagrams
+└── images/             — Console screenshots
+```
 
-| Directory | Core Function |
-|-----------|---------------|
-| `👉 application/` | Contains the web app source, buildspec.yml, and appspec.yml. |
-| `👉 docs/` | Pipeline stage configurations and IAM role details. |
-| `👉 scripts/` | Scripts to initialize CodeCommit and trigger deployments. |
+---
+
+## Execution Order
+
+| Script | Part | Task |
+|---|---|---|
+| `01-create-iam-roles.ps1` | 1 | All 4 IAM service roles |
+| `02-create-s3-bucket.ps1` | 2 | Artifact bucket with versioning |
+| `03-create-codecommit.ps1` | 3 | Git repository |
+| `04-launch-ec2.ps1` | 6 | EC2 with CodeDeploy agent |
+| `05-create-codedeploy.ps1` | 7 | Application + deployment group |
+| `06-create-codebuild.ps1` | 8 | Build project |
+| `07-create-codepipeline.ps1` | 9 | Pipeline with 3 stages |
+| `08-monitor-pipeline.ps1` | 10 | Watch execution status |
+| `09-trigger-deployment.ps1` | 11 | Push v2.0 and verify |
+| `10-cleanup.ps1` | 12 | Full teardown |
 
 ---
 
-## 📚 Granular Documentation Suite
-We have broken down the technical manuals into granular, highly detailed Markdown files. Start with the Project Overview and proceed sequentially:
+## Key Concepts Demonstrated
 
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
-- 🧹 [Cleanup Guide](docs/cleanup-guide.md)
+**CI/CD pipeline**: Every `git push` to the `main` branch automatically triggers Source → Build → Deploy. No manual intervention required after initial setup.
+
+**buildspec.yml**: YAML config that tells CodeBuild what to do — install dependencies, run tests, package artifacts. The `pre_build` phase validates HTML structure; the `build` phase copies files to `dist/` with build metadata.
+
+**appspec.yml**: YAML config that tells CodeDeploy how to deploy — which files go where, and which lifecycle hook scripts to run (BeforeInstall → AfterInstall → ApplicationStart → ValidateService).
+
+**Tag-based deployment**: CodeDeploy finds EC2 instances by tag (`Environment=production`) rather than instance ID. Any EC2 with that tag becomes a deployment target — no hardcoded instance IDs.
+
+**Auto-rollback**: The deployment group is configured with `auto-rollback on deployment failure`. If the `ValidateService` hook returns a non-zero exit code, CodeDeploy automatically rolls back to the previous version.
 
 ---
-*✨ Modernized & Enhanced for the AWS Hands-On Portfolio ✨*
+
+*Part of the AWS Cloud Projects portfolio — hands-on infrastructure built and documented end to end.*

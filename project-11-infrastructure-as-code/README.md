@@ -1,102 +1,77 @@
+# Project 11 — Infrastructure as Code with CloudFormation
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Infrastructure as Code (IaC)</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Convert manual console clicks into repeatable, version-controlled YAML templates for automated provisioning.</text>
-  </svg>
-</div>
+Level: Intermediate | Estimated Time: 5–6 hours
+Region: ap-south-1 (Mumbai) ✅
 
+## 🎯 Purpose
+Convert everything built manually so far into version-controlled, repeatable Infrastructure as Code using AWS CloudFormation. This project demonstrates how to provision, update, and tear down an entire VPC, ALB, and Auto Scaling Group stack identically every time using a single command.
 
+## 🧠 Learning Objectives
+- Understand CloudFormation templates, stacks, and change sets
+- Write YAML templates with Parameters, Resources, and Outputs
+- Use Intrinsic Functions (`!Ref`, `!GetAtt`, `!Sub`, `!FindInMap`, `!Select`)
+- Deploy a complete VPC + EC2 + ALB + ASG stack from one template
+- Update a running stack safely using change sets
+- Understand stack rollback behavior on failure
+- Tear down entire environments with one command
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Auto Scaling Alb</b></a></td>
-      <td style="width: 33%; border: none;"><a href="README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../project-12-event-driven-pipeline/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Event Driven Pipeline</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## 🏗️ Architecture
+CloudFormation provisions all resources in dependency order based on `main-stack.yaml`.
+![Architecture](architecture/architecture.svg)
 
+### AWS Services Used
+- **CloudFormation**: Defines and provisions all infrastructure as code
+- **VPC, Subnets, IGW**: Networking layer
+- **EC2, Launch Template**: Compute layer
+- **ALB, Target Group, ASG**: Load balancing and scaling
+- **IAM**: CloudFormation execution role
 
-<div align="center">
-  <img src="architecture/architecture.svg" alt="Project Architecture" width="800"/>
-</div>
+## 💰 Free Tier Status
+CloudFormation itself is always free. This project recreates the architecture from Project 10, meaning costs are identical:
+- EC2 t2.micro × 2: 750 hrs/month free
+- ALB: 750 hrs + 15 LCU free
+- Everything else: Always free
+- **Estimated Cost: $0.00**
 
----
+## 🚀 Deployment Instructions
 
-## 🌟 Expansive Overview
-> **Core Purpose:** Convert manual console clicks into repeatable, version-controlled YAML templates for automated provisioning.
+### 1. Validate the Template
+Ensure your CloudFormation template syntax is correct before deploying:
+```bash
+aws cloudformation validate-template --template-body file://templates/main-stack.yaml
+```
 
-Infrastructure as Code (IaC) is designed to reflect enterprise-grade cloud engineering. This project moves beyond the console basics, demonstrating how AWS services are stitched together to form resilient, scalable, and highly available architectures.
+### 2. Create the Stack
+Deploy the entire infrastructure using the `01-create-stack.sh` script (or `.ps1` for PowerShell):
+```bash
+./scripts/01-create-stack.sh
+```
 
-### 💼 Real-World Usage Scenarios
-Companies around the globe use this exact architectural pattern for:
-- **Multi-Region Deployment:** Copying a production environment from US to Europe in minutes.
-- **Disaster Recovery:** Re-creating a destroyed VPC identically from version control.
-- **Auditing:** Using CloudFormation Drift Detection to see if engineers made manual unauthorized changes.
+### 3. Apply a Change Set
+Change sets allow you to preview modifications before applying them safely.
+```bash
+# Preview changes
+./scripts/02-create-changeset.sh
 
----
+# Apply changes
+./scripts/03-execute-changeset.sh
+```
 
-## ⚙️ Infrastructure Specifications
+### 4. Test Rollback
+Experience automated rollback by attempting a deployment with an invalid configuration. CloudFormation will safely revert to the last known good state.
+```bash
+./scripts/04-test-rollback.sh
+```
 
-<details>
-<summary><b>💡 Click to Expand Technical Specifications</b></summary>
-<br>
+### 5. Detect Drift
+Discover if resources have been manually modified outside of CloudFormation:
+```bash
+./scripts/05-detect-drift.sh
+```
 
-| Component | Specification |
-|-----------|---------------|
-| **Tooling** | ** AWS CloudFormation (YAML) |
-| **Resources Defined** | ** VPC, IGW, Subnets, Route Tables, SG, LaunchTemplate, ASG, ALB |
-| **Features Used** | ** Parameters, Outputs, Mappings, !Ref, !GetAtt, !Sub |
-| **Operations** | ** Create Stack, Change Sets, Stack Rollback |
-
-</details>
-
----
-
-## 📂 Project Structure & Performance
-
-To optimize your execution of this project, adhere strictly to the following folder topology. 
-
-| Directory | Core Function |
-|-----------|---------------|
-| `👉 templates/` | Contains the CloudFormation YAML declarative code. |
-| `👉 docs/` | Template syntax guides and drift detection instructions. |
-| `👉 scripts/` | CLI scripts for deploying and updating stacks via Change Sets. |
-
----
-
-## 📚 Granular Documentation Suite
-We have broken down the technical manuals into granular, highly detailed Markdown files. Start with the Project Overview and proceed sequentially:
-
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
-- 🧹 [Cleanup Guide](docs/cleanup-guide.md)
-
----
-*✨ Modernized & Enhanced for the AWS Hands-On Portfolio ✨*
+## 🧹 Cleanup
+Tear down the entire infrastructure with a single command:
+```bash
+./scripts/06-cleanup.sh
+```
+*(Verify deletion with `aws cloudformation describe-stacks --stack-name my-app-stack`)*

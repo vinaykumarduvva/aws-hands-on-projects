@@ -1,53 +1,184 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-  <style>
-    .bg { fill: #f8f9fa; }
-    .text { font-family: sans-serif; font-size: 14px; fill: #333; }
-    .title { font-size: 20px; font-weight: bold; fill: #111; }
-    .box { fill: #ffffff; stroke: #e1e4e8; stroke-width: 2px; rx: 8px; }
-    .cfn-box { fill: none; stroke: #ff9900; stroke-width: 3px; rx: 8px; stroke-dasharray: 8; }
-    .line { stroke: #28a745; stroke-width: 2px; fill: none; stroke-dasharray: 4; animation: dash 10s linear infinite; }
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800');
+      
+      /* Base Theme Variables (Light by default) */
+      :root {
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        
+        --aws-orange: #ff9900;
+        --aws-blue: #232f3e;
+        --vpc-green: #34d399;
+        --subnet-blue: #38bdf8;
+        --ec2-orange: #f97316;
+        --alb-purple: #a855f7;
+      }
+      
+      /* Dark Theme */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-color: #0f172a;
+          --card-bg: #1e293b;
+          --text-primary: #f8fafc;
+          --text-secondary: #cbd5e1;
+          --border-color: #334155;
+        }
+      }
+      
+      * {
+        font-family: 'Outfit', system-ui, sans-serif;
+      }
+      
+      .bg { fill: var(--bg-color); transition: fill 0.3s ease; }
+      
+      .box {
+        fill: var(--card-bg);
+        stroke: var(--border-color);
+        stroke-width: 2;
+        transition: all 0.3s ease;
+        filter: url(#shadow);
+      }
+      
+      .vpc-box { stroke: var(--vpc-green); stroke-width: 3; stroke-dasharray: 8 4; fill: transparent; }
+      .subnet-box { stroke: var(--subnet-blue); stroke-width: 2; stroke-dasharray: 4 4; fill: rgba(56, 189, 248, 0.05); }
+      
+      .title { fill: var(--text-primary); font-size: 28px; font-weight: 800; }
+      .subtitle { fill: var(--text-secondary); font-size: 16px; font-weight: 400; }
+      .label-bold { fill: var(--text-primary); font-size: 18px; font-weight: 600; }
+      .label { fill: var(--text-secondary); font-size: 14px; }
+      
+      .line {
+        stroke: var(--text-secondary);
+        stroke-width: 2;
+        stroke-dasharray: 5;
+        animation: dash 20s linear infinite;
+        fill: transparent;
+      }
+      
+      .line-solid {
+        stroke: var(--alb-purple);
+        stroke-width: 3;
+        fill: transparent;
+      }
+      
+      @keyframes dash {
+        to {
+          stroke-dashoffset: -1000;
+        }
+      }
+      
+      .particle {
+        fill: var(--aws-orange);
+        animation: fade 3s infinite linear;
+      }
+      
+      @keyframes fade {
+        0% { opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+    </style>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" width="1200" height="800" />
+  
+  <!-- Header -->
+  <text x="600" y="60" text-anchor="middle" class="title">Project 11: Infrastructure as Code</text>
+  <text x="600" y="90" text-anchor="middle" class="subtitle">CloudFormation Deployment Architecture</text>
+  
+  <!-- CloudFormation Stack -->
+  <g class="node" transform="translate(50, 300)">
+    <rect class="box" width="200" height="150" rx="12" style="stroke: var(--aws-orange);" />
+    <text x="100" y="40" text-anchor="middle" class="label-bold" fill="var(--aws-orange)">CloudFormation</text>
+    <text x="100" y="70" text-anchor="middle" class="label">main-stack.yaml</text>
+    <text x="100" y="100" text-anchor="middle" class="label" style="font-size:12px;">+ Parameters</text>
+    <text x="100" y="120" text-anchor="middle" class="label" style="font-size:12px;">+ Resources</text>
+  </g>
+  
+  <!-- Connect CFN to VPC -->
+  <path id="deploy-path" d="M 250 375 L 350 375" class="line" style="stroke: var(--aws-orange); stroke-width: 3;" />
+  <circle r="4" class="particle">
+    <animateMotion dur="3s" repeatCount="indefinite" path="M 250 375 L 350 375" />
+  </circle>
+  
+  <text x="300" y="360" text-anchor="middle" class="label" style="fill: var(--aws-orange); font-weight: bold;">Deploys</text>
+
+  <!-- VPC Region -->
+  <rect class="vpc-box" x="350" y="150" width="750" height="550" rx="20" />
+  <text x="370" y="180" class="label-bold" style="fill: var(--vpc-green);">VPC (10.1.0.0/16)</text>
+  <text x="370" y="200" class="label">ap-south-1 (Mumbai)</text>
+  
+  <!-- IGW -->
+  <g class="node" transform="translate(680, 120)">
+    <rect class="box" width="100" height="60" rx="12" />
+    <text x="50" y="35" text-anchor="middle" class="label-bold">IGW</text>
+  </g>
+  
+  <!-- ALB -->
+  <g class="node" transform="translate(630, 220)">
+    <rect class="box" width="200" height="80" rx="12" style="stroke: var(--alb-purple);" />
+    <text x="100" y="35" text-anchor="middle" class="label-bold" style="fill: var(--alb-purple);">Application Load Balancer</text>
+    <text x="100" y="60" text-anchor="middle" class="label">Target Group (Port 80)</text>
+  </g>
+  
+  <!-- ASG Box -->
+  <rect x="420" y="350" width="620" height="300" rx="15" style="fill: transparent; stroke: var(--ec2-orange); stroke-width: 2; stroke-dasharray: 6 6;" />
+  <text x="730" y="380" text-anchor="middle" class="label-bold" style="fill: var(--ec2-orange);">Auto Scaling Group (2-6 Instances)</text>
+  
+  <!-- Subnet A -->
+  <g transform="translate(450, 400)">
+    <rect class="subnet-box" width="250" height="220" rx="10" />
+    <text x="125" y="30" text-anchor="middle" class="label-bold" style="fill: var(--subnet-blue);">Public Subnet A</text>
+    <text x="125" y="50" text-anchor="middle" class="label">10.1.1.0/24</text>
     
-    @keyframes dash { to { stroke-dashoffset: -500; } }
-    @media (prefers-color-scheme: dark) {
-      .bg { fill: #0d1117; }
-      .box { fill: #161b22; stroke: #30363d; }
-      .text { fill: #c9d1d9; }
-      .title { fill: #f0f6fc; }
-      .line { stroke: #3fb950; }
-    }
-  </style>
+    <!-- EC2 Instance 1 -->
+    <g class="node" transform="translate(50, 80)">
+      <rect class="box" width="150" height="100" rx="12" style="stroke: var(--ec2-orange);" />
+      <text x="75" y="35" text-anchor="middle" class="label-bold">EC2 Instance</text>
+      <text x="75" y="60" text-anchor="middle" class="label">t2.micro</text>
+      <text x="75" y="85" text-anchor="middle" class="label" style="font-size:12px;">Web Server (Apache)</text>
+    </g>
+  </g>
+  
+  <!-- Subnet B -->
+  <g transform="translate(750, 400)">
+    <rect class="subnet-box" width="250" height="220" rx="10" />
+    <text x="125" y="30" text-anchor="middle" class="label-bold" style="fill: var(--subnet-blue);">Public Subnet B</text>
+    <text x="125" y="50" text-anchor="middle" class="label">10.1.2.0/24</text>
+    
+    <!-- EC2 Instance 2 -->
+    <g class="node" transform="translate(50, 80)">
+      <rect class="box" width="150" height="100" rx="12" style="stroke: var(--ec2-orange);" />
+      <text x="75" y="35" text-anchor="middle" class="label-bold">EC2 Instance</text>
+      <text x="75" y="60" text-anchor="middle" class="label">t2.micro</text>
+      <text x="75" y="85" text-anchor="middle" class="label" style="font-size:12px;">Web Server (Apache)</text>
+    </g>
+  </g>
+  
+  <!-- Connection Lines -->
+  <!-- Internet to IGW -->
+  <path d="M 730 50 L 730 120" class="line" fill="transparent" />
+  <text x="740" y="80" class="label">Internet Traffic</text>
+  
+  <!-- IGW to ALB -->
+  <path d="M 730 180 L 730 220" class="line" fill="transparent" />
+  
+  <!-- ALB to Instance A -->
+  <path d="M 680 300 L 680 330 L 575 330 L 575 480" class="line-solid" fill="transparent" />
+  
+  <!-- ALB to Instance B -->
+  <path d="M 780 300 L 780 330 L 875 330 L 875 480" class="line-solid" fill="transparent" />
+  
+  <text x="730" y="740" text-anchor="middle" class="subtitle">CloudFormation automates the entire provisioning of this infrastructure stack</text>
 
-  <rect width="100%" height="100%" class="bg" rx="10"/>
-  <text x="400" y="40" class="title" text-anchor="middle">Infrastructure as Code (CloudFormation)</text>
-
-  <!-- YAML Template -->
-  <rect x="50" y="140" width="140" height="120" class="box" />
-  <text x="120" y="180" class="text" text-anchor="middle" font-weight="bold">main-stack.yaml</text>
-  <text x="120" y="210" class="text" text-anchor="middle" font-size="12px">Parameters</text>
-  <text x="120" y="230" class="text" text-anchor="middle" font-size="12px">Resources</text>
-
-  <!-- CloudFormation -->
-  <rect x="280" y="160" width="140" height="80" class="box" />
-  <text x="350" y="195" class="text" text-anchor="middle" font-weight="bold">CloudFormation</text>
-  <text x="350" y="215" class="text" text-anchor="middle" font-size="12px">Stack Engine</text>
-
-  <!-- Target Infrastructure -->
-  <rect x="490" y="100" width="280" height="200" class="cfn-box" />
-  <text x="630" y="130" class="text" text-anchor="middle" font-weight="bold" fill="#ff9900">Provisioned Stack</text>
-
-  <rect x="520" y="150" width="100" height="50" class="box" />
-  <text x="570" y="170" class="text" text-anchor="middle" font-weight="bold">VPC</text>
-  <text x="570" y="185" class="text" text-anchor="middle" font-size="10px">Networking</text>
-
-  <rect x="640" y="150" width="100" height="50" class="box" />
-  <text x="690" y="170" class="text" text-anchor="middle" font-weight="bold">ALB</text>
-  <text x="690" y="185" class="text" text-anchor="middle" font-size="10px">Routing</text>
-
-  <rect x="580" y="220" width="100" height="50" class="box" />
-  <text x="630" y="240" class="text" text-anchor="middle" font-weight="bold">ASG / EC2</text>
-  <text x="630" y="255" class="text" text-anchor="middle" font-size="10px">Compute</text>
-
-  <!-- Flow Lines -->
-  <path d="M 190 200 L 280 200" class="line" />
-  <path d="M 420 200 L 490 200" class="line" />
 </svg>

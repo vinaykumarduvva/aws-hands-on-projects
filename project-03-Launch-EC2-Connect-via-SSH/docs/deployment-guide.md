@@ -1,80 +1,38 @@
+# Deployment Guide
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">EC2 Launch & SSH</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Step-by-Step Deployment Guide</text>
-  </svg>
-</div>
+## Automated Scripts Available
+> [!TIP]
+> **Dual-Platform Execution:** This project contains fully automated deployment and teardown scripts for both Windows (PowerShell) and Linux/macOS (Bash). Check the `scripts/` directory for `.ps1` files and the `bash-scripts/` directory for `.sh` files.
 
+## Cleanup Guide
 
+## Cleanup (full teardown)
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-02-s3-static-website/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: S3 Static Website</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-04-s3-versioning/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: S3 Versioning</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+```powershell
+# 1. Terminate instance
+aws ec2 terminate-instances --instance-ids $INSTANCE_ID
+aws ec2 wait instance-terminated --instance-ids $INSTANCE_ID
 
+# 2. Delete security group
+aws ec2 delete-security-group --group-id $SG_ID
 
-<br>
+# 3. Delete key pair from AWS (keep local .ppk file)
+aws ec2 delete-key-pair --key-name aws-ec2-keypair
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+# 4. Remove IAM role and profile
+aws iam remove-role-from-instance-profile `
+  --instance-profile-name ec2-ssm-profile --role-name ec2-ssm-role
+aws iam detach-role-policy `
+  --role-name ec2-ssm-role `
+  --policy-arn arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+aws iam delete-instance-profile --instance-profile-name ec2-ssm-profile
+aws iam delete-role --role-name ec2-ssm-role
 
-<br>
+# 5. Verify cleanup
+aws ec2 describe-instances --instance-ids $INSTANCE_ID `
+  --query "Reservations[0].Instances[0].State.Name" --output text
+# Expected: terminated
+```
 
-## Step 1: Create Key Pair and Security Group
-1. In the EC2 Console, create a new Key Pair (RSA, `.ppk` for PuTTY or `.pem` for OpenSSH).
-2. Create a Security Group in the Default VPC. Add inbound rules:
-   - HTTP (80) -> Source: Anywhere.
-   - SSH (22) -> Source: My IP.
-
-## Step 2: Create IAM Role for SSM
-1. In IAM, create a Role for the EC2 use case.
-2. Attach the `AmazonSSMManagedInstanceCore` policy.
-3. Name it `ec2-ssm-role`.
-
-## Step 3: Launch the EC2 Instance
-1. Launch Instance, select Amazon Linux 2023 AMI, `t2.micro`.
-2. Select the Key Pair and Security Group created in Step 1.
-3. Under Advanced Details, select the IAM instance profile `ec2-ssm-role`.
-4. Under User Data, paste the bash script (found in `scripts/userdata.sh`).
-5. Launch the instance.
-
-<br>
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-02-s3-static-website/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: S3 Static Website</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-04-s3-versioning/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: S3 Versioning</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+---
 

@@ -1,70 +1,46 @@
+# Architecture: AWS Account Setup & IAM Foundations
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">IAM Setup & Security</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Granular Architecture Details</text>
-  </svg>
-</div>
+This document outlines the foundational security architecture implemented for the AWS account.
 
+## Overview
 
+The architecture focuses on securing the AWS environment by applying IAM best practices, enforcing least-privilege access, and implementing proactive cost-monitoring controls.
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><i>(First Project)</i></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-02-s3-static-website/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: S3 Static Website</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Architecture Diagram
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#f8f9fa" rx="10"/>
+  <rect x="50" y="50" width="150" height="80" fill="#ffcccb" stroke="#d32f2f" stroke-width="2" rx="5"/>
+  <text x="125" y="90" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Root User</text>
+  <text x="125" y="110" font-family="Arial" font-size="12" text-anchor="middle">(Secured with MFA)</text>
+  <rect x="50" y="250" width="150" height="80" fill="#c8e6c9" stroke="#388e3c" stroke-width="2" rx="5"/>
+  <text x="125" y="290" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">IAM Admin User</text>
+  <text x="125" y="310" font-family="Arial" font-size="12" text-anchor="middle">(CLI & Console Access)</text>
+  <rect x="350" y="100" width="180" height="60" fill="#bbdefb" stroke="#1976d2" stroke-width="2" rx="5"/>
+  <text x="440" y="135" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">CloudWatch Alarm</text>
+  <rect x="350" y="220" width="180" height="60" fill="#ffe0b2" stroke="#f57c00" stroke-width="2" rx="5"/>
+  <text x="440" y="255" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">SNS Topic</text>
+  <rect x="350" y="320" width="180" height="40" fill="#e1bee7" stroke="#8e24aa" stroke-width="2" rx="5"/>
+  <text x="440" y="345" font-family="Arial" font-size="14" text-anchor="middle">Email Notification</text>
+  <path d="M 440 160 L 440 215" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 440 280 L 440 315" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+</svg>
 
-<br>
+## Component Details
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+1. **Root User**: The primary account owner. It is secured with Multi-Factor Authentication (MFA) and is not to be used for daily operations.
+2. **IAM Admin User**: A dedicated administrative user (`admin-yourname`) created with `AdministratorAccess`. This user accesses AWS via the Management Console and programmatically via AWS CLI v2.
+3. **CloudWatch Alarm**: Monitors estimated AWS charges and triggers when costs exceed a predefined threshold (e.g., $5).
+4. **SNS Topic**: Receives alerts from CloudWatch and broadcasts them to subscribed endpoints.
+5. **Email Notification**: Delivers the billing alert to the administrator's email, preventing unexpected cost overruns.
 
-<br>
+## Traffic & Workflow
 
-## IAM (Identity and Access Management)
-- **Root User:** The owner of the account. It is secured via a virtual MFA device (e.g., Google Authenticator).
-- **Admin User:** A standard IAM user with the `AdministratorAccess` managed policy attached. This user is used for all CLI and Console access.
-
-## CloudWatch & SNS (Billing Alerts)
-- **CloudWatch Alarm:** Monitors the `EstimatedCharges` metric in the `us-east-1` region (where billing metrics are generated).
-- **SNS Topic:** A Simple Notification Service topic that acts as a pub/sub channel. The CloudWatch alarm publishes to this topic, which then emails the subscribed address.
-
-<br>
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><i>(First Project)</i></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-02-s3-static-website/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: S3 Static Website</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-
+- The **IAM Admin User** is the primary actor, interacting securely with AWS resources.
+- If AWS usage generates costs exceeding the $5 threshold, **CloudWatch** triggers an alarm.
+- The alarm publishes a message to an **SNS Topic**, which immediately dispatches an **Email Notification** to the account owner.

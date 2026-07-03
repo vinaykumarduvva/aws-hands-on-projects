@@ -1,101 +1,158 @@
+# Project 7 — CloudWatch Alarms, SNS Notifications & Dashboards
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">CloudWatch & SNS Alerts</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Establish robust observability, dashboarding, and proactive alerting for cloud infrastructure.</text>
-  </svg>
-</div>
+![AWS](https://img.shields.io/badge/AWS-CloudWatch%20%2B%20SNS-orange?logo=amazonaws)
+![Level](https://img.shields.io/badge/Level-Beginner%20→%20Intermediate-blue)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![Free Tier](https://img.shields.io/badge/Cost-Free%20Tier%20Eligible-green)
 
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../project-06-rds-ec2/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Rds Ec2</b></a></td>
-      <td style="width: 33%; border: none;"><a href="README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Serverless Rest Api</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-
-
-<div align="center">
-  <img src="architecture/architecture.svg" alt="Project Architecture" width="800"/>
-</div>
+Build a complete AWS monitoring and alerting system — CloudWatch alarms for EC2 and RDS metrics, SNS email notifications, a custom dashboard, and log monitoring with metric filters. This is the observability foundation every cloud engineer needs.
 
 ---
 
-## 🌟 Expansive Overview
-> **Core Purpose:** Establish robust observability, dashboarding, and proactive alerting for cloud infrastructure.
+## Architecture Overview
 
-CloudWatch & SNS Alerts is designed to reflect enterprise-grade cloud engineering. This project moves beyond the console basics, demonstrating how AWS services are stitched together to form resilient, scalable, and highly available architectures.
+```
+EC2 Instance          RDS MySQL         Billing
+├── CPUUtilization    ├── CPUUtilization ├── EstimatedCharges
+├── NetworkIn/Out     ├── DBConnections  └── → SNS → Email
+├── StatusCheckFailed └── FreeStorage
+└── DiskReadOps             │
+         │                  │
+         ▼                  ▼
+┌──────────────────────────────────────┐
+│          CloudWatch Alarms           │
+│  EC2-CPU-High   RDS-CPU-High         │
+│  EC2-StatusFail RDS-Storage-Low      │
+│  Billing-Alert  App-Errors-High      │
+└──────────────────┬───────────────────┘
+                   │ ALARM state
+                   ▼
+┌──────────────────────────────────────┐
+│     SNS Topic: monitoring-alerts     │
+│     Subscriber: your@email.com       │
+└──────────────────┬───────────────────┘
+                   ▼
+         📧 Email Notification
 
-### 💼 Real-World Usage Scenarios
-Companies around the globe use this exact architectural pattern for:
-- **FinOps:** Alerting the finance team if daily AWS spend exceeds $1000.
-- **SRE/Ops:** Paging on-call engineers via PagerDuty (via SNS) when CPU hits 90%.
-- **Security Analytics:** Triggering alerts when CloudWatch Logs detect 'Failed SSH login' events.
-
----
-
-## ⚙️ Infrastructure Specifications
-
-<details>
-<summary><b>💡 Click to Expand Technical Specifications</b></summary>
-<br>
-
-| Component | Specification |
-|-----------|---------------|
-| **Metrics Monitored** | ** CPUUtilization, EstimatedCharges, StatusCheckFailed |
-| **Alarms** | ** 5+ custom CloudWatch Alarms (Target Tracking & Static) |
-| **Notification** | ** Amazon SNS Topic (Email protocol) |
-| **Dashboards** | ** Unified CloudWatch Dashboard (Line & Number widgets) |
-
-</details>
-
----
-
-## 📂 Project Structure & Performance
-
-To optimize your execution of this project, adhere strictly to the following folder topology. 
-
-| Directory | Core Function |
-|-----------|---------------|
-| `👉 docs/` | Alarm configurations and metric definitions. |
-| `👉 scripts/` | Scripts to trigger simulated CPU load and test alarms. |
+┌──────────────────────────────────────┐
+│   Dashboard: AWS-Bootcamp-Dashboard  │
+│  EC2 CPU · Network · RDS · Billing   │
+└──────────────────────────────────────┘
+```
 
 ---
 
-## 📚 Granular Documentation Suite
-We have broken down the technical manuals into granular, highly detailed Markdown files. Start with the Project Overview and proceed sequentially:
+## AWS Services Used
 
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
-- 🧹 [Cleanup Guide](docs/cleanup-guide.md)
+| Service | Role |
+|---|---|
+| CloudWatch | Metrics, alarms, dashboards, logs |
+| SNS | Routes alarm notifications to email |
+| EC2 | Source of compute metrics |
+| RDS | Source of database metrics |
+| CloudWatch Logs | Log storage and metric filters |
+| IAM | CloudWatch agent role for EC2 |
 
 ---
-*✨ Modernized & Enhanced for the AWS Hands-On Portfolio ✨*
+
+## Alarms Built
+
+| Alarm | Metric | Threshold | Service |
+|---|---|---|---|
+| EC2-CPU-High | CPUUtilization | > 70% | EC2 |
+| EC2-StatusCheck-Failed | StatusCheckFailed | ≥ 1 | EC2 |
+| EC2-NetworkIn-High | NetworkIn | > 5 MB/5min | EC2 |
+| RDS-CPU-High | CPUUtilization | > 80% | RDS |
+| RDS-Storage-Low | FreeStorageSpace | < 2 GB | RDS |
+| RDS-Connections-High | DatabaseConnections | > 50 | RDS |
+| Billing-Alert-5USD | EstimatedCharges | > $5 | Billing |
+| App-Errors-High | ApplicationErrors | > 5/5min | Custom |
+
+---
+
+## Free Tier Status
+
+| Resource | Free Tier | Usage |
+|---|---|---|
+| CloudWatch metrics | 10 custom metrics free | ~1 custom |
+| CloudWatch alarms | 10 free | 8 created |
+| CloudWatch dashboards | 3 free | 1 created |
+| CloudWatch Logs | 5 GB free | Minimal |
+| SNS emails | 1,000/month free | <10 |
+
+**Cost estimate: $0.00** — entirely within free tier.
+
+---
+
+## Project Structure
+
+```
+project-07-cloudwatch-monitoring/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── docs/
+│   ├── project-overview.md
+│   ├── architecture.md
+│   ├── monitoring-strategy.md
+│   ├── cloudwatch-alarms.md
+│   ├── dashboards.md
+│   ├── logs-and-metric-filters.md
+│   ├── troubleshooting.md
+│   └── cleanup-guide.md
+├── scripts/
+│   ├── 01-sns-setup.ps1
+│   ├── 02-launch-monitoring-ec2.ps1
+│   ├── 03-create-ec2-alarms.ps1
+│   ├── 04-create-rds-alarms.ps1
+│   ├── 05-create-billing-alarm.ps1
+│   ├── 06-generate-cpu-load.sh
+│   ├── 07-create-dashboard.ps1
+│   ├── 08-create-log-group.ps1
+│   ├── 09-create-metric-filter.ps1
+│   ├── 10-test-log-events.ps1
+│   ├── 11-verify-alarms.ps1
+│   └── 12-cleanup.ps1
+├── architecture/
+│   ├── monitoring-architecture.svg
+│   ├── alarm-flow.svg
+│   ├── dashboard-layout.svg
+│   └── log-monitoring-flow.svg
+└── images/
+    └── (25 console screenshots)
+```
+
+---
+
+## Execution Order
+
+| Script | Part | Task |
+|---|---|---|
+| `01-sns-setup.ps1` | 1 | Create SNS topic + email subscription |
+| `02-launch-monitoring-ec2.ps1` | 2 | Launch EC2 for metrics |
+| `03-create-ec2-alarms.ps1` | 3 | EC2 CPU, status, network alarms |
+| `04-create-rds-alarms.ps1` | 4 | RDS CPU, storage, connections alarms |
+| `05-create-billing-alarm.ps1` | 5 | Billing threshold alarm |
+| `06-generate-cpu-load.sh` | 6 | SSH into EC2 and stress CPU |
+| `07-create-dashboard.ps1` | 7 | Build CloudWatch dashboard |
+| `08-create-log-group.ps1` | 8 | Create log group with retention |
+| `09-create-metric-filter.ps1` | 9 | ERROR log metric filter + alarm |
+| `10-test-log-events.ps1` | 8 | Push test log events |
+| `11-verify-alarms.ps1` | 9 | List all alarms and states |
+| `12-cleanup.ps1` | 10 | Full teardown |
+
+---
+
+## Key Concepts Demonstrated
+
+**Alarm states**: Every CloudWatch alarm cycles through `INSUFFICIENT_DATA → OK → ALARM`. Understanding when and why each state occurs is essential for production operations.
+
+**Evaluation periods**: The EC2-CPU-High alarm requires 2 consecutive 5-minute periods above 70% before triggering. This prevents transient spikes from generating false alerts — a core production alarm design principle.
+
+**Metric filters**: CloudWatch Logs can scan log lines for patterns and increment a custom metric. This bridges application-level events (ERROR logs) with the same alarm infrastructure used for infrastructure metrics.
+
+**SNS decoupling**: Alarms do not send emails directly. They publish to an SNS topic. This means one alarm can notify email, SMS, PagerDuty, Lambda, and SQS simultaneously — by adding subscribers.
+
+---
+
+*Part of the AWS Cloud Projects portfolio — hands-on infrastructure built and documented end to end.*

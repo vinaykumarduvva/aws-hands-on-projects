@@ -1,77 +1,247 @@
+# Architecture — Project 9 CI/CD Pipeline
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">CI/CD Pipeline (CodePipeline)</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Granular Architecture Details</text>
-  </svg>
-</div>
+## High-Level Architecture
 
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                    Developer Workstation                        │
+│                    Windows PC — ap-south-1                      │
+│                                                                 │
+│   git push origin main                                          │
+│   (index.html, buildspec.yml, appspec.yml, scripts/)           │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ HTTPS push
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              CodeCommit — my-web-app                            │
+│              Region: ap-south-1                                 │
+│              Branch: main                                       │
+│              Trigger: CloudWatch Events rule                    │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ EventBridge trigger
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     CodePipeline                                │
+│                     my-web-app-pipeline                         │
+│                                                                 │
+│  ┌─────────────┐    ┌─────────────┐    ┌──────────────────┐    │
+│  │   Source    │───▶│    Build    │───▶│     Deploy       │    │
+│  │             │    │             │    │                  │    │
+│  │ CodeCommit  │    │  CodeBuild  │    │   CodeDeploy     │    │
+│  │ SourceOutput│    │ BuildOutput │    │   production     │    │
+│  └─────────────┘    └─────────────┘    └──────────────────┘    │
+│          │                 │                    │               │
+│          ▼                 ▼                    ▼               │
+│    S3 artifact       S3 artifact          EC2 Instance          │
+│    (source zip)      (built zip)          (deployed app)        │
+└─────────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              EC2 Instance — cicd-deploy-server                  │
+│              ap-south-1 · t2.micro · Amazon Linux 2023          │
+│              Tag: Environment=production                        │
+│                                                                 │
+│              CodeDeploy Agent (running)                         │
+│              Apache Web Server (httpd)                          │
+│              Application: /var/www/html/                        │
+│                                                                 │
+│              Public IP → http://YOUR_IP → live app ✅           │
+└─────────────────────────────────────────────────────────────────┘
+```
 
+---
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Serverless Rest Api</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Auto Scaling Alb</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Component Architecture
 
+### Source Stage — CodeCommit
 
-<br>
+```text
+CodeCommit Repository: my-web-app
+├── main branch (production)
+│   ├── index.html          ← Application source
+│   ├── buildspec.yml       ← Build instructions
+│   ├── appspec.yml         ← Deploy instructions
+│   └── scripts/            ← Lifecycle hook scripts
+│
+└── CloudWatch Events Rule
+    └── Trigger: aws.codecommit referenceUpdated on main
+    └── Target: CodePipeline execution start
+```
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+### Build Stage — CodeBuild
 
-<br>
+```text
+CodeBuild Project: my-web-app-build
+├── Environment: aws/codebuild/standard:7.0 (Linux)
+├── Compute: BUILD_GENERAL1_SMALL (3 GB RAM, 2 vCPU)
+├── Source: CodeCommit my-web-app (main)
+├── Buildspec: buildspec.yml (in repo root)
+│
+├── Phase: install    → set up Python 3.11 runtime
+├── Phase: pre_build  → validate HTML, check files exist
+├── Phase: build      → copy to dist/, generate build-info.txt
+├── Phase: post_build → confirm artifact ready
+│
+├── Artifacts:
+│   └── S3: codepipeline-artifacts-ACCOUNT-ap-south-1/
+│       └── my-web-app-build/BuildOutput.zip
+│
+└── Logs: /aws/codebuild/my-web-app-build (CloudWatch)
+```
 
-## Source (AWS CodeCommit)
-- A managed, private Git repository.
-- Contains application code, `buildspec.yml` (for CodeBuild), and `appspec.yml` (for CodeDeploy).
+### Deploy Stage — CodeDeploy
 
-## Build (AWS CodeBuild)
-- A fully managed build server.
-- Spins up a container, pulls the code, executes the commands in `buildspec.yml` (e.g. compiling, testing), and outputs a `.zip` artifact to S3.
+```text
+CodeDeploy Application: my-web-app
+└── Deployment Group: production
+    ├── EC2 tag filter: Environment=production
+    ├── Deployment config: CodeDeployDefault.AllAtOnce
+    ├── Auto-rollback: enabled on DEPLOYMENT_FAILURE
+    │
+    └── Lifecycle Hooks (appspec.yml):
+        ├── BeforeInstall    → before_install.sh
+        ├── AfterInstall     → after_install.sh
+        ├── ApplicationStart → start_application.sh
+        └── ValidateService  → validate_service.sh
+```
 
-## Deploy (AWS CodeDeploy)
-- The CodeDeploy Agent installed on the target EC2 instance pulls the artifact from S3.
-- Executes lifecycle hooks defined in `appspec.yml` (e.g. stopping the web server, copying files, starting the web server).
+---
 
-## Orchestration (AWS CodePipeline)
-- The overarching workflow that links Source -> Build -> Deploy, passing the S3 artifacts between stages and triggering automatically on Git pushes.
+## IAM Role Architecture
 
-<br>
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                    IAM Roles                                │
+│                                                             │
+│  codebuild-service-role                                     │
+│  ├── Trust: codebuild.amazonaws.com                         │
+│  ├── AWSCodeBuildAdminAccess                                │
+│  ├── CloudWatchLogsFullAccess                               │
+│  └── AmazonS3FullAccess                                     │
+│                                                             │
+│  codedeploy-service-role                                    │
+│  ├── Trust: codedeploy.amazonaws.com                        │
+│  └── AWSCodeDeployRole                                      │
+│                                                             │
+│  codepipeline-service-role                                  │
+│  ├── Trust: codepipeline.amazonaws.com                      │
+│  ├── AWSCodePipeline_FullAccess                             │
+│  ├── AWSCodeCommitFullAccess                                │
+│  ├── AWSCodeBuildAdminAccess                                │
+│  ├── AWSCodeDeployFullAccess                                │
+│  └── AmazonS3FullAccess                                     │
+│                                                             │
+│  ec2-codedeploy-role                                        │
+│  ├── Trust: ec2.amazonaws.com                               │
+│  ├── AmazonSSMManagedInstanceCore                           │
+│  └── AmazonS3ReadOnlyAccess                                 │
+└─────────────────────────────────────────────────────────────┘
+```
 
+---
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Serverless Rest Api</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Auto Scaling Alb</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Network Architecture
 
+```text
+VPC: Default VPC (ap-south-1)
+│
+└── Public Subnet (ap-south-1a)
+    │
+    └── EC2: cicd-deploy-server
+        ├── Security Group: cicd-deploy-sg
+        │   ├── Inbound: SSH :22 from MY_IP/32
+        │   └── Inbound: HTTP :80 from 0.0.0.0/0
+        │
+        ├── IAM Role: ec2-codedeploy-role
+        │   (allows S3 read + SSM access)
+        │
+        └── CodeDeploy Agent
+            └── Polls CodeDeploy service for deployments
+            └── Pulls artifact from S3
+            └── Executes lifecycle hooks
+```
+
+---
+
+## S3 Artifact Flow
+
+```text
+S3 Bucket: codepipeline-artifacts-ACCOUNT-ap-south-1
+│
+├── Source artifacts (CodePipeline puts here)
+│   └── my-web-app-pipeline/SourceOutput/
+│       └── source.zip (index.html + buildspec + appspec + scripts)
+│
+└── Build artifacts (CodeBuild puts here)
+    └── my-web-app-pipeline/BuildOutput/
+        └── BuildOutput.zip
+            ├── index.html
+            ├── appspec.yml
+            ├── build-info.txt
+            └── scripts/
+                ├── before_install.sh
+                ├── after_install.sh
+                ├── start_application.sh
+                └── validate_service.sh
+```
+
+---
+
+## Data Flow Summary
+
+```text
+1. Developer edits index.html locally (Version 1.0 → 2.0)
+
+2. git push origin main
+   └── CodeCommit stores new commit
+
+3. CloudWatch Events detects push
+   └── Triggers CodePipeline execution
+
+4. Source Stage
+   └── CodePipeline fetches source from CodeCommit
+   └── Zips and stores in S3 as SourceOutput
+
+5. Build Stage
+   └── CodeBuild pulls SourceOutput from S3
+   └── Runs buildspec.yml phases
+   └── Validates HTML, copies to dist/
+   └── Zips dist/ and stores as BuildOutput in S3
+
+6. Deploy Stage
+   └── CodeDeploy pulls BuildOutput from S3
+   └── Finds EC2 instances tagged Environment=production
+   └── CodeDeploy agent on EC2 downloads artifact
+   └── Runs lifecycle hooks from appspec.yml
+   └── Validates HTTP 200 response
+
+7. Done — Version 2.0 live at http://EC2_PUBLIC_IP
+   Total time: ~3-4 minutes from git push
+```
+
+---
+
+## Monitoring and Observability
+
+| What to monitor | Where | Metric/Log |
+| --- | --- | --- |
+| Pipeline executions | CodePipeline console | Stage status, duration |
+| Build logs | CloudWatch Logs | /aws/codebuild/my-web-app-build |
+| Deploy events | CodeDeploy console | Deployment history, hook logs |
+| EC2 agent status | EC2 SSH / SSM | `systemctl status codedeploy-agent` |
+| App availability | Browser / curl | HTTP 200 from EC2 public IP |
+
+---
+
+## Deployment Config Options
+
+| Config | Behavior | Use Case |
+| --- | --- | --- |
+| AllAtOnce | Deploy to all instances simultaneously | Dev/test, single instance |
+| HalfAtATime | Deploy to 50% then 50% | Rolling update |
+| OneAtATime | Deploy one instance at a time | Zero downtime (large fleet) |
+| Custom | You define percentage/count | Fine-grained control |
+
+This project uses `AllAtOnce` since we have a single EC2 instance.
+Production fleets typically use `HalfAtATime` or `OneAtATime`.

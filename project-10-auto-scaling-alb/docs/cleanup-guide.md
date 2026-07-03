@@ -1,69 +1,84 @@
+# 🧹 Project 10 Cleanup Guide
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Auto Scaling & ALB</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Infrastructure Cleanup Guide</text>
-  </svg>
-</div>
+To avoid incurring any unexpected charges on your AWS account, it is important to delete all the resources provisioned during this project. Follow these steps in order to cleanly tear down the infrastructure.
 
+> [!WARNING]
+> **ASG Warning**: The Auto Scaling Group will continuously re-launch instances if you terminate them manually without first deleting or scaling down the ASG. Always set desired capacity to 0 or delete the ASG before terminating instances.
 
+## 1. Scale ASG to Zero and Delete
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-09-cicd-pipeline/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Cicd Pipeline</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-11-infrastructure-as-code/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Infrastructure As Code</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+- [ ] Go to the **EC2 Console** > **Auto Scaling Groups**.
+- [ ] Select **`web-server-asg`**.
+- [ ] Click **Edit** and set Min, Max, and Desired to **0**.
+- [ ] Wait for all instances to terminate (~1 minute).
+- [ ] Select the ASG again and click **Delete**.
 
+Alternatively via CLI:
+```powershell
+aws autoscaling update-auto-scaling-group `
+    --auto-scaling-group-name web-server-asg `
+    --min-size 0 --max-size 0 --desired-capacity 0
 
-<br>
+Start-Sleep -Seconds 60
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+aws autoscaling delete-auto-scaling-group `
+    --auto-scaling-group-name web-server-asg `
+    --force-delete
+```
 
-<br>
+## 2. Delete the Application Load Balancer
 
-To avoid ongoing EC2 charges, you must delete the resources. Because the ASG is designed to replace terminated instances, **you cannot just terminate the EC2 instances** (the ASG will just launch more). You must delete the ASG itself.
+- [ ] Go to the **EC2 Console** > **Load Balancers**.
+- [ ] Select **`my-alb`**.
+- [ ] Click **Actions** > **Delete load balancer**.
+- [ ] Type `confirm` and click **Delete**.
+- [ ] Wait ~30 seconds for the ALB to fully deregister.
 
-1. **Delete Auto Scaling Group:** Navigate to ASG, select your group, and click Delete. Wait for it to spin down the instances.
-2. **Delete Application Load Balancer:** Navigate to Load Balancers and delete the ALB.
-3. **Delete Target Group:** Navigate to Target Groups and delete the group.
-4. **Delete Launch Template:** Navigate to Launch Templates and delete it.
+## 3. Delete the Target Group
 
-<br>
+- [ ] Go to the **EC2 Console** > **Target Groups**.
+- [ ] Select **`web-server-tg`**.
+- [ ] Click **Actions** > **Delete**.
+- [ ] Confirm deletion.
 
+> [!NOTE]
+> If deletion fails with "Target group is currently in use", wait for the ALB to finish deleting and try again.
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-09-cicd-pipeline/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Cicd Pipeline</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-11-infrastructure-as-code/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Infrastructure As Code</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## 4. Delete the Launch Template
 
+- [ ] Go to the **EC2 Console** > **Launch Templates**.
+- [ ] Select **`web-server-lt`**.
+- [ ] Click **Actions** > **Delete template**.
+- [ ] Type `Delete` and confirm.
+
+## 5. Delete Security Groups
+
+- [ ] Go to the **EC2 Console** > **Security Groups**.
+- [ ] Select **`asg-ec2-sg`** and click **Actions** > **Delete security groups**.
+- [ ] Select **`alb-sg`** and click **Actions** > **Delete security groups**.
+
+> [!NOTE]
+> Delete `asg-ec2-sg` first (it references `alb-sg`). If deletion fails, wait 60 seconds for ENIs to release and retry.
+
+## 6. Verify All Instances Are Terminated
+
+- [ ] Go to the **EC2 Console** > **Instances**.
+- [ ] Filter by tag `Project: project-10-asg-alb`.
+- [ ] Verify all instances show state **Terminated**.
+
+---
+
+## Deletion Order Summary
+
+```text
+1. ASG      → stops launching new instances
+2. ALB      → releases ENIs and public DNS
+3. Target Group → can only delete after ALB is gone
+4. Launch Template → safe to delete anytime after ASG
+5. Security Groups → delete EC2 SG first, then ALB SG
+```
+
+---
+
+**🎉 Cleanup Complete!**
+Your AWS environment is now clean from Project 10 resources and you will not incur further charges related to this project.

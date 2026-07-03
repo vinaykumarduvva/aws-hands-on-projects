@@ -1,69 +1,131 @@
+# Cleanup Guide — Serverless REST API
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Serverless REST API</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Infrastructure Cleanup Guide</text>
-  </svg>
-</div>
+## Why Cleanup Matters
 
+All three core services (Lambda, API Gateway, DynamoDB) are within permanent free tier for typical usage. However:
+- Leaving resources running is a habit risk — future projects may compound
+- DynamoDB items persist until deleted
+- Lambda versions accumulate storage if you deploy many updates
+- API Gateway stages stay deployed and accessible
 
+Script: `scripts/09-cleanup.ps1`
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-07-cloudwatch-monitoring/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Cloudwatch Monitoring</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-09-cicd-pipeline/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Cicd Pipeline</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+---
 
+## Cleanup Sequence
 
-<br>
+No hard dependency order (unlike EC2/VPC projects), but this sequence is clean:
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+### Step 1 — Delete API Gateway
 
-<br>
+```powershell
+aws apigateway delete-rest-api --rest-api-id $API_ID
+Write-Host "API Gateway deleted"
+```
 
-To ensure you incur absolutely zero charges:
+This immediately makes all endpoints return 404. The Lambda function and DynamoDB table remain untouched.
 
-1. **Delete API Gateway:** Navigate to API Gateway, select your API, and click Delete.
-2. **Delete Lambda Function:** Navigate to Lambda, select your function, and click Delete.
-3. **Delete DynamoDB Table:** Navigate to DynamoDB, select the `users` table, and click Delete.
-4. **Delete IAM Role:** Navigate to IAM > Roles and delete the execution role you created for Lambda.
+### Step 2 — Delete Lambda Function
 
-<br>
+```powershell
+aws lambda delete-function --function-name users-api
+Write-Host "Lambda deleted"
+```
 
+Deletes the function and all its versions. Does not delete the log group (retained for debugging).
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-07-cloudwatch-monitoring/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Cloudwatch Monitoring</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-09-cicd-pipeline/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Cicd Pipeline</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+### Step 3 — Delete DynamoDB Table
 
+```powershell
+aws dynamodb delete-table --table-name users
+Write-Host "DynamoDB table deleted"
+```
+
+Deletes all items. Cannot be undone — all user data is gone. If you want to preserve data, export first:
+```powershell
+aws dynamodb scan --table-name users > users-backup.json
+```
+
+### Step 4 — Delete IAM Role
+
+```powershell
+# Must remove inline policy and detach managed policy before deleting role
+
+aws iam delete-role-policy `
+  --role-name lambda-users-api-role `
+  --policy-name dynamodb-users-access
+
+aws iam detach-role-policy `
+  --role-name lambda-users-api-role `
+  --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+aws iam delete-role --role-name lambda-users-api-role
+Write-Host "IAM role deleted"
+```
+
+IAM roles cannot be deleted while they have attached policies — both must be removed first.
+
+### Step 5 — Delete CloudWatch Log Group
+
+```powershell
+aws logs delete-log-group `
+  --log-group-name "/aws/lambda/users-api"
+Write-Host "Log group deleted"
+```
+
+Optional — logs are retained automatically after Lambda deletion but accrue minimal storage cost.
+
+---
+
+## Verification
+
+```powershell
+# Lambda gone
+aws lambda get-function --function-name users-api 2>&1
+# Expected: ResourceNotFoundException
+
+# API gone
+aws apigateway get-rest-api --rest-api-id $API_ID 2>&1
+# Expected: NotFoundException
+
+# DynamoDB gone
+aws dynamodb describe-table --table-name users 2>&1
+# Expected: ResourceNotFoundException
+
+# IAM role gone
+aws iam get-role --role-name lambda-users-api-role 2>&1
+# Expected: NoSuchEntityException
+```
+
+---
+
+## Re-fetch IDs Before Cleanup
+
+If variables were lost:
+
+```powershell
+$LAMBDA_ARN = aws lambda get-function `
+  --function-name users-api `
+  --query "Configuration.FunctionArn" --output text
+
+$API_ID = aws apigateway get-rest-apis `
+  --query "items[?name=='users-api'].id | [0]" `
+  --output text
+
+Write-Host "Lambda ARN: $LAMBDA_ARN"
+Write-Host "API ID:     $API_ID"
+```
+
+---
+
+## Cost Check
+
+After cleanup, check **AWS Billing → Cost Explorer** in 24 hours.
+
+Expected charges:
+- Lambda: $0.00 (well within 1M free requests)
+- API Gateway: $0.00 (within 1M free calls / 12 months)
+- DynamoDB: $0.00 (on-demand, minimal requests, within free tier)
+- CloudWatch Logs: $0.00 (minimal ingestion)
+
+Total: **$0.00**

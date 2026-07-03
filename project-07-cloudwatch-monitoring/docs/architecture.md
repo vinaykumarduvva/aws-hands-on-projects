@@ -1,72 +1,160 @@
+# Architecture — CloudWatch Monitoring Stack
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">CloudWatch & SNS Alerts</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Granular Architecture Details</text>
-  </svg>
-</div>
+## Full System View
 
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      AWS Account                                │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │                   Metric Sources                         │   │
+│  │                                                          │   │
+│  │  ┌────────────────┐   ┌────────────────┐   ┌─────────┐  │   │
+│  │  │   EC2 Instance │   │   RDS MySQL    │   │Billing  │  │   │
+│  │  │  monitoring-   │   │ myapp-database │   │ Service │  │   │
+│  │  │  test          │   │                │   │         │  │   │
+│  │  │                │   │                │   │         │  │   │
+│  │  │ CPUUtilization │   │ CPUUtilization │   │Estimated│  │   │
+│  │  │ NetworkIn/Out  │   │ DBConnections  │   │Charges  │  │   │
+│  │  │ StatusCheck    │   │ FreeStorage    │   │         │  │   │
+│  │  └───────┬────────┘   └───────┬────────┘   └────┬────┘  │   │
+│  └──────────│────────────────────│────────────────-│───────┘   │
+│             │    (auto-published) │                 │           │
+│             ▼                    ▼                 ▼           │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │              CloudWatch Metrics Store                    │   │
+│  │  namespace: AWS/EC2  AWS/RDS  AWS/Billing  CustomMetrics │   │
+│  └──────────────────────────┬───────────────────────────────┘   │
+│                             │                                   │
+│          ┌──────────────────┼──────────────────────┐           │
+│          │                  │                      │           │
+│          ▼                  ▼                      ▼           │
+│  ┌───────────────┐  ┌───────────────┐  ┌──────────────────┐   │
+│  │CloudWatch     │  │CloudWatch     │  │CloudWatch Logs   │   │
+│  │   Alarms (8)  │  │   Dashboard   │  │                  │   │
+│  │               │  │               │  │ /aws/ec2/        │   │
+│  │ EC2-CPU-High  │  │ AWS-Bootcamp- │  │ monitoring-test  │   │
+│  │ EC2-Status-   │  │ Dashboard     │  │                  │   │
+│  │ EC2-NetworkIn │  │               │  │ Metric Filter:   │   │
+│  │ RDS-CPU-High  │  │ EC2 CPU graph │  │ "ERROR" → count  │   │
+│  │ RDS-Storage   │  │ EC2 Network   │  │       │          │   │
+│  │ RDS-Connx     │  │ RDS CPU       │  │       ▼          │   │
+│  │ Billing-$5    │  │ RDS Connx     │  │ CustomMetrics/   │   │
+│  │ App-Errors    │  │ Billing $     │  │ ApplicationErrors│   │
+│  └───────┬───────┘  └───────────────┘  └──────────────────┘   │
+│          │                                                      │
+│          │ state = ALARM                                        │
+│          ▼                                                      │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │            SNS Topic: monitoring-alerts                   │  │
+│  │            ARN: arn:aws:sns:us-east-1:XXXX:monitoring-..  │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│          │                                                      │
+└──────────│──────────────────────────────────────────────────────┘
+           │
+           ▼ (outside AWS)
+  📧 vinay@example.com
+     (confirmed subscription)
+```
 
+---
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-06-rds-ec2/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Rds Ec2</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Serverless Rest Api</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Alarm State Machine
 
+Every alarm cycles through these states:
 
-<br>
+```
+                 ┌──────────────────────────────────────────┐
+                 │                                          │
+   Launch ──→ INSUFFICIENT_DATA                            │
+                 │                                          │
+                 │  first data points arrive                │
+                 ▼                                          │
+               ┌───┐                                        │
+               │ OK│ ←─────────────────────────────────────┘
+               └─┬─┘       metric returns below threshold
+                 │
+                 │  N consecutive periods above threshold
+                 ▼
+             ┌───────┐
+             │ ALARM │ ──→ publishes to SNS ──→ email sent
+             └───────┘
+```
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+Key rules:
+- Alarm does NOT fire on the first breach — it waits for N consecutive evaluation periods
+- OK transition also triggers SNS if `ok-actions` is set (recovery notification)
+- `INSUFFICIENT_DATA` occurs when an instance is stopped or the metric stops publishing
 
-<br>
+---
 
-## Amazon CloudWatch
-- **Metrics:** Collects default metrics at 5-minute intervals (or 1-minute with detailed monitoring).
-- **Alarms:** Configured to watch metrics like `CPUUtilization`, `DatabaseConnections`, and `EstimatedCharges`. They transition between `OK`, `ALARM`, and `INSUFFICIENT_DATA`.
-- **Dashboards:** A single pane of glass visualizing the health of all monitored resources using line graphs and number widgets.
+## SNS Fan-Out Pattern
 
-## Amazon SNS (Simple Notification Service)
-- A Pub/Sub messaging service.
-- **Topic:** A logical access point that CloudWatch Alarms publish to.
-- **Subscription:** An email address subscribed to the topic. When a message hits the topic, AWS automatically forwards it via email.
+```
+CloudWatch Alarm (EC2-CPU-High)
+          │
+          │ publishes JSON message
+          ▼
+SNS Topic: monitoring-alerts
+          │
+    ┌─────┼──────┬─────────────────┐
+    │     │      │                 │
+    ▼     ▼      ▼                 ▼
+ Email  Email  Lambda           SQS Queue
+(you)  (team) (auto-remediate) (audit log)
+              [future]         [future]
+```
 
-<br>
+In this project only the email subscriber is active. The architecture supports adding more without modifying alarms.
 
+---
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-06-rds-ec2/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Rds Ec2</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Serverless Rest Api</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Log → Metric → Alarm Pipeline
 
+```
+Application on EC2
+  │
+  │ writes logs to /var/log/app.log
+  ▼
+CloudWatch Logs Agent (future: unified agent)
+  │
+  │ ingests log lines to:
+  ▼
+Log Group: /aws/ec2/monitoring-test
+  │
+  │ Metric Filter: pattern = "ERROR"
+  │ on match: increment CustomMetrics/ApplicationErrors by 1
+  ▼
+CloudWatch Metric: CustomMetrics/ApplicationErrors
+  │
+  │ Alarm: App-Errors-High
+  │ threshold: Sum > 5 in one 5-minute period
+  ▼
+SNS Topic → Email notification
+```
+
+This pipeline converts unstructured log text into structured operational signals that feed the same alarm infrastructure as hardware metrics.
+
+---
+
+## Resource Inventory
+
+| Resource | Name/ID | Notes |
+|---|---|---|
+| SNS Topic | monitoring-alerts | Standard type |
+| SNS Subscription | your-email | Must be confirmed |
+| EC2 Instance | monitoring-test | t2.micro, default VPC |
+| Security Group | monitoring-test-sg | SSH from your IP |
+| CloudWatch Dashboard | AWS-Bootcamp-Dashboard | 5–6 widgets |
+| Log Group | /aws/ec2/monitoring-test | 7-day retention |
+| Log Stream | app-server-1 | Test events |
+| Metric Filter | ErrorCount | Pattern: "ERROR" |
+| **Alarms** | | |
+| EC2-CPU-High | CPUUtilization > 70% | 2 × 5 min |
+| EC2-StatusCheck-Failed | StatusCheckFailed ≥ 1 | 2 × 1 min |
+| EC2-NetworkIn-High | NetworkIn > 5MB/5min | 1 × 5 min |
+| RDS-CPU-High | CPUUtilization > 80% | 2 × 5 min |
+| RDS-Storage-Low | FreeStorageSpace < 2GB | 1 × 5 min |
+| RDS-Connections-High | DatabaseConnections > 50 | 1 × 5 min |
+| Billing-Alert-5USD | EstimatedCharges > $5 | 1 × 1 day |
+| App-Errors-High | ApplicationErrors > 5 | 1 × 5 min |

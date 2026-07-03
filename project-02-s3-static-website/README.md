@@ -1,102 +1,54 @@
+# Project 2 — Static Website on S3 + CloudFront
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">S3 Static Website</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Deploy an infinitely scalable, low-cost static web application without managing servers.</text>
-  </svg>
-</div>
+## Overview
+Hosted a static portfolio website on Amazon S3 with CloudFront as a global CDN,
+enabling HTTPS delivery from 400+ edge locations worldwide at near-zero cost.
 
+## Architecture
+```
+Browser → CloudFront (HTTPS, CDN) → S3 Bucket (origin, HTTP)
+```
 
+## Services Used
+- Amazon S3 — static file storage and website hosting
+- Amazon CloudFront — CDN, SSL termination, caching
+- AWS CLI v2 — file sync and cache invalidation
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../project-01-iam-setup/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Iam Setup</b></a></td>
-      <td style="width: 33%; border: none;"><a href="README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../project-03-Launch-EC2-Connect-via-SSH/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Launch Ec2 Connect Via Ssh</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Live URL
+S3 static website: https://aws-sample-webiste-2026.s3.ap-south-1.amazonaws.com/index.html
 
+CloudFront: https://d2qfvpm2acd8sv.cloudfront.net/
 
-<div align="center">
-  <img src="architecture/architecture.svg" alt="Project Architecture" width="800"/>
-</div>
+## Setup Steps
+1. Create S3 bucket, disable block public access
+2. Enable static website hosting (index.html / error.html)
+3. Apply public read bucket policy
+4. Upload files: `aws s3 sync ./website/ s3://BUCKET/`
+5. Create CloudFront distribution pointing to S3 website endpoint
+6. Set viewer protocol to redirect HTTP → HTTPS
+7. Test HTTPS URL, then invalidate cache after updates
 
----
+## Key Commands
+```powershell
+# Upload files
+aws s3 sync .\website\ s3://YOUR-BUCKET/ --region us-east-1
 
-## 🌟 Expansive Overview
-> **Core Purpose:** Deploy an infinitely scalable, low-cost static web application without managing servers.
+# Invalidate cache
+aws cloudfront create-invalidation --distribution-id YOUR_ID --paths "/*"
 
-S3 Static Website is designed to reflect enterprise-grade cloud engineering. This project moves beyond the console basics, demonstrating how AWS services are stitched together to form resilient, scalable, and highly available architectures.
+# Check files in bucket
+aws s3 ls s3://YOUR-BUCKET/
+```
 
-### 💼 Real-World Usage Scenarios
-Companies around the globe use this exact architectural pattern for:
-- **Marketing Sites:** Hosting high-traffic landing pages securely.
-- **Documentation:** Serving static internal wikis (like MkDocs or Docusaurus).
-- **Frontend Hosting:** Hosting React/Angular SPAs backed by API Gateway.
+## Cost Estimate
+$0.00 — S3 and CloudFront both within Free Tier limits for this project.
 
----
+## Cleanup
+1. Disable and delete CloudFront distribution
+2. `aws s3 rm s3://YOUR-BUCKET --recursive`
+3. `aws s3api delete-bucket --bucket YOUR-BUCKET --region us-east-1`
 
-## ⚙️ Infrastructure Specifications
-
-<details>
-<summary><b>💡 Click to Expand Technical Specifications</b></summary>
-<br>
-
-| Component | Specification |
-|-----------|---------------|
-| **Storage Service** | ** Amazon S3 Standard |
-| **Access** | ** Public Read via Bucket Policy |
-| **Routing** | ** Index Document (index.html), Error Document (error.html) |
-| **Endpoint** | ** `<bucket-name>.s3-website-<region>.amazonaws.com` |
-
-</details>
-
----
-
-## 📂 Project Structure & Performance
-
-To optimize your execution of this project, adhere strictly to the following folder topology. 
-
-| Directory | Core Function |
-|-----------|---------------|
-| `👉 website/` | Contains HTML, CSS, and JS static assets. |
-| `👉 docs/` | Deployment and troubleshooting documentation. |
-| `👉 scripts/` | Automation scripts for bucket creation and sync. |
-
----
-
-## 📚 Granular Documentation Suite
-We have broken down the technical manuals into granular, highly detailed Markdown files. Start with the Project Overview and proceed sequentially:
-
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
-- 🧹 [Cleanup Guide](docs/cleanup-guide.md)
-
----
-*✨ Modernized & Enhanced for the AWS Hands-On Portfolio ✨*
+## Next Steps
+- Add a custom domain with Route 53
+- Add a contact form using API Gateway + Lambda (Project 8)
+- Automate deploys with CodePipeline (Project 9)

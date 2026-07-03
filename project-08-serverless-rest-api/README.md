@@ -1,102 +1,131 @@
+# Project 8 — Serverless REST API: Lambda + API Gateway + DynamoDB
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Serverless REST API</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Build highly scalable, zero-maintenance backend systems using modern serverless paradigms.</text>
-  </svg>
-</div>
+![AWS](https://img.shields.io/badge/AWS-Lambda%20%2B%20API%20Gateway%20%2B%20DynamoDB-orange?logo=amazonaws)
+![Level](https://img.shields.io/badge/Level-Intermediate-blue)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![Free Tier](https://img.shields.io/badge/Cost-Free%20Tier%20Forever-green)
 
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../project-07-cloudwatch-monitoring/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Cloudwatch Monitoring</b></a></td>
-      <td style="width: 33%; border: none;"><a href="README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../project-09-cicd-pipeline/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Cicd Pipeline</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-
-
-<div align="center">
-  <img src="architecture/architecture.svg" alt="Project Architecture" width="800"/>
-</div>
+Build a fully serverless REST API from scratch — no servers to manage, no EC2 to patch, scales automatically from zero to millions of requests. This is the most in-demand intermediate AWS skill and appears in virtually every Solutions Architect and Cloud Engineer interview.
 
 ---
 
-## 🌟 Expansive Overview
-> **Core Purpose:** Build highly scalable, zero-maintenance backend systems using modern serverless paradigms.
+## Architecture Overview
 
-Serverless REST API is designed to reflect enterprise-grade cloud engineering. This project moves beyond the console basics, demonstrating how AWS services are stitched together to form resilient, scalable, and highly available architectures.
-
-### 💼 Real-World Usage Scenarios
-Companies around the globe use this exact architectural pattern for:
-- **Mobile App Backends:** Handling millions of unpredictable API requests from iOS/Android apps.
-- **IoT Data Ingestion:** Receiving sensor data globally and storing it in DynamoDB instantly.
-- **Microservices:** Breaking down monolithic APIs into discrete, independently scalable Lambda functions.
-
----
-
-## ⚙️ Infrastructure Specifications
-
-<details>
-<summary><b>💡 Click to Expand Technical Specifications</b></summary>
-<br>
-
-| Component | Specification |
-|-----------|---------------|
-| **API Gateway** | ** REST API, Lambda Proxy Integration, ANY Method, /{proxy+} route |
-| **Compute** | ** AWS Lambda (Python 3.12, 128MB Memory) |
-| **Database** | ** Amazon DynamoDB (On-Demand billing, PK: userId) |
-| **Security** | ** IAM Execution Role strictly scoped to single DynamoDB table |
-
-</details>
-
----
-
-## 📂 Project Structure & Performance
-
-To optimize your execution of this project, adhere strictly to the following folder topology. 
-
-| Directory | Core Function |
-|-----------|---------------|
-| `👉 lambda/` | Python source code for the backend API logic. |
-| `👉 docs/` | API endpoints, CORS, and Lambda Proxy details. |
-| `👉 scripts/` | Packaging and deployment scripts for API Gateway. |
+```text
+Client (Browser / curl / Postman)
+         │
+         │ HTTPS Request
+         ▼
+┌──────────────────────────────────────────────┐
+│         API Gateway (REST API)               │
+│                                              │
+│  POST   /users       → create user           │
+│  GET    /users       → list all users        │
+│  GET    /users/{id}  → get single user       │
+│  PUT    /users/{id}  → update user           │
+│  DELETE /users/{id}  → delete user           │
+└──────────────────┬───────────────────────────┘
+                   │ Lambda Proxy Integration
+                   ▼
+       ┌───────────────────────┐
+       │     AWS Lambda        │
+       │   users-api           │
+       │   Python 3.12         │
+       │   128 MB / 30 sec     │
+       └───────────┬───────────┘
+                   │ IAM Role (least privilege)
+                   ▼
+       ┌───────────────────────┐
+       │      DynamoDB         │
+       │   Table: users        │
+       │   PK: userId (String) │
+       │   On-demand billing   │
+       └───────────────────────┘
+```
 
 ---
 
-## 📚 Granular Documentation Suite
-We have broken down the technical manuals into granular, highly detailed Markdown files. Start with the Project Overview and proceed sequentially:
+## AWS Services Used
 
-- 📄 [Project Overview](docs/project-overview.md)
-- 🏗️ [Architecture Details](docs/architecture.md)
-- 🚀 [Deployment Guide](docs/deployment-guide.md)
-- 🔐 [Security Protocols](docs/security-protocols.md)
-- 🧪 [Testing Procedures](docs/testing-procedures.md)
-- 🛠️ [Troubleshooting](docs/troubleshooting.md)
-- 🧹 [Cleanup Guide](docs/cleanup-guide.md)
+| Service | Role |
+| --- | --- |
+| AWS Lambda | Serverless compute — runs Python code on demand |
+| API Gateway | HTTP endpoint — routes requests to Lambda |
+| DynamoDB | Serverless NoSQL database — stores user records |
+| IAM | Lambda execution role with scoped DynamoDB permissions |
+| CloudWatch Logs | Automatic Lambda execution logs |
+| CloudWatch | Lambda metrics — invocations, errors, duration |
 
 ---
-*✨ Modernized & Enhanced for the AWS Hands-On Portfolio ✨*
+
+## API Endpoints
+
+| Method | Endpoint | Action | Status Codes |
+| --- | --- | --- | --- |
+| `POST` | `/users` | Create a new user | 201, 400, 500 |
+| `GET` | `/users` | List all users | 200, 500 |
+| `GET` | `/users/{userId}` | Get a single user | 200, 404, 500 |
+| `PUT` | `/users/{userId}` | Update user fields | 200, 404, 500 |
+| `DELETE` | `/users/{userId}` | Delete a user | 200, 404, 500 |
+
+---
+
+## Free Tier Status
+
+| Resource | Free Tier | Duration |
+| --- | --- | --- |
+| Lambda | 1M requests/month + 400K GB-seconds | **Forever** |
+| API Gateway | 1M API calls/month | 12 months |
+| DynamoDB | 25 GB + 25 WCU + 25 RCU | **Forever** |
+
+**Cost estimate: $0.00** — all three services within free tier.
+
+---
+
+## Project Structure
+
+```text
+project-08-serverless-rest-api/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── docs/               — architecture, design, guides
+├── lambda/             — Python function code + zip
+├── scripts/            — PowerShell deployment scripts
+├── architecture/       — SVG diagrams
+└── images/             — Console screenshots
+```
+
+---
+
+## Execution Order
+
+| Script | Part | Task |
+| --- | --- | --- |
+| `01-create-dynamodb.ps1` | 1 | Create users table |
+| `02-create-lambda-role.ps1` | 2 | IAM role + DynamoDB policy |
+| `03-package-lambda.ps1` | 3 | Zip Lambda code |
+| `04-deploy-lambda.ps1` | 3 | Deploy Lambda function |
+| `05-create-api-gateway.ps1` | 5 | REST API + routes + deploy |
+| `06-test-api.ps1` | 6 | Run all 8 API tests |
+| `07-monitor-cloudwatch.ps1` | 8 | View logs and metrics |
+| `08-update-lambda.ps1` | 9 | Update deployed code |
+| `09-cleanup.ps1` | 10 | Full teardown |
+
+---
+
+## Key Concepts Demonstrated
+
+**Lambda Proxy Integration**: API Gateway forwards the entire HTTP request as a JSON event to Lambda. Lambda returns a structured response with `statusCode`, `headers`, and `body`. This pattern gives full routing control to the Lambda function.
+
+**Serverless vs Traditional**: Zero infrastructure management, automatic scaling, pay-per-invocation billing. The `users-api` Lambda function handles all 5 HTTP methods — routing is done in Python code, not via separate Lambda functions per route.
+
+**DynamoDB On-Demand**: No capacity planning, no pre-provisioned read/write units. Scales instantly to any traffic level. Cost is per request, not per hour.
+
+**IAM Least Privilege**: The Lambda execution role has exactly the DynamoDB operations it needs — `GetItem`, `PutItem`, `UpdateItem`, `DeleteItem`, `Scan`, `Query` — scoped to the specific `users` table ARN. Nothing more.
+
+**CORS Headers**: Every response includes `Access-Control-Allow-Origin: *` so the API can be called from browser-based frontends without a proxy.
+
+---
+
+*Part of the AWS Cloud Projects portfolio — hands-on infrastructure built and documented end to end.*

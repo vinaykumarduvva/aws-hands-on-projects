@@ -1,72 +1,43 @@
+# Architecture: Static Website on S3 + CloudFront
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">S3 Static Website</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Granular Architecture Details</text>
-  </svg>
-</div>
+This document illustrates the architecture for globally distributing a highly-available static website using AWS S3 and CloudFront.
 
+## Overview
 
+The solution provides a secure, fast, and cost-effective way to host a static portfolio website. It leverages Amazon S3 for origin storage and Amazon CloudFront as a Content Delivery Network (CDN) to ensure low latency and HTTPS security worldwide.
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-01-iam-setup/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Iam Setup</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-03-Launch-EC2-Connect-via-SSH/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Launch Ec2 Connect Via Ssh</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Architecture Diagram
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300">
+  <rect width="700" height="300" fill="#f8f9fa" rx="10"/>
+  <rect x="50" y="110" width="120" height="80" fill="#e0e0e0" stroke="#757575" stroke-width="2" rx="5"/>
+  <text x="110" y="150" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Web Browser</text>
+  <text x="110" y="170" font-family="Arial" font-size="12" text-anchor="middle">(User)</text>
+  <rect x="270" y="90" width="160" height="120" fill="#e1bee7" stroke="#8e24aa" stroke-width="2" rx="5"/>
+  <text x="350" y="145" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">CloudFront CDN</text>
+  <text x="350" y="165" font-family="Arial" font-size="12" text-anchor="middle">(Global Edge Cache)</text>
+  <text x="350" y="185" font-family="Arial" font-size="12" text-anchor="middle">HTTPS</text>
+  <rect x="520" y="100" width="130" height="100" fill="#c8e6c9" stroke="#388e3c" stroke-width="2" rx="5"/>
+  <text x="585" y="145" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Amazon S3</text>
+  <text x="585" y="165" font-family="Arial" font-size="12" text-anchor="middle">(Origin Bucket)</text>
+  <text x="585" y="185" font-family="Arial" font-size="12" text-anchor="middle">HTTP</text>
+  <path d="M 170 150 L 265 150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 430 150 L 515 150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+    </marker>
+  </defs>
+</svg>
 
-<br>
+## Component Details
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+1. **Web Browser (User)**: The client requesting the website content. All connections are forced to use HTTPS for security.
+2. **CloudFront CDN**: A global content delivery network spanning over 400 edge locations worldwide. It caches static assets closer to the users, terminates SSL/TLS connections, and significantly reduces latency.
+3. **Amazon S3 (Origin Bucket)**: The foundational storage layer holding the website's static files (`index.html`, `error.html`, CSS, JS). It is configured for static website hosting and grants public read access to its objects.
 
-<br>
+## Traffic Flow
 
-## Amazon S3 (The Origin)
-- Configured to host static assets (`index.html`, `style.css`, etc.).
-- A bucket policy is applied allowing `s3:GetObject` publicly so CloudFront can fetch the assets.
-- `index.html` is configured as both the Default Root Object and the Error Document.
-
-## Amazon CloudFront (The CDN)
-- Distributed across 400+ Edge Locations worldwide.
-- Configured with a `ViewerProtocolPolicy` of `redirect-to-https`.
-- Points to the S3 Bucket's website endpoint (not the REST endpoint) to allow S3 to natively handle index document resolution.
-
-<br>
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-01-iam-setup/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Iam Setup</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-03-Launch-EC2-Connect-via-SSH/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Launch Ec2 Connect Via Ssh</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-
+1. **Request**: A user requests the website via their browser. The request is routed to the nearest CloudFront Edge Location.
+2. **Cache Check**: CloudFront checks its local cache. If the content is available (Cache Hit), it serves the content immediately to the user over HTTPS.
+3. **Origin Fetch**: If the content is not cached (Cache Miss), CloudFront securely fetches the files from the S3 Origin Bucket over HTTP, caches them for future requests, and returns them to the user.

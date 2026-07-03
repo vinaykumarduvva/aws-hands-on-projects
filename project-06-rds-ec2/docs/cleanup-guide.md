@@ -1,70 +1,226 @@
+# Cleanup Guide — RDS MySQL + EC2 Two-Tier Application
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">RDS Database & EC2 App</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Infrastructure Cleanup Guide</text>
-  </svg>
-</div>
+## Why Cleanup Order Matters
 
+AWS resources have dependencies. Deleting in the wrong order produces `DependencyViolation` errors. Follow the sequence below exactly.
 
+**Critical**: RDS charges money even when idle if Free Tier hours are exhausted. Do not leave it running after the project.
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-05-Custom-VPC/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Custom Vpc</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-07-cloudwatch-monitoring/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Cloudwatch Monitoring</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+---
 
+## Full Cleanup Sequence
 
-<br>
+Script: `scripts/10-cleanup.ps1`
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+### Step 1 — Terminate EC2 App Server
 
-<br>
+```powershell
+aws ec2 terminate-instances --instance-ids $APP_INSTANCE_ID
+aws ec2 wait instance-terminated --instance-ids $APP_INSTANCE_ID
+Write-Host "EC2 terminated"
+```
 
-> [!WARNING]
-> RDS databases are expensive if left running outside the Free Tier. Always delete unused databases.
+The wait command blocks until the instance is fully terminated (~1–2 minutes).
 
-1. **Delete RDS Database:** Navigate to RDS. Select the database and choose Delete. Uncheck "Create final snapshot" and acknowledge the deletion. This will take ~5-10 minutes.
-2. **Delete EC2 Instance:** Terminate the App Server EC2 instance.
-3. **Delete Secret:** Navigate to Secrets Manager and delete the secret. (Note: Secrets have a mandatory recovery window, so it will go into a scheduled deletion state).
-4. **Delete Security Groups:** Once the EC2 and RDS instances are fully terminated, delete the `DB-SG` and `Web-SG`.
+### Step 2 — Delete RDS Instance
 
-<br>
+```powershell
+aws rds delete-db-instance `
+  --db-instance-identifier myapp-database `
+  --skip-final-snapshot `
+  --delete-automated-backups
 
+aws rds wait db-instance-deleted `
+  --db-instance-identifier myapp-database
+Write-Host "RDS deleted"
+```
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-05-Custom-VPC/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Custom Vpc</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-07-cloudwatch-monitoring/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Cloudwatch Monitoring</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+`--skip-final-snapshot` avoids creating a snapshot that would cost storage. `--delete-automated-backups` removes the automated backup set immediately.
 
+This step takes **3–5 minutes**.
+
+### Step 3 — Delete RDS Subnet Group
+
+```powershell
+aws rds delete-db-subnet-group `
+  --db-subnet-group-name rds-subnet-group
+Write-Host "Subnet group deleted"
+```
+
+Must come after RDS deletion — the subnet group cannot be deleted while an RDS instance uses it.
+
+### Step 4 — Delete Secrets Manager Secret
+
+```powershell
+aws secretsmanager delete-secret `
+  --secret-id "rds/myapp/credentials" `
+  --force-delete-without-recovery
+Write-Host "Secret deleted"
+```
+
+`--force-delete-without-recovery` skips the 7-day recovery window. For a project secret with no production data, this is appropriate.
+
+### Step 5 — Delete Security Groups
+
+```powershell
+aws ec2 delete-security-group --group-id $RDS_SG
+aws ec2 delete-security-group --group-id $EC2_SG
+Write-Host "Security groups deleted"
+```
+
+EC2 and RDS must be gone before their security groups can be deleted.
+
+### Step 6 — Delete IAM Role and Profile
+
+```powershell
+aws iam remove-role-from-instance-profile `
+  --instance-profile-name ec2-app-profile `
+  --role-name ec2-app-role
+
+aws iam detach-role-policy `
+  --role-name ec2-app-role `
+  --policy-arn arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+aws iam delete-role-policy `
+  --role-name ec2-app-role `
+  --policy-name secrets-manager-access
+
+aws iam delete-instance-profile --instance-profile-name ec2-app-profile
+aws iam delete-role --role-name ec2-app-role
+Write-Host "IAM role deleted"
+```
+
+Order within IAM cleanup: remove role from profile → detach managed policy → delete inline policy → delete profile → delete role.
+
+### Step 7 — Delete Subnets
+
+```powershell
+aws ec2 delete-subnet --subnet-id $PUB_SUBNET_A
+aws ec2 delete-subnet --subnet-id $PUB_SUBNET_B
+aws ec2 delete-subnet --subnet-id $PRI_SUBNET_A
+aws ec2 delete-subnet --subnet-id $PRI_SUBNET_B
+Write-Host "Subnets deleted"
+```
+
+### Step 8 — Delete Route Tables
+
+```powershell
+aws ec2 delete-route-table --route-table-id $PUB_RT_ID
+aws ec2 delete-route-table --route-table-id $PRI_RT_ID
+Write-Host "Route tables deleted"
+```
+
+Only custom route tables can be deleted — the main route table is deleted with the VPC.
+
+### Step 9 — Detach and Delete Internet Gateway
+
+```powershell
+aws ec2 detach-internet-gateway `
+  --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
+aws ec2 delete-internet-gateway --internet-gateway-id $IGW_ID
+Write-Host "IGW deleted"
+```
+
+Must detach before deleting.
+
+### Step 10 — Delete VPC
+
+```powershell
+aws ec2 delete-vpc --vpc-id $VPC_ID
+Write-Host "VPC deleted"
+```
+
+---
+
+## Verification
+
+```powershell
+# RDS
+aws rds describe-db-instances `
+  --db-instance-identifier myapp-database 2>&1 | Select-String "DBInstanceNotFound"
+# Expected: line containing "DBInstanceNotFound"
+
+# EC2
+aws ec2 describe-instances `
+  --instance-ids $APP_INSTANCE_ID `
+  --query "Reservations[0].Instances[0].State.Name" --output text
+# Expected: terminated
+
+# VPC
+aws ec2 describe-vpcs --vpc-ids $VPC_ID 2>&1
+# Expected: InvalidVpcID.NotFound error
+
+# Secret
+aws secretsmanager describe-secret `
+  --secret-id "rds/myapp/credentials" 2>&1
+# Expected: ResourceNotFoundException
+```
+
+---
+
+## Cost Check After Cleanup
+
+Log in to AWS Console → Billing → Cost Explorer.
+
+After cleanup, you should see:
+- RDS: $0.00 (or minimal if left running briefly)
+- EC2: $0.00
+- Secrets Manager: $0.00–$0.01
+
+If the RDS line still shows charges after cleanup, verify deletion in the RDS console (check all regions — resources may exist in the wrong region if you switched accidentally).
+
+---
+
+## If Variables Are Lost
+
+Re-fetch before running cleanup:
+
+```powershell
+$VPC_ID = aws ec2 describe-vpcs `
+  --filters "Name=tag:Name,Values=my-custom-vpc" `
+  --query "Vpcs[0].VpcId" --output text
+
+$PUB_SUBNET_A = aws ec2 describe-subnets `
+  --filters "Name=tag:Name,Values=public-subnet-a" `
+  --query "Subnets[0].SubnetId" --output text
+
+$PUB_SUBNET_B = aws ec2 describe-subnets `
+  --filters "Name=tag:Name,Values=public-subnet-b" `
+  --query "Subnets[0].SubnetId" --output text
+
+$PRI_SUBNET_A = aws ec2 describe-subnets `
+  --filters "Name=tag:Name,Values=private-subnet-a" `
+  --query "Subnets[0].SubnetId" --output text
+
+$PRI_SUBNET_B = aws ec2 describe-subnets `
+  --filters "Name=tag:Name,Values=private-subnet-b" `
+  --query "Subnets[0].SubnetId" --output text
+
+$EC2_SG = aws ec2 describe-security-groups `
+  --filters "Name=group-name,Values=ec2-app-sg" "Name=vpc-id,Values=$VPC_ID" `
+  --query "SecurityGroups[0].GroupId" --output text
+
+$RDS_SG = aws ec2 describe-security-groups `
+  --filters "Name=group-name,Values=rds-sg" "Name=vpc-id,Values=$VPC_ID" `
+  --query "SecurityGroups[0].GroupId" --output text
+
+$IGW_ID = aws ec2 describe-internet-gateways `
+  --filters "Name=tag:Name,Values=my-vpc-igw" `
+  --query "InternetGateways[0].InternetGatewayId" --output text
+
+$PUB_RT_ID = aws ec2 describe-route-tables `
+  --filters "Name=tag:Name,Values=public-route-table" `
+  --query "RouteTables[0].RouteTableId" --output text
+
+$PRI_RT_ID = aws ec2 describe-route-tables `
+  --filters "Name=tag:Name,Values=private-route-table" `
+  --query "RouteTables[0].RouteTableId" --output text
+
+$APP_INSTANCE_ID = aws ec2 describe-instances `
+  --filters "Name=tag:Name,Values=app-server" `
+  --query "Reservations[0].Instances[0].InstanceId" --output text
+
+Write-Host "All IDs re-fetched"
+Write-Host "VPC: $VPC_ID"
+Write-Host "EC2: $APP_INSTANCE_ID"
+```

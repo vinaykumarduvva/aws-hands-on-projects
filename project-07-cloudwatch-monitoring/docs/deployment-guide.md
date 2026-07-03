@@ -1,78 +1,149 @@
+# Deployment Guide
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">CloudWatch & SNS Alerts</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Step-by-Step Deployment Guide</text>
-  </svg>
-</div>
+## Automated Scripts Available
+> [!TIP]
+> **Dual-Platform Execution:** This project contains fully automated deployment and teardown scripts for both Windows (PowerShell) and Linux/macOS (Bash). Check the `scripts/` directory for `.ps1` files and the `bash-scripts/` directory for `.sh` files.
 
+## Cleanup Guide
 
+# Cleanup Guide — CloudWatch Monitoring Project
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-06-rds-ec2/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Rds Ec2</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Serverless Rest Api</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+## Cleanup Order
 
+CloudWatch alarms, dashboards, and log groups have no dependency chain — they can be deleted in any order. EC2 and its security group must be deleted after each other (SG after instance).
 
-<br>
+Script: `scripts/12-cleanup.ps1`
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+---
 
-<br>
+## Step-by-Step
 
-## Step 1: Create SNS Topic
-1. Navigate to Amazon SNS > Topics. Create a Standard topic.
-2. Create a Subscription. Protocol: Email. Enter your email address.
-3. Check your email and click the confirmation link.
+### Step 1 — Delete All CloudWatch Alarms
 
-## Step 2: Create Alarms
-1. Navigate to CloudWatch > Alarms.
-2. **EC2 CPU Alarm:** Select `EC2 > Per-Instance Metrics > CPUUtilization`. Set threshold to > 70% for 2 evaluation periods. Action: Send to SNS topic.
-3. **Billing Alarm:** Select `Billing > Total Estimated Charge`. Set threshold to > $5. Action: Send to SNS topic. *(Note: Must be created in the `us-east-1` region).*
+```powershell
+aws cloudwatch delete-alarms `
+  --alarm-names `
+    "EC2-CPU-High" `
+    "EC2-StatusCheck-Failed" `
+    "EC2-NetworkIn-High" `
+    "RDS-CPU-High" `
+    "RDS-Storage-Low" `
+    "RDS-Connections-High" `
+    "Billing-Alert-5USD" `
+    "App-Errors-High"
+```
 
-## Step 3: Create Dashboard
-1. Navigate to CloudWatch > Dashboards. Create Dashboard.
-2. Add a Line widget for EC2 CPU Utilization.
-3. Add a Number widget for Total Estimated Charges.
-4. Save the dashboard.
+All 8 alarms deleted in one API call. No wait needed.
 
-<br>
+### Step 2 — Delete Dashboard
 
+```powershell
+aws cloudwatch delete-dashboards \
+  --dashboard-names "AWS-Bootcamp-Dashboard"
+```
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-06-rds-ec2/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Rds Ec2</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Serverless Rest Api</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
+### Step 3 — Delete Log Group
+
+```powershell
+aws logs delete-log-group \
+  --log-group-name "/aws/ec2/monitoring-test"
+```
+
+Deleting the log group deletes all log streams and events within it.
+
+### Step 4 — Delete SNS Subscription and Topic
+
+```powershell
+# Get subscription ARN first
+$SUB_ARN = aws sns list-subscriptions-by-topic \
+  --topic-arn $SNS_ARN \
+  --query "Subscriptions[0].SubscriptionArn" \
+  --output text
+
+# Unsubscribe (only if confirmed — PendingConfirmation subscriptions auto-expire)
+if ($SUB_ARN -ne "PendingConfirmation") {
+    aws sns unsubscribe --subscription-arn $SUB_ARN
+}
+
+# Delete the topic
+aws sns delete-topic --topic-arn $SNS_ARN
+```
+
+Deleting the topic does not automatically unsubscribe — the endpoint receives no more messages, but the subscription record may linger. Explicit unsubscribe is cleaner.
+
+### Step 5 — Terminate EC2 and Delete Security Group
+
+```powershell
+aws ec2 terminate-instances --instance-ids $MON_INSTANCE_ID
+aws ec2 wait instance-terminated --instance-ids $MON_INSTANCE_ID
+aws ec2 delete-security-group --group-id $MON_SG
+```
+
+Security group cannot be deleted while the instance is running or stopping — the wait command ensures termination is complete.
+
+---
+
+## Verification
+
+```powershell
+# Alarms gone
+aws cloudwatch describe-alarms \
+  --query "MetricAlarms[*].AlarmName" --output table
+# Expected: empty
+
+# Dashboard gone
+aws cloudwatch list-dashboards \
+  --query "DashboardEntries[*].DashboardName" --output table
+# Expected: empty
+
+# Log group gone
+aws logs describe-log-groups \
+  --log-group-name-prefix "/aws/ec2/monitoring-test"
+# Expected: empty list
+
+# SNS topic gone
+aws sns list-topics \
+  --query "Topics[?contains(TopicArn,'monitoring-alerts')]"
+# Expected: empty
+
+# EC2 gone
+aws ec2 describe-instances \
+  --instance-ids $MON_INSTANCE_ID \
+  --query "Reservations[0].Instances[0].State.Name" --output text
+# Expected: terminated
+```
+
+---
+
+## What This Project Leaves Behind
+
+After cleanup, nothing billable remains. Verify in **AWS Billing → Cost Explorer** 24 hours later:
+- CloudWatch: $0 (all within free tier)
+- SNS: $0 (email notifications are free)
+- EC2: $0 (terminated)
+- CloudWatch Logs: $0 (minimal ingestion, within free tier)
+
+---
+
+## Re-fetch IDs If Variables Are Lost
+
+```powershell
+$SNS_ARN = aws sns list-topics `
+  --query "Topics[?contains(TopicArn,`'monitoring-alerts`')].TopicArn | [0]" `
+  --output text
+
+$MON_INSTANCE_ID = aws ec2 describe-instances `
+  --filters "Name=tag:Name,Values=monitoring-test" `
+  --query "Reservations[0].Instances[0].InstanceId" `
+  --output text
+
+$MON_SG = aws ec2 describe-security-groups `
+  --filters "Name=group-name,Values=monitoring-test-sg" `
+  --query "SecurityGroups[0].GroupId" `
+  --output text
+
+Write-Host "SNS:  $SNS_ARN"
+Write-Host "EC2:  $MON_INSTANCE_ID"
+Write-Host "SG:   $MON_SG"
+```
 
