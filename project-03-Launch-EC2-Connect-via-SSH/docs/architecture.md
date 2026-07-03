@@ -7,17 +7,17 @@ This document outlines the network and security architecture required to safely 
 ```mermaid
 flowchart TD
     subgraph "The Public Internet"
-        Admin([Administrator<br/>(Your Laptop)])
-        Users([Web Users])
+        Admin(["Administrator<br/>(Your Laptop)"])
+        Users(["Web Users"])
     end
 
     subgraph "AWS Cloud - Region (e.g., us-east-1)"
         subgraph "Default Virtual Private Cloud (VPC)"
             subgraph "Public Subnet"
                 subgraph "Security Group (Firewall)"
-                    EC2[Amazon EC2 Instance<br/>(Amazon Linux 2023)<br/>Public IP Attached]
-                    Apache{Apache Web Server<br/>(Port 80)}
-                    SSHD{SSH Daemon<br/>(Port 22)}
+                    EC2["Amazon EC2 Instance<br/>(Amazon Linux 2023)<br/>Public IP Attached"]
+                    Apache{"Apache Web Server<br/>(Port 80)"}
+                    SSHD{"SSH Daemon<br/>(Port 22)"}
                 end
             end
         end

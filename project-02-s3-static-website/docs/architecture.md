@@ -7,12 +7,12 @@ This document outlines the high-level architecture of hosting a serverless stati
 ```mermaid
 flowchart LR
     subgraph "The Internet"
-        User([Web Browser<br/>(HTTP GET)])
+        User(["Web Browser<br/>(HTTP GET)"])
     end
 
     subgraph "AWS Infrastructure (e.g., us-east-1)"
         subgraph "Amazon S3 Service"
-            DNS[S3 Website Endpoint<br/>(bucket-name.s3-website-region.amazonaws.com)]
+            DNS["S3 Website Endpoint<br/>(bucket-name.s3-website-region.amazonaws.com)"]
             
             subgraph "S3 Bucket"
                 Policy{"Bucket Policy<br/>(Allow PublicReadGetObject)"}

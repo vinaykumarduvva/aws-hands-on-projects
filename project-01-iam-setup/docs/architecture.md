@@ -7,15 +7,15 @@ This document outlines the high-level architecture of your foundational AWS iden
 ```mermaid
 flowchart TD
     subgraph "The Human Operator"
-        Human([You])
+        Human(["You"])
     end
 
     subgraph "Identity Providers"
         Root["Root User Account<br/>(Locked Away)"]
-        MFA1{Hardware/Virtual MFA}
+        MFA1{"Hardware/Virtual MFA"}
         
         IAMUser["IAM User<br/>(e.g., 'admin')"]
-        MFA2{Virtual MFA}
+        MFA2{"Virtual MFA"}
     end
 
     subgraph "AWS Infrastructure (Control Plane)"
