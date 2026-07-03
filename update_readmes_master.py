@@ -820,7 +820,7 @@ PROJECTS = {
 def build_readme(num: str, p: dict) -> str:
     """Generate a deeply technical, standardized README.md."""
     dir_name = p["dir"]
-    svg_url = f"{GITHUB_BASE}/{dir_name}/architecture/architecture.svg"
+    svg_url = "./architecture/architecture.svg"
 
     # ── Determine navigation ──
     prev_num = int(num) - 1
@@ -870,9 +870,6 @@ def build_readme(num: str, p: dict) -> str:
     lines.append(f'    <a href="#-setup--installation">Setup</a> · \n')
     lines.append(f'    <a href="#-documentation-suite">Docs</a>\n')
     lines.append(f'  </p>\n')
-    lines.append(f'\n')
-    # Live demo
-    lines.append(f'  <p><b>🔗 <a href="#">Live Demo</a></b> &nbsp;·&nbsp; <b>📹 <a href="#">Video Walkthrough</a></b></p>\n')
     lines.append(f'\n')
     lines.append(f'</div>\n')
     lines.append(f'\n<br/>\n\n')

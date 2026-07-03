@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-03-Launch-EC2-Connect-via-SSH/architecture/architecture.svg" alt="Launch EC2 Instances & Secure Connectivity Architecture" width="820"/>
+  <img src="./architecture/architecture.svg" alt="Launch EC2 Instances & Secure Connectivity Architecture" width="820"/>
   <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 03: Launch EC2 Instances & Secure Connectivity</h1>
 
@@ -21,8 +21,6 @@
     <a href="#-documentation-suite">Docs</a>
   </p>
 
-  <p><b>🔗 <a href="#">Live Demo</a></b> &nbsp;·&nbsp; <b>📹 <a href="#">Video Walkthrough</a></b></p>
-
 </div>
 
 <br/>
@@ -31,7 +29,7 @@
 
 ## 🏗️ Architecture Overview
 
-<img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-03-Launch-EC2-Connect-via-SSH/architecture/architecture.svg" alt="Launch EC2 Instances & Secure Connectivity — System Architecture" width="800"/>
+<img src="./architecture/architecture.svg" alt="Launch EC2 Instances & Secure Connectivity — System Architecture" width="800"/>
 
 <p><i>▲ High-level architecture diagram showing the interaction between EC2, VPC, SSM, EBS services</i></p>
 

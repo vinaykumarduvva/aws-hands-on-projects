@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-06-rds-ec2/architecture/architecture.svg" alt="RDS MySQL + EC2 Two-Tier Web Application Architecture" width="820"/>
+  <img src="./architecture/architecture.svg" alt="RDS MySQL + EC2 Two-Tier Web Application Architecture" width="820"/>
   <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 06: RDS MySQL + EC2 Two-Tier Web Application</h1>
 
@@ -21,8 +21,6 @@
     <a href="#-documentation-suite">Docs</a>
   </p>
 
-  <p><b>🔗 <a href="#">Live Demo</a></b> &nbsp;·&nbsp; <b>📹 <a href="#">Video Walkthrough</a></b></p>
-
 </div>
 
 <br/>
@@ -31,7 +29,7 @@
 
 ## 🏗️ Architecture Overview
 
-<img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-06-rds-ec2/architecture/architecture.svg" alt="RDS MySQL + EC2 Two-Tier Web Application — System Architecture" width="800"/>
+<img src="./architecture/architecture.svg" alt="RDS MySQL + EC2 Two-Tier Web Application — System Architecture" width="800"/>
 
 <p><i>▲ High-level architecture diagram showing the interaction between RDS, EC2, VPC, Secrets Manager services</i></p>
 

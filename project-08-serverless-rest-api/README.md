@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-08-serverless-rest-api/architecture/architecture.svg" alt="Serverless REST API with API Gateway, Lambda & DynamoDB Architecture" width="820"/>
+  <img src="./architecture/architecture.svg" alt="Serverless REST API with API Gateway, Lambda & DynamoDB Architecture" width="820"/>
   <br/><br/>
   <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 08: Serverless REST API with API Gateway, Lambda & DynamoDB</h1>
 
@@ -21,8 +21,6 @@
     <a href="#-documentation-suite">Docs</a>
   </p>
 
-  <p><b>🔗 <a href="#">Live Demo</a></b> &nbsp;·&nbsp; <b>📹 <a href="#">Video Walkthrough</a></b></p>
-
 </div>
 
 <br/>
@@ -31,7 +29,7 @@
 
 ## 🏗️ Architecture Overview
 
-<img src="https://raw.githubusercontent.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects/main/project-08-serverless-rest-api/architecture/architecture.svg" alt="Serverless REST API with API Gateway, Lambda & DynamoDB — System Architecture" width="800"/>
+<img src="./architecture/architecture.svg" alt="Serverless REST API with API Gateway, Lambda & DynamoDB — System Architecture" width="800"/>
 
 <p><i>▲ High-level architecture diagram showing the interaction between API Gateway, Lambda, DynamoDB, IAM, CloudWatch services</i></p>
 
