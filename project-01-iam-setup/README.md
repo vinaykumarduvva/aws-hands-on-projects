@@ -1,5 +1,5 @@
 <div align="center">
-  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="40px" height="40px" style="vertical-align: middle; margin-right: 10px;"/> Project 01: AWS Account Setup & IAM Foundations</h1>
+  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" alt="AWS Logo" style="height: 1em; vertical-align: middle; margin-right: 8px;"/> Project 01: AWS Account Setup & IAM Foundations</h1>
 
   <p><i>Establish a hardened AWS account baseline by configuring Identity and Access Management (IAM) with least-privilege policies, multi-factor authentication (MFA), and granular role-based access control. This project lays the security foundation that every subsequent project in this portfolio depends on.</i></p>
 
