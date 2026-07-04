@@ -2,11 +2,65 @@
 
 This document details the network topology and component interactions of our Custom VPC.
 
-## 🏗️ High-Level Topology
+## 🏗️ System Overview & Data Flow
 
 The environment is built within a single AWS Region (`us-east-1`) and spans two Availability Zones (`us-east-1a` and `us-east-1b`) to ensure high availability and fault tolerance. 
 
 The core of the architecture is a Virtual Private Cloud (VPC) allocated with a `/16` CIDR block, providing a massive pool of 65,536 private IP addresses.
+
+```mermaid
+flowchart TD
+    Internet((Internet))
+    Admin([Administrator])
+    
+    subgraph "AWS Region: us-east-1"
+        IGW["Internet Gateway"]
+        
+        subgraph "Custom VPC (10.0.0.0/16)"
+            PubRT{"Public Route Table<br>(0.0.0.0/0 -> IGW)"}
+            PrivRT{"Private Route Table<br>(0.0.0.0/0 -> NAT Gateway)"}
+            
+            subgraph "us-east-1a"
+                subgraph PubA["Public Subnet A (10.0.1.0/24)"]
+                    NAT["NAT Gateway"]
+                    Bastion["Bastion Host"]
+                end
+                
+                subgraph PrivA["Private Subnet A (10.0.3.0/24)"]
+                    AppA["Private EC2"]
+                end
+            end
+            
+            subgraph "us-east-1b"
+                subgraph PubB["Public Subnet B (10.0.2.0/24)"]
+                    HA1["(Reserved for HA)"]
+                end
+                subgraph PrivB["Private Subnet B (10.0.4.0/24)"]
+                    HA2["(Reserved for HA)"]
+                end
+            end
+            
+            %% Route Associations
+            PubRT -.- PubA
+            PubRT -.- PubB
+            PrivRT -.- PrivA
+            PrivRT -.- PrivB
+        end
+    end
+
+    %% Internet Flow
+    Internet <--> IGW
+    IGW <--> PubRT
+    NAT --> IGW
+    
+    %% Traffic Paths
+    PrivA -- "Outbound Internet" --> PrivRT
+    PrivRT --> NAT
+    
+    %% Admin Access
+    Admin -- "SSH" --> Bastion
+    Bastion -- "SSH (Jump)" --> AppA
+```
 
 ## 🧩 Core Components
 
