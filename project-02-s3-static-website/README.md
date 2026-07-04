@@ -121,23 +121,6 @@ Choose your platform and execute the scripts in order:
 <tr><td>🖥️</td><td><code>scripts/powershell/cleanup.ps1</code></td><td>Execute Cleanup</td></tr>
 </table>
 
-## 📸 Project Screenshots
-
-- **S3 Bucket Created**
-  ![S3 Bucket Created](./images/01-s3-bucket-created.png)
-- **Static Hosting Enabled**
-  ![Static Hosting Enabled](./images/02-static-hosting-enabled.png)
-- **Bucket Policy**
-  ![Bucket Policy](./images/03-bucket-policy.png)
-- **CloudFront Distribution**
-  ![CloudFront Distribution](./images/04-cloudfront-distribution.png)
-- **Live HTTPS Site**
-  ![Live HTTPS Site](./images/05-live-https-site.png)
-- **404 Error Page**
-  ![404 Error Page](./images/06-404-error-page.png)
-- **Sample Website S3**
-  ![Sample Website S3](./images/Sample-webiste-s3.png)
-
 ## 📚 Documentation Suite
 
 | Document | Description |

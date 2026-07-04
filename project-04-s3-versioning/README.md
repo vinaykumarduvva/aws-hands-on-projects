@@ -139,25 +139,6 @@ Choose your platform and execute the scripts in order:
 <tr><td>🖥️</td><td><code>scripts/powershell/06-cleanup.ps1</code></td><td>Execute Cleanup</td></tr>
 </table>
 
-## 📸 Project Screenshots
-
-- **Versioning Enabled**
-  ![Versioning Enabled](./images/01-versioning-enabled.png)
-- **Multiple Versions**
-  ![Multiple Versions](./images/02-multiple-versions.png)
-- **Delete Marker**
-  ![Delete Marker](./images/03-delete-marker.png)
-- **File Recovered**
-  ![File Recovered](./images/04-file-recovered.png)
-- **Lifecycle Policy**
-  ![Lifecycle Policy](./images/05-lifecycle-policy.png)
-- **Replication Rule**
-  ![Replication Rule](./images/06-replication-rule.png)
-- **Replica In West**
-  ![Replica In West](./images/07-replica-in-west.png)
-- **Replication Completed**
-  ![Replication Completed](./images/08-replication-completed.png)
-
 ## 📚 Documentation Suite
 
 | Document | Description |

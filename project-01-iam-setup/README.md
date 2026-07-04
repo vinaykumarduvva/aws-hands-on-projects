@@ -138,15 +138,6 @@ aws iam delete-access-key --user-name <YourUserName> --access-key-id <YourAccess
 aws iam delete-user --user-name <YourUserName>
 ```
 
-## 📸 Project Screenshots
-
-- **MFA Enabled**
-  ![MFA Enabled](./images/01-mfa-enabled.png)
-- **Billing Alarm**
-  ![Billing Alarm](./images/02-billing-alarm.png)
-- **IAM User Created**
-  ![IAM User Created](./images/03-iam-user-created.png)
-
 ## 📚 Documentation Suite
 
 | Document | Description |

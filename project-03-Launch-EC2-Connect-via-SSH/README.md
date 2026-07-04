@@ -143,23 +143,6 @@ Choose your platform and execute the scripts in order:
 <tr><td>🖥️</td><td><code>scripts/powershell/05-cleanup.ps1</code></td><td>Execute Cleanup</td></tr>
 </table>
 
-## 📸 Project Screenshots
-
-- **Instance Running**
-  ![Instance Running](./images/01-instance-running.png)
-- **Security Group Rules**
-  ![Security Group Rules](./images/02-security-group-rules.png)
-- **PuTTY Connected**
-  ![PuTTY Connected](./images/03-putty-connected.png)
-- **Apache Running**
-  ![Apache Running](./images/04-apache-running.png)
-- **Web Server Browser**
-  ![Web Server Browser](./images/05-web-server-browser.png)
-- **Session Manager**
-  ![Session Manager](./images/06-session-manager.png)
-- **Monitoring Tab**
-  ![Monitoring Tab](./images/07-monitoring-tab.png)
-
 ## 📚 Documentation Suite
 
 | Document | Description |
