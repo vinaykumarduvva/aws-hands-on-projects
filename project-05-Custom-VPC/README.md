@@ -47,6 +47,18 @@
 | **NACLs** | Default allow-all NACLs; ephemeral port range (1024-65535) for return traffic |
 | **Region** | us-east-1 (multi-AZ: 1a + 1b) |
 
+## 🌐 CIDR Block Plan
+
+| Resource | CIDR | Notes |
+|:---------|:-----|:------|
+| **VPC** | `10.0.0.0/16` | 65,536 IP addresses total |
+| **Public Subnet A** | `10.0.1.0/24` | 256 IPs — us-east-1a |
+| **Public Subnet B** | `10.0.2.0/24` | 256 IPs — us-east-1b |
+| **Private Subnet A** | `10.0.3.0/24` | 256 IPs — us-east-1a |
+| **Private Subnet B** | `10.0.4.0/24` | 256 IPs — us-east-1b |
+
+> 💡 **Note:** AWS reserves 5 IPs per subnet (.0, .1, .2, .3, .255), so each /24 gives you 251 usable addresses.
+
 ## 🧩 Key Components
 
 ### VPC (10.0.0.0/16)
@@ -79,6 +91,20 @@ Stateless subnet-level firewall providing defense-in-depth alongside security gr
 - **Elastic IP Persistence** – NAT Gateway's EIP ensures consistent outbound IP for allowlisting
 - **CIDR Planning** – /24 subnets (251 usable IPs each) with room for future /24 expansion within the /16 VPC
 - **Flow Logs Ready** – VPC architecture supports CloudWatch or S3-based VPC Flow Logs for network monitoring
+
+## ✅ Free Tier Status
+
+| Resource | Cost |
+|:---------|:-----|
+| **VPC, Subnets, IGW, Route Tables** | Always free |
+| **Security Groups, NACLs** | Always free |
+| **EC2 t2.micro (test instances)** | Free tier (750 hrs/month) |
+| **NAT Gateway** | ⚠️ **NOT free** — ~$0.045/hr + $0.045/GB |
+| **Elastic IP (attached)** | Free while attached to running instance |
+
+> [!WARNING]
+> **NAT Gateway is the only paid resource in this project.**
+> We create it, test it, then delete it immediately. Total exposure is under $0.10 if you follow the cleanup steps. This is worth it — NAT Gateway is in every AWS interview and every real production VPC.
 
 ## 🛠️ Setup & Installation
 
@@ -179,5 +205,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](../LICE
 ---
 
 <div align="center">
-  <b>[⬅️ Previous: Project 04](../project-04-s3-versioning) &nbsp;|&nbsp; [Next: Project 06 ➡️](../project-06-rds-ec2)</b>
+  <b><a href="../project-04-s3-versioning">⬅️ Previous: Project 04</a> &nbsp;|&nbsp; <a href="../project-06-rds-ec2">Next: Project 06 ➡️</a></b>
 </div>
