@@ -1,9 +1,14 @@
 <div align="center">
   <a href="https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects">
-    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=24&pause=1000&color=FF9900&center=true&vCenter=true&width=600&lines=Building+Cloud+Infrastructure...;Automating+with+IaC...;Deploying+Serverless+Apps...;From+Zero+to+Cloud+Engineer!" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=28&pause=1000&color=F067B4&center=true&vCenter=true&width=700&lines=%E2%98%81%EF%B8%8F+Welcome+to+My+Cloud+Lab+%E2%98%81%EF%B8%8F;Building+Cloud+Infrastructure...;Automating+with+IaC+%26+CloudFormation...;Deploying+Serverless+Apps+on+AWS...;Designing+Highly+Available+Systems...;Securing+Cloud+Environments...;CI%2FCD+Pipelines+%26+DevOps+Workflows...;From+Zero+to+Cloud+Engineer!" alt="Typing SVG" />
   </a>
 
-  <h1>☁️ AWS Cloud Engineering Portfolio</h1>
+  <br/>
+
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" width="80" alt="AWS Logo" />
+  <h1>
+    AWS Cloud Engineering Portfolio
+  </h1>
 
   <p><em>A journey from complete beginner to job-ready Cloud Engineer, built from the ground up on the AWS Free Tier.</em></p>
 
@@ -57,10 +62,32 @@
 
 Explore the live static websites I've deployed on AWS S3 & CloudFront!
 
-| Project | Live Link |
-| :--- | :--- |
-| **AWS Handy Book** | 🌐 [Interactive Reference Guide](https://aws-handy-book-reference-website.s3.ap-south-1.amazonaws.com/index.html) |
-| **AWS CloudShell Explorer** | 🌐 [Interactive Commands Explorer](https://aws-cloudshell-commands-website.s3.ap-south-1.amazonaws.com/index.html) |
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="400">
+        <br/><br/>
+        <b>📘 AWS Handy Book</b>
+        <br/>
+        <em>Interactive Reference Guide</em>
+        <br/><br/>
+        <a href="https://aws-handy-book-reference-website.s3.ap-south-1.amazonaws.com/index.html">
+          <img src="https://img.shields.io/badge/🌐_Visit_Live_Site-FF9900?style=for-the-badge" alt="Live Site" />
+        </a>
+      </td>
+      <td align="center" width="400">
+        <br/><br/>
+        <b>⚡ AWS CloudShell Explorer</b>
+        <br/>
+        <em>Interactive Commands Explorer</em>
+        <br/><br/>
+        <a href="https://aws-cloudshell-commands-website.s3.ap-south-1.amazonaws.com/index.html">
+          <img src="https://img.shields.io/badge/🌐_Visit_Live_Site-0078D4?style=for-the-badge" alt="Live Site" />
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
 
 <br/>
 
