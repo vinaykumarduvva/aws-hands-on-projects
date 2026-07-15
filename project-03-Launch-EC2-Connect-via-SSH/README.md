@@ -150,6 +150,11 @@ Throughout the documentation and `images/` directory, you will find screenshots 
 | 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
 | 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
 | 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
+| 🧹 [Cleanup Guide](docs/cleanup-guide.md) | Instructions for tearing down AWS resources to avoid charges |
+| 📐 [Design Specifications](docs/design-specifications.md) | Detailed design specs and configuration parameters |
+| 📋 [IAM Policy Notes](docs/iam-policy-notes.md) | Detailed notes on IAM policy structure, conditions, and best practices |
+| 🛡️ [Security Group Rules](docs/security-group-rules.md) | Inbound/outbound security group rule definitions and rationale |
+| 🔍 [Troubleshooting Instructions](docs/troubleshooting-instrustions.md) | Additional step-by-step troubleshooting walkthroughs |
 
 ## 🤝 Contribution & Maintenance
 

@@ -140,6 +140,12 @@ Throughout the documentation and `images/` directory, you will find screenshots 
 | 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
 | 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
 | 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
+| 🧹 [Cleanup Guide](docs/cleanup-guide.md) | Instructions for tearing down AWS resources to avoid charges |
+| 🌐 [API Endpoints](docs/api-endpoints.md) | API route definitions, request/response schemas, and usage examples |
+| 🗃️ [DynamoDB Design](docs/dynamodb-design.md) | Single-table design patterns, key schema, and access patterns |
+| ⚡ [Lambda Design](docs/lambda-design.md) | Lambda function architecture, handler patterns, and configuration |
+| 🔒 [Security](docs/security.md) | API security, IAM roles, API keys, and request validation |
+| 🧪 [Testing Guide](docs/testing-guide.md) | Comprehensive API testing strategies, tools, and example test cases |
 
 ## 🤝 Contribution & Maintenance
 

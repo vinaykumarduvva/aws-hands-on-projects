@@ -133,6 +133,7 @@ Throughout the documentation and `images/` directory, you will find screenshots 
 | 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
 | 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
 | 🧹 [Cleanup Guide](docs/cleanup-guide.md) | Instructions for tearing down AWS resources to avoid charges |
+| 📋 [IAM Policy Notes](docs/iam-policy-notes.md) | Detailed notes on IAM policy structure, conditions, and best practices |
 
 ## 🤝 Contribution & Maintenance
 

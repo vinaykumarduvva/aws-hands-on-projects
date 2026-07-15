@@ -114,20 +114,20 @@ export CRITICAL_THRESHOLD="95"
 
 Choose your platform and execute the scripts in order:
 
-| Step | Bash Script | PowerShell Script | Description |
-|------|-------------|-------------------|-------------|
-| 01 | `scripts/bash/01-sns-setup.sh` | `scripts/powershell/01-sns-setup.ps1` | Creates SNS topic and email subscription |
-| 02 | `scripts/bash/02-launch-monitoring-ec2.sh` | `scripts/powershell/02-launch-monitoring-ec2.ps1` | Launches EC2 instance for testing |
-| 03 | `scripts/bash/03-create-ec2-alarms.sh` | `scripts/powershell/03-create-ec2-alarms.ps1` | Creates CPU, Network, and StatusCheck alarms |
-| 04 | `scripts/bash/04-create-rds-alarms.sh` | `scripts/powershell/04-create-rds-alarms.ps1` | Creates RDS CPU, Storage, and Connections alarms |
-| 05 | `scripts/bash/05-create-billing-alarm.sh` | `scripts/powershell/05-create-billing-alarm.ps1` | Creates $5 billing threshold alarm in us-east-1 |
-| 06 | `scripts/bash/06-generate-cpu-load.sh` | `scripts/powershell/06-generate-cpu-load.ps1` | Stresses EC2 to trigger CPU alarm |
-| 07 | `scripts/bash/07-create-dashboard.sh` | `scripts/powershell/07-create-dashboard.ps1` | Deploys CloudWatch multi-widget dashboard |
-| 08 | `scripts/bash/08-create-log-group.sh` | `scripts/powershell/08-create-log-group.ps1` | Sets up CloudWatch Logs with 7-day retention |
-| 09 | `scripts/bash/09-create-metric-filter.sh` | `scripts/powershell/09-create-metric-filter.ps1` | Creates filter and alarm for application errors |
-| 10 | `scripts/bash/10-test-log-events.sh` | `scripts/powershell/10-test-log-events.ps1` | Ingests mock logs to trigger error alarm |
-| 11 | `scripts/bash/11-verify-alarms.sh` | `scripts/powershell/11-verify-alarms.ps1` | Queries and validates all alarm states |
-| 12 | `scripts/bash/12-cleanup.sh` | `scripts/powershell/12-cleanup.ps1` | Tears down all monitoring infrastructure |
+| Step | Bash Script                                | PowerShell Script                                 | Description                                      |
+| ------| --------------------------------------------| ---------------------------------------------------| --------------------------------------------------|
+| 01   | `scripts/bash/01-sns-setup.sh`             | `scripts/powershell/01-sns-setup.ps1`             | Creates SNS topic and email subscription         |
+| 02   | `scripts/bash/02-launch-monitoring-ec2.sh` | `scripts/powershell/02-launch-monitoring-ec2.ps1` | Launches EC2 instance for testing                |
+| 03   | `scripts/bash/03-create-ec2-alarms.sh`     | `scripts/powershell/03-create-ec2-alarms.ps1`     | Creates CPU, Network, and StatusCheck alarms     |
+| 04   | `scripts/bash/04-create-rds-alarms.sh`     | `scripts/powershell/04-create-rds-alarms.ps1`     | Creates RDS CPU, Storage, and Connections alarms |
+| 05   | `scripts/bash/05-create-billing-alarm.sh`  | `scripts/powershell/05-create-billing-alarm.ps1`  | Creates $5 billing threshold alarm in us-east-1  |
+| 06   | `scripts/bash/06-generate-cpu-load.sh`     | `scripts/powershell/06-generate-cpu-load.ps1`     | Stresses EC2 to trigger CPU alarm                |
+| 07   | `scripts/bash/07-create-dashboard.sh`      | `scripts/powershell/07-create-dashboard.ps1`      | Deploys CloudWatch multi-widget dashboard        |
+| 08   | `scripts/bash/08-create-log-group.sh`      | `scripts/powershell/08-create-log-group.ps1`      | Sets up CloudWatch Logs with 7-day retention     |
+| 09   | `scripts/bash/09-create-metric-filter.sh`  | `scripts/powershell/09-create-metric-filter.ps1`  | Creates filter and alarm for application errors  |
+| 10   | `scripts/bash/10-test-log-events.sh`       | `scripts/powershell/10-test-log-events.ps1`       | Ingests mock logs to trigger error alarm         |
+| 11   | `scripts/bash/11-verify-alarms.sh`         | `scripts/powershell/11-verify-alarms.ps1`         | Queries and validates all alarm states           |
+| 12   | `scripts/bash/12-cleanup.sh`               | `scripts/powershell/12-cleanup.ps1`               | Tears down all monitoring infrastructure         |
 
 ### 📸 Screenshots & Validation
 Throughout the documentation and `images/` directory, you will find screenshots captured during the deployment process. These visual artifacts serve as verification that the UI steps were successfully executed and validate the final architecture.
@@ -142,6 +142,11 @@ Throughout the documentation and `images/` directory, you will find screenshots 
 | 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
 | 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
 | 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
+| 🧹 [Cleanup Guide](docs/cleanup-guide.md) | Instructions for tearing down AWS resources to avoid charges |
+| 🔔 [CloudWatch Alarms](docs/cloudwatch-alarms.md) | Alarm configuration, thresholds, evaluation periods, and actions |
+| 📊 [Dashboards](docs/dashboards.md) | CloudWatch dashboard design, widget configuration, and layout |
+| 📝 [Logs & Metric Filters](docs/logs-and-metric-filters.md) | Log group setup, metric filter patterns, and custom metric creation |
+| 📈 [Monitoring Strategy](docs/monitoring-strategy.md) | Overall monitoring philosophy, alerting tiers, and escalation paths |
 
 ## 🤝 Contribution & Maintenance
 

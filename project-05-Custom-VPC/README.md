@@ -165,6 +165,10 @@ Throughout the documentation and `images/` directory, you will find screenshots 
 | 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
 | 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
 | 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
+| 🧹 [Cleanup Guide](docs/cleanup-guide.md) | Instructions for tearing down AWS resources to avoid charges |
+| 📐 [Design Specifications](docs/design-specifications.md) | Detailed design specs and configuration parameters |
+| 🌐 [Networking Concepts](docs/networking-concepts.md) | Deep-dive into VPC, subnets, routing, NAT, and IGW concepts |
+| 🛡️ [Security Group Notes](docs/security-group-notes.md) | Security group rule definitions, chaining patterns, and best practices |
 
 ## 🤝 Contribution & Maintenance
 
