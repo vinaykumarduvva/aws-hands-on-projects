@@ -5,7 +5,11 @@ This guide details the complete process for deploying this project's resources.
 ## 🏗️ PART 1 — CREATES THE INITIAL S3 BUCKET
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **S3** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -26,7 +30,11 @@ aws s3api create-bucket --bucket $BUCKET_NAME --region $AWS_REGION
 ## 🏗️ PART 2 — ENABLES STATIC WEBSITE HOSTING
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -46,7 +54,11 @@ aws s3api put-bucket-website --bucket $BUCKET_NAME --website-configuration '{"In
 ## 🏗️ PART 3 — APPLIES PUBLIC READ BUCKET POLICY
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **S3** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -68,7 +80,11 @@ aws s3api put-bucket-policy --bucket $BUCKET_NAME --policy "{\`"Version\`":\`"20
 ## 🏗️ PART 4 — UPLOADS HTML/CSS FILES TO S3
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **S3** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -89,7 +105,11 @@ aws s3 sync ..\..\website\ s3://$BUCKET_NAME/ --region $AWS_REGION
 ## 🏗️ PART 5 — FORCES CLOUDFRONT TO PULL NEW FILES
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **CloudFront** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash

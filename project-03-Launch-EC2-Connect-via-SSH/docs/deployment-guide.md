@@ -5,7 +5,11 @@ This guide details the complete process for deploying this project's resources.
 ## 🏗️ PART 1 — GENERATES THE SSH KEY PAIR
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -56,7 +60,11 @@ aws ec2 describe-key-pairs --key-names aws-ec2-keypair `
 ## 🏗️ PART 2 — CONFIGURES THE FIREWALL RULES (SSH/HTTP)
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -156,7 +164,11 @@ aws ec2 describe-security-groups --group-ids $SG_ID `
 ## 🏗️ PART 3 — LAUNCHES THE EC2 INSTANCE
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -291,7 +303,11 @@ Write-Host "Instance passed all status checks - ready to connect!"
 ## 🏗️ PART 4 — CONNECTS VIA SESSION MANAGER
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash

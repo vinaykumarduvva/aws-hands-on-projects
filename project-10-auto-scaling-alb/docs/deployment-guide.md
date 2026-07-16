@@ -5,7 +5,11 @@ This guide details the complete process for deploying this project's resources.
 ## 🏗️ PART 1 — VERIFY REGION, IDENTITY, AND KEY PAIR
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -152,7 +156,11 @@ Write-Host "Next step: Run 02-setup-vpc-subnets.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 2 — DISCOVER DEFAULT VPC AND SELECT SUBNETS
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **VPC** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -271,7 +279,11 @@ Write-Host "Next step: Run 03-create-security-groups.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 3 — CREATE ALB AND EC2 SECURITY GROUPS
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -458,7 +470,11 @@ Write-Host "Next step: Run 04-create-launch-template.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 4 — CREATE LAUNCH TEMPLATE WITH APACHE USER DATA
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -753,7 +769,11 @@ Write-Host "Next step: Run 05-create-target-group.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 5 — CREATE TARGET GROUP FOR INSTANCES
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -890,7 +910,11 @@ Write-Host "Next step: Run 06-create-alb.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 6 — CREATE APPLICATION LOAD BALANCER AND LISTENER
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2 > Load Balancing** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -1107,7 +1131,11 @@ Write-Host "Next step: Run 07-create-auto-scaling-group.ps1" -ForegroundColor Cy
 ## 🏗️ PART 7 — CREATE ASG WITH TARGET TRACKING SCALING
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -1342,7 +1370,11 @@ Write-Host "Next step: Run 08-verify-and-test.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 8 — VERIFY LOAD BALANCING ACROSS INSTANCES
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -1573,7 +1605,11 @@ Write-Host "Next step: Run 09-test-auto-scaling.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 9 — SSH AND RUN STRESS TOOL TO SPIKE CPU
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -1770,7 +1806,11 @@ Write-Host "Next step: Run 10-simulate-failure.ps1 OR 11-cleanup.ps1" -Foregroun
 ## 🏗️ PART 10 — TERMINATE AN INSTANCE TO VERIFY SELF-HEALING
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash

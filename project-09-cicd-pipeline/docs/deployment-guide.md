@@ -5,7 +5,11 @@ This guide details the complete process for deploying this project's resources.
 ## 🏗️ PART 1 — CREATE IAM ROLES FOR CODEBUILD, CODEDEPLOY, CODEPIPELINE, EC2
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -225,7 +229,11 @@ Write-Host "Next step: Run 02-create-s3-bucket.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 2 — CREATE S3 ARTIFACT BUCKET WITH VERSIONING ENABLED
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **S3** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -334,7 +342,11 @@ Write-Host "Next step: Run 03-create-codecommit.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 3 — CREATE CODECOMMIT REPOSITORY AND PUSH APPLICATION CODE
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **Developer Tools** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -493,7 +505,11 @@ Write-Host "Next step: Push your code, then run 04-launch-ec2.ps1" -ForegroundCo
 ## 🏗️ PART 4 — LAUNCH EC2 WITH CODEDEPLOY AGENT AND APACHE HTTPD
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -744,7 +760,11 @@ Write-Host "Next step: Run 05-create-codedeploy.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 5 — CREATE CODEDEPLOY APPLICATION AND DEPLOYMENT GROUP
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **Developer Tools** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -885,7 +905,11 @@ Write-Host "Next step: Run 06-create-codebuild.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 6 — CREATE CODEBUILD PROJECT LINKED TO CODECOMMIT
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **Developer Tools** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -1010,7 +1034,11 @@ Write-Host "Next step: Run 07-create-codepipeline.ps1" -ForegroundColor Cyan
 ## 🏗️ PART 7 — CREATE CODEPIPELINE (SOURCE → BUILD → DEPLOY)
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **Developer Tools** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -1284,7 +1312,11 @@ Write-Host "Next step: Run 08-monitor-pipeline.ps1 to watch execution" -Foregrou
 ## 🏗️ PART 8 — MONITOR PIPELINE EXECUTION AND VERIFY ALL STAGES GREEN
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -1486,7 +1518,11 @@ Write-Host "Re-run this script every 30s to watch progression: Source → Build 
 ## 🏗️ PART 9 — UPDATE APP TO VERSION 2.0, PUSH, WATCH AUTO-DEPLOY
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **AWS Console** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash

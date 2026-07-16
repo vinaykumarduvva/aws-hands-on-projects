@@ -5,7 +5,11 @@ This guide details the complete process for deploying this project's resources.
 ## 🏗️ PART 1 — PROVISIONS THE CUSTOM VPC AND 4 SUBNETS
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **VPC** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -96,7 +100,11 @@ Write-Host "Public Subnets: $PUB_SUBNET_A, $PUB_SUBNET_B"
 ## 🏗️ PART 2 — CREATES IGW, ROUTE TABLES, AND SUBNET ASSOCIATIONS
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **VPC** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -179,7 +187,11 @@ Write-Host -ForegroundColor Green "Internet Gateway and Route Tables created."
 ## 🏗️ PART 3 — DEPLOYS NAT GATEWAY WITH ELASTIC IP
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **VPC** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -236,7 +248,11 @@ Write-Host -ForegroundColor Green "NAT Gateway created and configured."
 ## 🏗️ PART 4 — CONFIGURES PUBLIC BASTION AND PRIVATE SECURITY GROUPS
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
@@ -299,7 +315,11 @@ Write-Host -ForegroundColor Green "Security groups bastion-sg and private-sg cre
 ## 🏗️ PART 5 — LAUNCHES EC2 INSTANCES TO TEST ROUTING
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to the repository instructions or script comments for UI steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the **EC2** dashboard.
+2. Locate and click the primary **Create**, **Launch**, or **Configure** button relevant to the task.
+3. In the configuration wizard, ensure you input the names, regions, and parameters exactly as defined in your environment variables.
+4. Review the security and networking settings carefully. (Tip: Use the exact property names and values shown in the CLI commands in Method 2 below).
+5. Click to finalize and create the resource, then wait for its status to change to **Available**, **Active**, or **Running**.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
