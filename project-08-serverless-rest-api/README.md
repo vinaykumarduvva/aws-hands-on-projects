@@ -137,16 +137,13 @@ Throughout the documentation and `images/` directory, you will find screenshots 
 | 📄 [Project Overview](docs/project-overview.md) | Comprehensive project context, goals, and learning outcomes |
 | 🏗️ [Architecture Details](docs/architecture.md) | Deep-dive into system design, data flow, and component interactions |
 | 🚀 [Deployment Guide](docs/deployment-guide.md) | Step-by-step deployment procedures for dev, staging, and production |
-| 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
-| 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
+| 🔐 [Security Protocols](docs/security-protocols.md) | API security, IAM roles, API keys, and request validation |
+| 🧪 [Testing Procedures](docs/testing-procedures.md) | Comprehensive API testing strategies, tools, and example test cases |
 | 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
 | 🧹 [Cleanup Guide](docs/cleanup-guide.md) | Instructions for tearing down AWS resources to avoid charges |
 | 🌐 [API Endpoints](docs/api-endpoints.md) | API route definitions, request/response schemas, and usage examples |
 | 🗃️ [DynamoDB Design](docs/dynamodb-design.md) | Single-table design patterns, key schema, and access patterns |
 | ⚡ [Lambda Design](docs/lambda-design.md) | Lambda function architecture, handler patterns, and configuration |
-| 🔒 [Security](docs/security.md) | API security, IAM roles, API keys, and request validation |
-| 🧪 [Testing Guide](docs/testing-guide.md) | Comprehensive API testing strategies, tools, and example test cases |
-
 ## 🤝 Contribution & Maintenance
 
 ### Testing
@@ -182,5 +179,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](../LICE
 ---
 
 <div align="center">
-  <b>[⬅️ Previous: Project 07](../project-07-cloudwatch-monitoring) &nbsp;|&nbsp; [Next: Project 09 ➡️](../project-09-cicd-pipeline)</b>
+  <b><a href="../project-07-cloudwatch-monitoring">⬅️ Previous: Project 07</a> &nbsp;|&nbsp; <a href="../project-09-cicd-pipeline">Next: Project 09 ➡️</a></b>
 </div>
