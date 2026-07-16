@@ -36,7 +36,7 @@ def lambda_handler(event, context):
         try:
             result = process_sqs_record(sqs_record)
             results.append(result)
-            logger.info(f"Successfully processed: {result.get('file_key', 'Unknown')}")
+            logger.info(f"Successfully processed: {result['file_key']}")
             
         except Exception as e:
             logger.error(f"Failed to process record: {str(e)}")

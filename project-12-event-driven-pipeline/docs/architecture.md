@@ -1,95 +1,54 @@
+# Architecture Details: Event-Driven Pipeline
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Event-Driven Data Pipeline</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Granular Architecture Details</text>
-  </svg>
-</div>
+## 🏗️ System Diagram
 
+The architecture follows a strict decoupled pattern to ensure maximum resiliency and scalability.
 
+```mermaid
+graph TD
+    User((Client / App)) -->|"Upload file"| S3_Src[S3: event-pipeline-source]
+    
+    S3_Src -->|"1. ObjectCreated:*"| SQS_Queue[SQS: file-processing-queue]
+    SQS_Queue -.->|"MaxReceiveCount: 3"| SQS_DLQ[SQS: file-processing-dlq]
+    
+    SQS_Queue -->|"2. Event Source Mapping"| Lambda[Lambda: file-processor]
+    
+    Lambda -->|"3. Download & Process"| S3_Src
+    Lambda -->|"4. Write Results"| S3_Out[S3: event-pipeline-output]
+    Lambda -->|"5. Write Logs"| CW[CloudWatch Logs]
+```
 
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-11-infrastructure-as-code/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Infrastructure As Code</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><i>(Final Project)</i></td>
-    </tr>
-  </table>
-</div>
+## 🔄 Data Flow
 
+The lifecycle of an uploaded file operates as follows:
 
-<br>
+1. **Upload Trigger:** A user or application uploads a file (e.g., `test-employees.csv`) to the source S3 bucket under the `uploads/` prefix.
+2. **Event Generation:** S3 detects the `ObjectCreated` event. Because the object matches the configured prefix (`uploads/`) and suffix (`.csv` or `.json`), S3 generates an event payload containing the bucket name and object key.
+3. **Queueing:** S3 pushes this event payload as a message into the standard SQS queue (`file-processing-queue`).
+4. **Polling:** The Lambda service continuously polls the SQS queue via the Event Source Mapping.
+5. **Execution:** Lambda invokes the `file-processor` function, passing the SQS message as the `event` payload. 
+6. **Processing:** The Lambda function:
+   - Parses the SQS message to extract the S3 bucket and key.
+   - Downloads the actual file content from S3 into memory.
+   - Parses the content (calculating stats for CSV or mapping keys for JSON).
+7. **Persistence & Logging:** The function writes a new `{filename}-result.json` to the output S3 bucket and logs a summary to CloudWatch Logs. 
+8. **Completion:** Upon a successful return from Lambda (HTTP 200), the SQS message is automatically deleted from the queue.
 
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
+## 🛡️ Security Architecture
 
-<br>
+This pipeline is built entirely on the principle of **Least Privilege**.
 
-This document provides a deep dive into the architectural decisions and components of the Event-Driven Pipeline.
+### Resource-Based Policies (SQS)
+The SQS queue uses a resource policy that explicitly allows the `s3.amazonaws.com` service principal to perform the `sqs:SendMessage` action, but *only* if the `aws:SourceArn` matches the exact ARN of the source S3 bucket. This prevents unauthorized resources from injecting messages into the pipeline.
 
-## 🧱 Component Interaction Flow
+### IAM Execution Role (Lambda)
+The Lambda function is granted a highly restrictive IAM execution role (`lambda-file-processor-role`) with the following permissions:
+- `AWSLambdaBasicExecutionRole`: Allows writing execution logs to CloudWatch.
+- `AWSLambdaSQSQueueExecutionRole`: Allows reading (`sqs:ReceiveMessage`, `sqs:DeleteMessage`, `sqs:GetQueueAttributes`) from SQS.
+- **Inline S3 Policy**: 
+  - `s3:GetObject` restricted strictly to the `arn:aws:s3:::event-pipeline-source-ACCOUNT/*`.
+  - `s3:PutObject` restricted strictly to the `arn:aws:s3:::event-pipeline-output-ACCOUNT/*`.
 
-1. **S3 Bucket (Source)**
-   - **Role:** The entry point. Files (`.csv`, `.json`) are uploaded here.
-   - **Configuration:** Emits an `s3:ObjectCreated:*` event.
-   - **Why?** Triggering directly from S3 provides native, highly reliable event generation without needing a dedicated listener service.
+By siloing read and write access to specific buckets, we prevent the Lambda function from accidentally deleting or overwriting source files, or exposing data outside of the pipeline scope.
 
-2. **Amazon SQS (Standard Queue)**
-   - **Role:** The buffer and message broker.
-   - **Configuration:** 30s Visibility Timeout, 4-day Message Retention.
-   - **Why not S3 directly to Lambda?** 
-     If S3 triggers Lambda directly and Lambda fails (due to a bug or API rate limit), the event is lost. SQS ensures the message is held safely until Lambda successfully processes it.
-
-3. **AWS Lambda (Processor)**
-   - **Role:** The compute engine.
-   - **Configuration:** Python 3.12, 256MB RAM, 60s Timeout.
-   - **Behavior:** Triggered via Event Source Mapping. Reads the message, parses the S3 bucket/key, downloads the file, processes data, and pushes results.
-
-4. **S3 Bucket (Output)**
-   - **Role:** Final storage.
-   - **Configuration:** Stores processed JSON metadata summaries.
-
-5. **SQS Dead Letter Queue (DLQ)**
-   - **Role:** Safety net for "poison pill" messages.
-   - **Configuration:** `maxReceiveCount` = 3.
-   - **Why?** If a corrupted file is uploaded and Lambda crashes consistently 3 times, the message is routed to the DLQ instead of endlessly looping and wasting compute resources.
-
-## ⚡ Scalability & Fault Tolerance
-- **Spike Handling:** If 10,000 files are uploaded at once, SQS acts as a shock absorber. Lambda scales up its concurrent executions automatically to process the backlog efficiently.
-- **Retry Logic:** Built inherently into SQS. Messages reappear on the queue if Lambda fails to delete them (handled automatically by the Lambda service when it throws an exception).
-
-<br>
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-11-infrastructure-as-code/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Infrastructure As Code</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><i>(Final Project)</i></td>
-    </tr>
-  </table>
-</div>
 

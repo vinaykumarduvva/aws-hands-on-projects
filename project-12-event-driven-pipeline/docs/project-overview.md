@@ -1,82 +1,36 @@
+# Project 12 Overview: Event-Driven Pipeline
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">Event-Driven Data Pipeline</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">Expansive Project Overview</text>
-  </svg>
-</div>
+## 🎯 Business Problem
 
+In legacy and monolithic architectures, applications often perform heavy processing synchronously. For instance, if a user uploads a gigabyte-sized CSV file, a traditional web server might attempt to parse, validate, and store that file during the exact same HTTP request. 
 
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-11-infrastructure-as-code/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Infrastructure As Code</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><i>(Final Project)</i></td>
-    </tr>
-  </table>
-</div>
-
-
-<br>
-
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
-
-<br>
-
-## 🎯 The Business Problem
-In modern architectures, systems need to react in real-time to external inputs. If you have an application where users upload files, you don't want your web server hanging and synchronously processing those files (which could be gigabytes in size). Doing so wastes web server compute time and ruins the user experience.
+This synchronous approach creates severe bottlenecks:
+1. **Poor User Experience:** The user interface freezes while waiting for the server to respond.
+2. **Resource Exhaustion:** Web servers are tied up processing files instead of serving traffic, leading to dropped connections.
+3. **No Fault Tolerance:** If the server crashes mid-process, the file data is lost, and the user receives a generic error with no mechanism for a retry.
 
 ## 🚀 The Solution
-This project introduces **Asynchronous Event-Driven Processing**.
 
-1. **Uploads are fast**: The user uploads directly to S3.
-2. **Decoupled execution**: S3 fires an event to an SQS message queue.
-3. **Scalable processing**: Lambda functions poll the queue and process the files in the background.
+This project implements an **Asynchronous Event-Driven Pipeline** using AWS serverless technologies.
 
-## 🔑 Key Concepts Covered
-- **Decoupling:** Breaking a large monolithic process into independent parts communicating via queues.
-- **Message Queues:** Buffering work to prevent overwhelming backend workers during usage spikes.
-- **Idempotency & Retries:** Ensuring that if a file processing step fails, it can be retried safely.
+1. **Uploads are fast**: The application (or user) uploads the file directly to an Amazon S3 bucket. The upload completes instantly, freeing up the client.
+2. **Decoupled execution**: S3 natively triggers an event notification that pushes a message into an Amazon SQS queue.
+3. **Scalable processing**: AWS Lambda automatically polls the SQS queue. As messages arrive, Lambda spins up concurrent execution environments to process the files in the background, writing the results to an output bucket.
+
+## 🧠 Learning Objectives
+
+By completing this project, you will learn how to:
+
+- **Decouple architectures:** Break a monolithic process into independent components that scale autonomously.
+- **Implement SQS:** Configure an SQS Standard queue and understand concepts like Visibility Timeout, Message Retention, and polling.
+- **Configure Dead Letter Queues (DLQ):** Route messages that persistently fail (poison pills) to a DLQ for manual inspection, ensuring the main queue isn't blocked.
+- **Wire S3 Event Notifications:** Trigger downstream services natively when objects are created in an S3 bucket based on specific prefix/suffix filters.
+- **Master Lambda Event Source Mapping:** Configure Lambda to securely poll an SQS queue and handle batch item failures gracefully.
 
 ## 🏢 Real-World Use Cases
-- **Media Processing:** A user uploads a 4K video, and a background task encodes it into 1080p, 720p, and 480p.
-- **Data Ingestion (ETL):** An external vendor drops a nightly CSV into an S3 bucket. It triggers a pipeline to clean and load the data into a data warehouse.
-- **Log Aggregation:** Server logs are shipped to S3 and automatically scanned for security anomalies by Lambda.
 
-<br>
+- **Media Processing:** A user uploads a 4K video, returning immediately to the UI, while a background pipeline encodes it into multiple formats (1080p, 720p).
+- **Data Ingestion (ETL):** An external vendor drops a nightly `.csv` into an S3 bucket, which automatically triggers a pipeline to clean and load the data into a Redshift warehouse.
+- **Log Aggregation:** Application logs are shipped to S3 and automatically scanned for security anomalies by a Lambda function before being archived.
 
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-11-infrastructure-as-code/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Infrastructure As Code</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><i>(Final Project)</i></td>
-    </tr>
-  </table>
-</div>
 

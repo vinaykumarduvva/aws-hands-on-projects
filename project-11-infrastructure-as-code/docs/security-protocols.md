@@ -1,43 +1,42 @@
-# Security Protocols: Infrastructure as Code
+# Project 11 Security Protocols: CloudFormation
 
-When managing infrastructure as code, security shifts from just configuring AWS resources correctly to also securing the code and the deployment pipeline itself.
+This document outlines the security posture of the infrastructure deployed via CloudFormation, highlighting how automated provisioning enforces strict security boundaries.
 
-## 🛡️ The Principle of Least Privilege (IAM)
+## 🔐 IAM & Access Control
 
-### 1. CloudFormation Execution Role
-By default, CloudFormation uses the permissions of the IAM user executing the stack creation. 
-- **Best Practice:** In an enterprise environment, a dedicated **IAM Service Role** should be passed to CloudFormation. This restricts CloudFormation to only build specific resources (e.g., EC2 and VPC, but denying IAM or RDS creation), preventing privilege escalation.
-- **CAPABILITY_IAM:** When a CloudFormation template creates IAM resources (Roles, Policies, Users), AWS requires you to explicitly acknowledge this by passing the `--capabilities CAPABILITY_IAM` flag. This prevents templates from secretly granting administrative access.
+### CloudFormation Service Role
+By default, CloudFormation uses the credentials of the IAM user executing the stack deployment. To adhere to the principle of least privilege in production, it is a best practice to pass a **Service Role** to CloudFormation.
+- This allows the IAM user to only have the `cloudformation:*` permission.
+- CloudFormation assumes the Service Role to actually provision the underlying resources (VPC, EC2, ALB).
 
-## 🔗 Security Group Chaining in IaC
+### EC2 Instance Profile (Role)
+Although not explicitly modeled in this specific baseline template, future iterations should attach an **IAM Instance Profile** to the EC2 Launch Template.
+- Instead of baking long-term access keys into the EC2 instance, the Instance Profile securely vends temporary, rotating credentials to the EC2 instances.
 
-The CloudFormation template enforces a strict security posture using **Security Group Chaining**, defined programmatically:
+## 🛡️ Network Security
 
-1. **ALB Security Group (`ALBSecurityGroup`)**:
-   - Ingress: Allows HTTP (Port 80) from `0.0.0.0/0` (the internet).
-2. **EC2 Security Group (`EC2SecurityGroup`)**:
-   - Ingress: Allows HTTP (Port 80) **only** from the `ALBSecurityGroup` ID.
-   
-```yaml
-SecurityGroupIngress:
-  - IpProtocol: tcp
-    FromPort: 80
-    ToPort: 80
-    SourceSecurityGroupId: !Ref ALBSecurityGroup
-```
-*Because this is defined in code, it is impossible to accidentally misconfigure the EC2 instance to be open to the public internet during deployment.*
+The CloudFormation template provisions a secure network foundation mimicking enterprise best practices.
 
-## 🤫 Parameter Security (NoEcho)
+### VPC Isolation
+- Resources are deployed into a custom, isolated Virtual Private Cloud (VPC), separate from other workloads.
+- The subnets span multiple Availability Zones to ensure high availability.
 
-When writing CloudFormation templates, hardcoding passwords or API keys is a critical security vulnerability.
+### Security Group Chaining
+Security is enforced using strict Security Group chaining rules defined in the YAML:
+1. **`ALBSecurityGroup`:** Acts as the public perimeter. It allows inbound HTTP (Port 80) traffic from `0.0.0.0/0` (the internet).
+2. **`WebServerSecurityGroup`:** Attached to the EC2 instances. It blocks all direct internet access. It **only** allows inbound HTTP traffic if the source is the `ALBSecurityGroup`. 
+   - This makes it physically impossible for an attacker to bypass the Load Balancer and hit the EC2 instances directly.
 
-### NoEcho Parameters
-For sensitive inputs (like database passwords), CloudFormation provides the `NoEcho: true` property. When applied to a Parameter, AWS masks the value in the Console, CLI outputs, and logs.
+## 🔒 Encryption
 
-### AWS Systems Manager (SSM) Parameter Store & Secrets Manager
-Modern templates integrate with AWS Secrets Manager or SSM Parameter Store using dynamic references (`{{resolve:ssm-secure:...}}`). This allows the template to fetch secrets at deployment time without the secret ever being visible in the template or the parameter inputs.
+### Data at Rest
+- **EBS Volumes:** The root EBS volumes attached to the EC2 instances via the Launch Template should have `Encrypted: true` specified in the Block Device Mappings, utilizing the default AWS KMS key (`aws/ebs`).
 
-## 🕵️‍♂️ Drift Detection for Security Auditing
+### Data in Transit
+- **TLS/HTTPS:** While this baseline project uses HTTP (Port 80) for simplicity, a production CloudFormation template would provision an HTTPS Listener on the ALB and attach an ACM (AWS Certificate Manager) SSL/TLS certificate to encrypt all client-to-ALB traffic in transit.
 
-CloudFormation's **Drift Detection** acts as a security auditing tool. 
-If a malicious actor or an inexperienced developer manually opens Port 22 (SSH) to the world `0.0.0.0/0` via the AWS Console, the CloudFormation stack will report **MODIFIED** during a drift check, immediately flagging the security breach for remediation.
+## 📋 Compliance & Best Practices
+
+- **Infrastructure as Code Auditing:** Because the entire environment is defined in YAML, every security rule, open port, and IAM permission can be reviewed, linted (using tools like `cfn-lint`), and approved in a pull request *before* it is ever deployed.
+- **Drift Detection:** CloudFormation Drift Detection can be run periodically to ensure no administrator has manually modified Security Groups (e.g., opening port 22 to the world) outside of the IaC pipeline.
+- **IMDSv2:** The EC2 Launch Template should explicitly require Instance Metadata Service Version 2 (IMDSv2) to protect against Server-Side Request Forgery (SSRF) vulnerabilities.

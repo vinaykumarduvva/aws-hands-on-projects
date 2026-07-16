@@ -1,44 +1,84 @@
-﻿# Troubleshooting CloudFormation
+# Project 11 Troubleshooting Guide: CloudFormation
 
-CloudFormation abstracts away many complexities, but when a stack fails, debugging requires reading stack events carefully. Below are common errors and their resolutions.
+When deploying Infrastructure as Code, failures usually occur during the `CREATE_IN_PROGRESS` or `UPDATE_IN_PROGRESS` phases. CloudFormation's rollback mechanism makes troubleshooting uniquely reliant on stack events.
 
-## 💥 Common Stack Failures
+---
 
-| Error Status / Message | Root Cause | Resolution |
-|:---|:---|:---|
-| **`ROLLBACK_COMPLETE` immediately on create** | A resource failed to provision during initial stack creation. | Run `aws cloudformation describe-stack-events` and look for the first `CREATE_FAILED` event. The "Reason" column will explain exactly why. |
-| **Cannot update stack in `ROLLBACK_COMPLETE`** | If a stack fails its *very first* creation attempt, it is dead. It cannot be updated. | You must run `delete-stack` to remove the dead stack, fix your template, and run `create-stack` again. |
-| **`CREATE_FAILED` on VPC (CIDR overlap)** | The `VpcCIDR` you specified overlaps with another VPC in your account. | Change the `VpcCIDR` parameter to a non-overlapping range (e.g., `10.5.0.0/16`). |
-| **`InsufficientCapabilitiesException`** | Your template creates IAM Roles/Policies, but you didn't grant CloudFormation permission to do so. | Always append `--capabilities CAPABILITY_IAM` or `CAPABILITY_NAMED_IAM` to your `create-stack` and `create-change-set` commands. |
-| **Change Set shows `Replacement: True` unexpectedly** | You modified a property of a resource that is immutable (e.g., changing the Availability Zone of an existing Subnet or the Engine of an RDS DB). | CloudFormation must destroy the old resource and create a new one. Review AWS Documentation for the resource to see which properties require replacement. |
-| **`DELETE_FAILED` during stack cleanup** | CloudFormation cannot delete a resource because it is not empty or is in use (e.g., an S3 bucket with files in it, or a Security Group attached to a manual EC2 instance). | Manually empty the S3 bucket or detach the ENI/Security Group via the console, then run `delete-stack` again. |
+## 📋 Quick Reference Table
 
-## 🔍 Debugging Toolkit (cfn-lint)
+| Problem | Quick Fix |
+|:---|:---|
+| Stack stuck in `ROLLBACK_IN_PROGRESS` | Wait for rollback to complete. Do not attempt to delete the stack manually until it reaches `ROLLBACK_COMPLETE`. |
+| `ValidationError: Template format error` | Check your YAML indentation. Ensure intrinsic functions (e.g., `!Ref`) are correctly formatted. |
+| `Resource handler returned message: ... already exists` | You are trying to create a resource (like an S3 bucket or IAM role) with a hardcoded name that is already in use. |
+| EC2 instances not joining the ASG | Check the User Data script in the Launch Template for syntax errors or missing packages (`httpd`). |
 
-### 1. The Stack Events Command
-This is your most powerful tool. The first error in the list is the root cause; everything after it is a symptom of the rollback.
+---
 
-```powershell
-aws cloudformation describe-stack-events `
-  --stack-name my-app-stack `
-  --query "StackEvents[?ResourceStatus=='CREATE_FAILED' || ResourceStatus=='UPDATE_FAILED'].{Resource:LogicalResourceId,Reason:ResourceStatusReason}" `
-  --output table
-```
+## Deployment Errors
 
-### 2. Validating Templates (cfn-lint)
-While `aws cloudformation validate-template` checks basic JSON/YAML structure, it doesn't check AWS logic (e.g., if you used a valid instance type). 
+### ❌ Stack Creation Fails and Rolls Back
+**Symptom:** You run `aws cloudformation create-stack`, but the status quickly changes to `ROLLBACK_IN_PROGRESS`.
 
-To catch logical errors before deploying, install the AWS CloudFormation Linter:
+**Cause 1:** Hardcoded Resource Names.
+Many AWS resources (like IAM Roles and S3 buckets) require globally or account-unique names. If you hardcode a `RoleName` and it already exists, the deployment fails.
+**Fix 1:** Remove the hardcoded `RoleName` from your template and allow CloudFormation to dynamically generate a unique physical ID.
+
+**Cause 2:** Dependency Violation.
+You attempted to reference a resource before it was fully created, or the underlying resource failed to provision (e.g., requesting an EC2 instance type not available in the selected AZ).
+**Fix 2:** Open the CloudFormation Console, navigate to the **Events** tab for your stack, and look for the first event with the status `CREATE_FAILED`. The `Status reason` column will detail exactly why the resource failed.
+
+---
+
+## Configuration Errors
+
+### ❌ YAML Syntax or Validation Errors
+**Symptom:** The CLI returns `ValidationError` immediately when you run the `create-stack` or `validate-template` command.
+
+**Cause:** CloudFormation templates are extremely strict about YAML indentation, allowed properties, and intrinsic function usage.
+**Fix:** 
+1. Run `aws cloudformation validate-template --template-body file://main-stack.yaml`. This will catch basic syntax errors before attempting a deployment.
+2. Ensure you are using the correct short-form syntax for intrinsic functions (e.g., `!Sub` instead of `Fn::Sub`) consistently.
+
+---
+
+## Execution Errors
+
+### ❌ EC2 Instances Fail Health Checks
+**Symptom:** The stack deploys successfully (`CREATE_COMPLETE`), but the Target Group shows the EC2 instances as `Unhealthy`, and the Auto Scaling Group keeps terminating and replacing them.
+
+**Cause:** The EC2 instances are booting up, but the Apache web server (`httpd`) is either not installing, not starting, or not responding on Port 80.
+**Fix:**
+1. SSH into one of the running EC2 instances (if you attached a Key Pair).
+2. Check the user data execution logs: `cat /var/log/cloud-init-output.log`.
+3. Verify if `httpd` is running: `systemctl status httpd`.
+4. Update the `UserData` property in your CloudFormation Launch Template to fix any script errors, then perform a Stack Update.
+
+---
+
+## 🔍 Debug Commands
+
+Use these CLI commands to probe your CloudFormation stack and identify failures:
+
+**Validate Template Syntax**
 ```bash
-pip install cfn-lint
-cfn-lint templates/main-stack.yaml
+aws cloudformation validate-template \
+    --template-body file://main-stack.yaml
 ```
 
-### 3. Stack Stuck in `UPDATE_IN_PROGRESS`
-Some resources inherently take a long time to provision or update. 
-- RDS Databases: 10–20 minutes
-- CloudFront Distributions: 15–30 minutes
-- Auto Scaling Groups: Takes time to boot instances and pass ELB health checks.
+**Get the Root Cause of a Failure**
+*(This fetches the specific event that triggered a rollback)*
+```bash
+aws cloudformation describe-stack-events \
+    --stack-name my-app-stack \
+    --query "StackEvents[?ResourceStatus=='CREATE_FAILED'].{Resource:LogicalResourceId, Reason:ResourceStatusReason}" \
+    --output table
+```
 
-**Do not panic** unless the stack has been stuck for over an hour. Do not attempt to cancel the stack manually; let the CloudFormation timeout handles it.
-
+**Check Target Group Health (To debug ASG issues)**
+```bash
+aws elbv2 describe-target-health \
+    --target-group-arn <YOUR-TARGET-GROUP-ARN> \
+    --query "TargetHealthDescriptions[*].[Target.Id, TargetHealth.State, TargetHealth.Description]" \
+    --output table
+```
