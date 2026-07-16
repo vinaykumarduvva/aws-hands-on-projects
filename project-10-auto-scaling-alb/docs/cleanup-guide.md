@@ -5,7 +5,11 @@ This guide covers the systematic tear-down of the infrastructure.
 ## 🧹 TEARDOWN ALL RESOURCES AUTOMATICALLY
 
 ### 🖥️ Method 1: AWS Management Console
-*(Refer to script comments for UI cleanup steps)*
+1. Log into the AWS Management Console and use the top search bar to navigate to the relevant service dashboard (e.g., EC2, VPC, S3, RDS).
+2. Locate the resources you created for this project (refer to the `Resources to Delete` table above for the required deletion order).
+3. Select each resource and click the primary **Delete**, **Terminate**, or **Empty** button.
+4. In the confirmation dialog, type the required confirmation text (e.g., `delete`, `permanently delete`, or the resource name).
+5. Click to finalize the deletion, and wait for the resource to completely disappear from the console list before moving to the next service.
 
 ### 🐧 Method 2: AWS CLI (Bash)
 ```bash
