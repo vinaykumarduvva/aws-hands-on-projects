@@ -20,7 +20,30 @@ Write-Host "SQS queues deleted"
 
 # 4. Empty and delete S3 buckets
 foreach ($BUCKET in @($SOURCE_BUCKET, $OUTPUT_BUCKET)) {
-  aws s3 rm s3://$BUCKET --recursive
+  Write-Host "Emptying bucket: $BUCKET"
+  
+  # Delete all object versions
+  $versions = aws s3api list-object-versions --bucket $BUCKET --query "Versions[].[Key, VersionId]" --output text
+  if ($versions -and $versions -notmatch "None") {
+    $versions -split "`r?`n" | Where-Object { $_ -match "\S" } | ForEach-Object {
+      $parts = $_ -split "`t"
+      if ($parts.Count -eq 2) {
+        aws s3api delete-object --bucket $BUCKET --key $parts[0] --version-id $parts[1] | Out-Null
+      }
+    }
+  }
+
+  # Delete all delete markers
+  $markers = aws s3api list-object-versions --bucket $BUCKET --query "DeleteMarkers[].[Key, VersionId]" --output text
+  if ($markers -and $markers -notmatch "None") {
+    $markers -split "`r?`n" | Where-Object { $_ -match "\S" } | ForEach-Object {
+      $parts = $_ -split "`t"
+      if ($parts.Count -eq 2) {
+        aws s3api delete-object --bucket $BUCKET --key $parts[0] --version-id $parts[1] | Out-Null
+      }
+    }
+  }
+
   aws s3api delete-bucket --bucket $BUCKET --region ap-south-1
   Write-Host "Bucket deleted: $BUCKET"
 }

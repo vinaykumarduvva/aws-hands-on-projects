@@ -18,8 +18,25 @@ DLQ_URL=$(aws sqs get-queue-url --queue-name $DLQ_NAME --query "QueueUrl" --outp
 echo "SQS queues deleted"
 
 for BUCKET in $SOURCE_BUCKET $OUTPUT_BUCKET; do
-  aws s3 rm s3://$BUCKET --recursive
-  aws s3api delete-bucket --bucket $BUCKET --region ap-south-1
+  echo "Emptying bucket: $BUCKET"
+  
+  # Delete all object versions
+  VERSIONS=$(aws s3api list-object-versions --bucket "$BUCKET" --query="Versions[].[Key, VersionId]" --output text)
+  if [ -n "$VERSIONS" ] && [ "$VERSIONS" != "None" ]; then
+    while read -r KEY VERSION_ID; do
+      [ -n "$KEY" ] && aws s3api delete-object --bucket "$BUCKET" --key "$KEY" --version-id "$VERSION_ID" >/dev/null
+    done <<< "$VERSIONS"
+  fi
+
+  # Delete all delete markers
+  MARKERS=$(aws s3api list-object-versions --bucket "$BUCKET" --query="DeleteMarkers[].[Key, VersionId]" --output text)
+  if [ -n "$MARKERS" ] && [ "$MARKERS" != "None" ]; then
+    while read -r KEY VERSION_ID; do
+      [ -n "$KEY" ] && aws s3api delete-object --bucket "$BUCKET" --key "$KEY" --version-id "$VERSION_ID" >/dev/null
+    done <<< "$MARKERS"
+  fi
+
+  aws s3api delete-bucket --bucket "$BUCKET" --region ap-south-1
   echo "Bucket deleted: $BUCKET"
 done
 

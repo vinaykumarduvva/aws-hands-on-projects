@@ -10,7 +10,6 @@ ESM_UUID=$(aws lambda create-event-source-mapping \
   --event-source-arn $QUEUE_ARN \
   --batch-size 1 \
   --maximum-batching-window-in-seconds 0 \
-  --function-response-types ReportBatchItemFailures \
   --query "UUID" --output text)
 
 echo "Event source mapping UUID: $ESM_UUID"

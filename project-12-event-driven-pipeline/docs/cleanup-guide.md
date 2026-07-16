@@ -65,8 +65,25 @@ DLQ_URL=$(aws sqs get-queue-url --queue-name $DLQ_NAME --query "QueueUrl" --outp
 echo "SQS queues deleted"
 
 for BUCKET in $SOURCE_BUCKET $OUTPUT_BUCKET; do
-  aws s3 rm s3://$BUCKET --recursive
-  aws s3api delete-bucket --bucket $BUCKET --region ap-south-1
+  echo "Emptying bucket: $BUCKET"
+  
+  # Delete all object versions
+  VERSIONS=$(aws s3api list-object-versions --bucket "$BUCKET" --query="Versions[].[Key, VersionId]" --output text)
+  if [ -n "$VERSIONS" ] && [ "$VERSIONS" != "None" ]; then
+    while read -r KEY VERSION_ID; do
+      [ -n "$KEY" ] && aws s3api delete-object --bucket "$BUCKET" --key "$KEY" --version-id "$VERSION_ID" >/dev/null
+    done <<< "$VERSIONS"
+  fi
+
+  # Delete all delete markers
+  MARKERS=$(aws s3api list-object-versions --bucket "$BUCKET" --query="DeleteMarkers[].[Key, VersionId]" --output text)
+  if [ -n "$MARKERS" ] && [ "$MARKERS" != "None" ]; then
+    while read -r KEY VERSION_ID; do
+      [ -n "$KEY" ] && aws s3api delete-object --bucket "$BUCKET" --key "$KEY" --version-id "$VERSION_ID" >/dev/null
+    done <<< "$MARKERS"
+  fi
+
+  aws s3api delete-bucket --bucket "$BUCKET" --region ap-south-1
   echo "Bucket deleted: $BUCKET"
 done
 
@@ -105,7 +122,30 @@ Write-Host "SQS queues deleted"
 
 # 4. Empty and delete S3 buckets
 foreach ($BUCKET in @($SOURCE_BUCKET, $OUTPUT_BUCKET)) {
-  aws s3 rm s3://$BUCKET --recursive
+  Write-Host "Emptying bucket: $BUCKET"
+  
+  # Delete all object versions
+  $versions = aws s3api list-object-versions --bucket $BUCKET --query "Versions[].[Key, VersionId]" --output text
+  if ($versions -and $versions -notmatch "None") {
+    $versions -split "`r?`n" | Where-Object { $_ -match "\S" } | ForEach-Object {
+      $parts = $_ -split "`t"
+      if ($parts.Count -eq 2) {
+        aws s3api delete-object --bucket $BUCKET --key $parts[0] --version-id $parts[1] | Out-Null
+      }
+    }
+  }
+
+  # Delete all delete markers
+  $markers = aws s3api list-object-versions --bucket $BUCKET --query "DeleteMarkers[].[Key, VersionId]" --output text
+  if ($markers -and $markers -notmatch "None") {
+    $markers -split "`r?`n" | Where-Object { $_ -match "\S" } | ForEach-Object {
+      $parts = $_ -split "`t"
+      if ($parts.Count -eq 2) {
+        aws s3api delete-object --bucket $BUCKET --key $parts[0] --version-id $parts[1] | Out-Null
+      }
+    }
+  }
+
   aws s3api delete-bucket --bucket $BUCKET --region ap-south-1
   Write-Host "Bucket deleted: $BUCKET"
 }
