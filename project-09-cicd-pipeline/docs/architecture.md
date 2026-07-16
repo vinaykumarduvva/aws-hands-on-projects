@@ -40,19 +40,19 @@ flowchart TD
         end
     end
     
-    Dev -- "git push (main branch)" --> CC
+    Dev -->|"git push (main branch)"| CC
     CC --> S1
-    S1 -- "SourceOutput artifact" --> S3B
+    S1 -->|"SourceOutput artifact"| S3B
     S3B --> S2
     S2 --> CB
-    CB -- "Reads" -.-> BS
-    CB -- "BuildOutput artifact" --> S3B
+    CB -.->|"Reads"| BS
+    CB -->|"BuildOutput artifact"| S3B
     S3B --> S3
     S3 --> CD
-    CD -- "Reads" -.-> AS
-    CD -- "Downloads artifact" --> Agent
+    CD -.->|"Reads"| AS
+    CD -->|"Downloads artifact"| Agent
     Agent --> Apache
-    CB -- "Build logs" --> CW
+    CB -->|"Build logs"| CW
     IAM -.-> CB
     IAM -.-> CD
     IAM -.-> EC2
