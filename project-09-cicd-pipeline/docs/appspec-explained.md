@@ -1,67 +1,15 @@
+# appspec.yml Explained
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">CI/CD Pipeline (CodePipeline)</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">appspec-explained.md</text>
-  </svg>
-</div>
-
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Serverless Rest Api</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Auto Scaling Alb</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-
-
-<br>
-
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
-
-<br>
-
-## What is appspec.yml?
-
-`appspec.yml` is the CodeDeploy deployment manifest.
-It tells the CodeDeploy agent on EC2 exactly:
-
+`appspec.yml` is the CodeDeploy deployment manifest. It tells the CodeDeploy agent on EC2 exactly:
 - Which files to copy and where to put them
 - What permissions to set on those files
 - Which scripts to run at each deployment lifecycle stage
 
-Without `appspec.yml` CodeDeploy does not know what to do
-and the deployment fails immediately.
+Without `appspec.yml`, CodeDeploy does not know what to do and the deployment fails immediately.
 
 ---
 
-## File Location
+## 📂 File Location
 
 ```text
 my-web-app/
@@ -75,13 +23,12 @@ my-web-app/
     └── validate_service.sh
 ```
 
-> ⚠️ `appspec.yml` must be in the ROOT of the deployment
-> artifact. Our buildspec.yml copies it to `dist/` which
-> becomes the root of the BuildOutput ZIP.
+> [!WARNING]
+> `appspec.yml` must be in the ROOT of the deployment artifact. Our `buildspec.yml` copies it to `dist/` which becomes the root of the `BuildOutput` ZIP.
 
 ---
 
-## Full appspec.yml with Annotations
+## 📝 Full appspec.yml with Annotations
 
 ```yaml
 # AppSpec format version — always 0.0 for EC2/on-premises
@@ -188,10 +135,9 @@ hooks:
 
 ---
 
-## The 7 Lifecycle Event Hooks (Full List)
+## 🔄 The 7 Lifecycle Event Hooks (Full List)
 
-CodeDeploy supports 7 lifecycle hooks for EC2 deployments.
-We used 4. Here is the complete list in execution order:
+CodeDeploy supports 7 lifecycle hooks for EC2 deployments. We used 4. Here is the complete list in execution order:
 
 ```text
 ApplicationStop
@@ -219,7 +165,7 @@ ValidateService        ← We use this
 
 ---
 
-## Deployment Hook Scripts Explained
+## 📜 Deployment Hook Scripts Explained
 
 ### before_install.sh
 
@@ -328,7 +274,7 @@ echo "ValidateService complete — deployment successful!"
 
 ---
 
-## What Happens When a Hook Fails
+## ❌ What Happens When a Hook Fails
 
 ```text
 ValidateService returns exit code 1
@@ -347,14 +293,11 @@ Previous version restored on EC2
               │
               ▼
 Pipeline stage: Deploy → FAILED (red)
-              │
-              ▼
-Developer receives notification (if SNS configured)
 ```
 
 ---
 
-## appspec.yml Validation Checklist
+## ✅ appspec.yml Validation Checklist
 
 Before pushing, verify:
 
@@ -381,7 +324,7 @@ sed -i 's/\r//' scripts/*.sh
 
 ---
 
-## Common appspec.yml Errors
+## 🚨 Common appspec.yml Errors
 
 | Error                              | Cause                              | Fix                                                             |
 | ---------------------------------- | ---------------------------------- | --------------------------------------------------------------- |
@@ -391,17 +334,3 @@ sed -i 's/\r//' scripts/*.sh
 | `Permission denied`                | Wrong runas user                   | Change `runas: root` for system operations                      |
 | `Timeout`                          | Script took longer than `timeout`  | Increase timeout value or optimize script                       |
 | `YAML parse error`                 | Tab characters or bad indentation  | Use spaces only, validate with `python -c "import yaml..."`     |
-
-<br>
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Serverless Rest Api</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Auto Scaling Alb</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-

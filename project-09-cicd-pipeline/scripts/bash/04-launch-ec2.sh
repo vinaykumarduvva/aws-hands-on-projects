@@ -35,7 +35,7 @@ echo "VPC: $VPC_ID  Subnet: $SUBNET_ID"
 
 # ── SECURITY GROUP ────────────────────────────────────────────────────────────
 echo -e "\e[33m[3/5] Creating security group...\e[0m"
-MY_IP=(Invoke-WebRequest -Uri "https://checkip.amazonaws.com" -UseBasicParsing).Content.Trim()
+MY_IP=$(curl -s https://checkip.amazonaws.com | tr -d '[:space:]')
 
 DEPLOY_SG=$(aws ec2 create-security-group \
     --group-name cicd-deploy-sg \
@@ -53,7 +53,7 @@ echo "Security group: $DEPLOY_SG"
 
 # ── USER DATA ─────────────────────────────────────────────────────────────────
 echo -e "\e[33m[4/5] Preparing user data script...\e[0m"
-USER_DATA=@"
+cat > userdata-deploy.sh << 'USERDATA'
 #!/bin/bash
 yum update -y
 yum install -y ruby wget httpd
@@ -78,9 +78,7 @@ echo '<html><body style="font-family:Arial;text-align:center;padding:60px;backgr
 </body></html>' > /var/www/html/index.html
 
 echo "EC2 setup complete" > /tmp/setup-done.txt
-"@
-
-$USER_DATA | Out-File -FilePath "userdata-deploy.sh" -Encoding ascii
+USERDATA
 
 # ── LAUNCH INSTANCE ───────────────────────────────────────────────────────────
 echo -e "\e[33m[5/5] Launching EC2 instance...\e[0m"
@@ -117,4 +115,4 @@ echo "  App URL:             http://$DEPLOY_PUBLIC_IP"
 echo ""
 echo "IMPORTANT: Tag Environment=production is set — CodeDeploy uses this to find instances"
 echo ""
-echo -e "\e[36mNext step: Run 05-create-codedeploy.ps1\e[0m"
+echo -e "\e[36mNext step: Run 05-create-codedeploy.sh\e[0m"

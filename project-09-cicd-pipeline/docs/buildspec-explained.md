@@ -1,66 +1,14 @@
+# buildspec.yml Explained
 
-<div align="center">
-  <svg width="800" height="150" xmlns="http://www.w3.org/2000/svg">
-    <style>
-      .bg { fill: url(#grad); stroke: #e1e4e8; stroke-width: 2px; rx: 12px; }
-      .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 800; fill: #ffffff; }
-      .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; fill: #e1e4e8; }
-      .glow { animation: pulse 3s infinite alternate; }
-      @keyframes pulse {
-        0% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(255,153,0,0.4)); }
-        100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,153,0,0.9)); }
-      }
-      @media (prefers-color-scheme: dark) {
-        .bg { stroke: #30363d; }
-      }
-    </style>
-    <defs>
-      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#232f3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#ff9900;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="title glow">CI/CD Pipeline (CodePipeline)</text>
-    <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" class="subtitle">buildspec-explained.md</text>
-  </svg>
-</div>
+`buildspec.yml` is a YAML file that tells CodeBuild exactly what to do during a build. It lives in the root of your repository and is automatically picked up by CodeBuild.
 
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Serverless Rest Api</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Auto Scaling Alb</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-
-
-<br>
-
-<div style="background-color: #fdfdfe; border-left: 4px solid #ff9900; padding: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-  <i>The following granular documentation is designed to provide enterprise-level clarity for deploying and managing this AWS architecture. Pay close attention to the architectural specifications and step-by-step methodologies below.</i>
-</div>
-
-<br>
-
-## What is buildspec.yml?
-
-`buildspec.yml` is a YAML file that tells CodeBuild exactly
-what to do during a build. It lives in the root of your
-repository and is automatically picked up by CodeBuild.
-
-Think of it as a recipe — CodeBuild follows it step by step
-inside a fresh Linux container for every build.
+Think of it as a recipe — CodeBuild follows it step by step inside a fresh Linux container for every build.
 
 ---
 
-## File Location
+## 📂 File Location
 
-```
+```text
 my-web-app/              ← repository root
 ├── index.html
 ├── buildspec.yml        ← CodeBuild reads this
@@ -70,7 +18,7 @@ my-web-app/              ← repository root
 
 ---
 
-## Full buildspec.yml with Annotations
+## 📝 Full buildspec.yml with Annotations
 
 ```yaml
 # buildspec version — always 0.2 for current CodeBuild
@@ -218,60 +166,47 @@ cache:
 
 ---
 
-## buildspec.yml Phase Flow
+## 🔄 buildspec.yml Phase Flow
 
-```
-Container starts fresh
-        │
-        ▼
-[install]
-  Set up Python 3.11
-        │ success
-        ▼
-[pre_build]
-  Validate HTML
-  Check files exist
-        │ success → continue
-        │ failure → BUILD FAILED (stop here)
-        ▼
-[build]
-  Create dist/
-  Copy files
-  Generate build-info.txt
-        │ success → continue
-        │ failure → BUILD FAILED (stop here)
-        ▼
-[post_build]
-  Log completion
-  (always runs)
-        │
-        ▼
-[artifacts]
-  Zip dist/ contents
-  Upload to S3 as BuildOutput
-        │
-        ▼
-Build: SUCCEEDED ✅
+```mermaid
+graph TD
+    A[Container starts fresh] --> B[install]
+    B -->|success| C[pre_build]
+    C -->|success| D[build]
+    C -->|failure| F[BUILD FAILED]
+    D -->|success| E[post_build]
+    D -->|failure| F
+    E --> G[artifacts]
+    G --> H[Build: SUCCEEDED ✅]
+    
+    style A fill:#f8f9fa,stroke:#6c757d
+    style B fill:#e2e3e5,stroke:#383d41
+    style C fill:#e2e3e5,stroke:#383d41
+    style D fill:#e2e3e5,stroke:#383d41
+    style E fill:#e2e3e5,stroke:#383d41
+    style F fill:#f8d7da,stroke:#dc3545
+    style G fill:#cce5ff,stroke:#007bff
+    style H fill:#d4edda,stroke:#28a745
 ```
 
 ---
 
-## Environment Variables Available in buildspec.yml
+## 🌐 Environment Variables Available in buildspec.yml
 
 | Variable | Example Value | Description |
 |---|---|---|
-| CODEBUILD_BUILD_ID | my-web-app-build:abc123 | Unique build identifier |
-| CODEBUILD_BUILD_NUMBER | 5 | Auto-incrementing build count |
-| CODEBUILD_BUILD_ARN | arn:aws:codebuild:... | Full ARN of this build |
-| CODEBUILD_INITIATOR | codepipeline/my-web-app-pipeline | What started the build |
-| CODEBUILD_SOURCE_VERSION | refs/heads/main | Branch or commit reference |
-| CODEBUILD_SRC_DIR | /codebuild/output/src | Where source code lives |
-| AWS_DEFAULT_REGION | ap-south-1 | Current AWS region |
-| AWS_ACCOUNT_ID | 123456789012 | Your AWS account ID |
+| `CODEBUILD_BUILD_ID` | `my-web-app-build:abc123` | Unique build identifier |
+| `CODEBUILD_BUILD_NUMBER` | `5` | Auto-incrementing build count |
+| `CODEBUILD_BUILD_ARN` | `arn:aws:codebuild:...` | Full ARN of this build |
+| `CODEBUILD_INITIATOR` | `codepipeline/my-web-app-pipeline` | What started the build |
+| `CODEBUILD_SOURCE_VERSION` | `refs/heads/main` | Branch or commit reference |
+| `CODEBUILD_SRC_DIR` | `/codebuild/output/src` | Where source code lives |
+| `AWS_DEFAULT_REGION` | `ap-south-1` | Current AWS region |
+| `AWS_ACCOUNT_ID` | `123456789012` | Your AWS account ID |
 
 ---
 
-## Common buildspec.yml Patterns
+## 📋 Common buildspec.yml Patterns
 
 ### Node.js application
 ```yaml
@@ -327,40 +262,28 @@ phases:
 
 ---
 
-## Debugging Failed Builds
+## 🐛 Debugging Failed Builds
 
-```powershell
+```bash
 # Get build ID from latest execution
-$BUILD_ID = aws codebuild list-builds-for-project `
-  --project-name my-web-app-build `
-  --query "ids[0]" --output text
+BUILD_ID=$(aws codebuild list-builds-for-project \
+  --project-name my-web-app-build \
+  --query "ids[0]" --output text)
 
 # Get build details including failure reason
-aws codebuild batch-get-builds `
-  --ids $BUILD_ID `
-  --query "builds[0].{Status:buildStatus,Phase:currentPhase,Reason:phases[?phaseStatus=='FAILED'].phaseType}" `
+aws codebuild batch-get-builds \
+  --ids $BUILD_ID \
+  --query "builds[0].{Status:buildStatus,Phase:currentPhase,Reason:phases[?phaseStatus=='FAILED'].phaseType}" \
   --output table
 
 # Read CloudWatch logs for the failed build
-aws logs get-log-events `
-  --log-group-name /aws/codebuild/my-web-app-build `
-  --log-stream-name (aws logs describe-log-streams `
-    --log-group-name /aws/codebuild/my-web-app-build `
-    --order-by LastEventTime --descending `
-    --query "logStreams[0].logStreamName" --output text) `
+LOG_STREAM=$(aws logs describe-log-streams \
+  --log-group-name /aws/codebuild/my-web-app-build \
+  --order-by LastEventTime --descending \
+  --query "logStreams[0].logStreamName" --output text 2>/dev/null)
+
+aws logs get-log-events \
+  --log-group-name /aws/codebuild/my-web-app-build \
+  --log-stream-name $LOG_STREAM \
   --query "events[*].message" --output text
 ```
-
-<br>
-
-
-<div align="center" style="margin: 30px 0; padding: 15px; border: 1px solid #e1e4e8; border-radius: 8px; background-color: #f6f8fa;">
-  <table style="width: 100%; text-align: center; border: none; background: transparent;">
-    <tr style="border: none;">
-      <td style="width: 33%; border: none;"><a href='../../project-08-serverless-rest-api/README.md' style='font-size: 16px; text-decoration: none;'>⏪ <b>Previous: Serverless Rest Api</b></a></td>
-      <td style="width: 33%; border: none;"><a href="../README.md" style="font-size: 16px; text-decoration: none;">🏠 <b>Project Home</b></a></td>
-      <td style="width: 33%; border: none;"><a href='../../project-10-auto-scaling-alb/README.md' style='font-size: 16px; text-decoration: none;'><b>Next: Auto Scaling Alb</b> ⏩</a></td>
-    </tr>
-  </table>
-</div>
-

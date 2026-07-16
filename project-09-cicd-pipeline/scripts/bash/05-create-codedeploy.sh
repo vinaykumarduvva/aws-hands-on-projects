@@ -8,11 +8,11 @@
 echo -e "\e[36m=== Project 9 — Create CodeDeploy ===\e[0m"
 echo ""
 
-if (-not $CODEDEPLOY_ROLE_ARN) {
+if [ -z "$CODEDEPLOY_ROLE_ARN" ]; then
     CODEDEPLOY_ROLE_ARN=$(aws iam get-role \
         --role-name codedeploy-service-role \
         --query "Role.Arn" --output text)
-}
+fi
 echo "CodeDeploy Role ARN: $CODEDEPLOY_ROLE_ARN"
 echo ""
 
@@ -61,4 +61,4 @@ echo "Application:       my-web-app"
 echo "Deployment group:  production"
 echo "Target tag:        Environment=production"
 echo ""
-echo -e "\e[36mNext step: Run 06-create-codebuild.ps1\e[0m"
+echo -e "\e[36mNext step: Run 06-create-codebuild.sh\e[0m"

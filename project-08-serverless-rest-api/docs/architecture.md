@@ -16,19 +16,19 @@ flowchart TD
         CW["CloudWatch Logs"]
     end
     
-    Client -- "HTTPS Request" --> API
+    Client -->|HTTPS Request| API
     
-    API -- "POST /users" --> Lambda
-    API -- "GET /users" --> Lambda
-    API -- "GET /users/{id}" --> Lambda
-    API -- "PUT /users/{id}" --> Lambda
-    API -- "DELETE /users/{id}" --> Lambda
+    API -->|POST /users| Lambda
+    API -->|GET /users| Lambda
+    API -->|GET /users/id| Lambda
+    API -->|PUT /users/id| Lambda
+    API -->|DELETE /users/id| Lambda
     
-    Lambda -- "Assume Role" -.-> IAM
+    Lambda -.->|Assume Role| IAM
     IAM -.->|Grants Access| DB
     
-    Lambda -- "PutItem, GetItem, Scan, DeleteItem" --> DB
-    Lambda -- "Write execution logs" --> CW
+    Lambda -->|"PutItem, GetItem, Scan, DeleteItem"| DB
+    Lambda -->|Write execution logs| CW
 ```
 
 ## 🔄 Data Flow Analysis

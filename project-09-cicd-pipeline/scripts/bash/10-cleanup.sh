@@ -15,18 +15,18 @@ ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 ARTIFACT_BUCKET="codepipeline-artifacts-$ACCOUNT_ID-ap-south-1"
 
 # Re-fetch IDs
-if (-not $DEPLOY_INSTANCE_ID) {
+if [ -z "$DEPLOY_INSTANCE_ID" ]; then
     DEPLOY_INSTANCE_ID=$(aws ec2 describe-instances \
         --filters "Name=tag:Name,Values=cicd-deploy-server" \
         --region ap-south-1 \
         --query "Reservations[0].Instances[0].InstanceId" --output text)
-}
-if (-not $DEPLOY_SG) {
+fi
+if [ -z "$DEPLOY_SG" ]; then
     DEPLOY_SG=$(aws ec2 describe-security-groups \
         --filters "Name=group-name,Values=cicd-deploy-sg" \
         --region ap-south-1 \
         --query "SecurityGroups[0].GroupId" --output text)
-}
+fi
 
 echo "EC2 Instance: $DEPLOY_INSTANCE_ID"
 echo "Security Group: $DEPLOY_SG"
@@ -58,15 +58,15 @@ echo -e "\e[32mCodeCommit deleted.\e[0m"
 
 # ── 5: TERMINATE EC2 ─────────────────────────────────────────────────────────
 echo -e "\e[33m[5/7] Terminating EC2 instance...\e[0m"
-if ($DEPLOY_INSTANCE_ID -and $DEPLOY_INSTANCE_ID -ne "None") {
-    aws ec2 terminate-instances --instance-ids $DEPLOY_INSTANCE_ID --region ap-south-1 | Out-Null
+if [ -n "$DEPLOY_INSTANCE_ID" ] && [ "$DEPLOY_INSTANCE_ID" != "None" ]; then
+    aws ec2 terminate-instances --instance-ids $DEPLOY_INSTANCE_ID --region ap-south-1 > /dev/null 2>&1
     aws ec2 wait instance-terminated --instance-ids $DEPLOY_INSTANCE_ID --region ap-south-1
-echo "EC2 terminated."
-}
-if ($DEPLOY_SG -and $DEPLOY_SG -ne "None") {
+    echo "EC2 terminated."
+fi
+if [ -n "$DEPLOY_SG" ] && [ "$DEPLOY_SG" != "None" ]; then
     aws ec2 delete-security-group --group-id $DEPLOY_SG --region ap-south-1 2>/dev/null
-echo "Security group deleted."
-}
+    echo "Security group deleted."
+fi
 echo -e "\e[32mEC2 resources deleted.\e[0m"
 
 # ── 6: EMPTY AND DELETE S3 ────────────────────────────────────────────────────
@@ -78,25 +78,25 @@ echo -e "\e[32mS3 bucket deleted.\e[0m"
 # ── 7: DELETE IAM ROLES ───────────────────────────────────────────────────────
 echo -e "\e[33m[7/7] Deleting IAM roles...\e[0m"
 
-ROLES=@(
-    "codebuild-service-role",
-    "codedeploy-service-role",
-    "codepipeline-service-role",
+ROLES=(
+    "codebuild-service-role"
+    "codedeploy-service-role"
+    "codepipeline-service-role"
     "ec2-codedeploy-role"
 )
 
-foreach ($ROLE in $ROLES) {
+for ROLE in "${ROLES[@]}"; do
     POLICIES=$(aws iam list-attached-role-policies \
-        --role-name $ROLE \
+        --role-name "$ROLE" \
         --query "AttachedPolicies[*].PolicyArn" --output text 2>/dev/null)
-    foreach $(P in $(POLICIES )) {
-        if ($P -and $P -ne "None") {
-            aws iam detach-role-policy --role-name $ROLE --policy-arn $P 2>/dev/null
-        }
-    }
-    aws iam delete-role --role-name $ROLE 2>/dev/null
-echo "  Deleted role: $ROLE"
-}
+    for P in $POLICIES; do
+        if [ -n "$P" ] && [ "$P" != "None" ]; then
+            aws iam detach-role-policy --role-name "$ROLE" --policy-arn "$P" 2>/dev/null
+        fi
+    done
+    aws iam delete-role --role-name "$ROLE" 2>/dev/null
+    echo "  Deleted role: $ROLE"
+done
 
 aws iam remove-role-from-instance-profile \
     --instance-profile-name ec2-codedeploy-profile \
@@ -111,11 +111,15 @@ echo -e "\e[36m=== Cleanup Verification ===\e[0m"
 echo ""
 
 PIPE=$(aws codepipeline get-pipeline --name my-web-app-pipeline --region ap-south-1 2>&1)
-if ($PIPE -match "PipelineNotFoundException") { Write-Host "Pipeline:    DELETED" -ForegroundColor Green }
+if echo "$PIPE" | grep -q "PipelineNotFoundException"; then
+    echo -e "\e[32mPipeline:    DELETED\e[0m"
+fi
 
 REPO=$(aws codecommit get-repository --repository-name my-web-app --region ap-south-1 2>&1)
-if ($REPO -match "RepositoryDoesNotExistException") { Write-Host "CodeCommit:  DELETED" -ForegroundColor Green }
+if echo "$REPO" | grep -q "RepositoryDoesNotExistException"; then
+    echo -e "\e[32mCodeCommit:  DELETED\e[0m"
+fi
 
 echo ""
 echo -e "\e[36m=== Project 9 Cleanup Complete ===\e[0m"
-echo "Cost: $0.00 — all within free tier"
+echo "Cost: \$0.00 — all within free tier"

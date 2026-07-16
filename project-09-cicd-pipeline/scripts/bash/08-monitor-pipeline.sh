@@ -48,34 +48,35 @@ LOG_STREAM=$(aws logs describe-log-streams \
     --query "logStreams[0].logStreamName" \
     --output text 2>/dev/null)
 
-if ($LOG_STREAM -and $LOG_STREAM -ne "None") {
+if [ -n "$LOG_STREAM" ] && [ "$LOG_STREAM" != "None" ]; then
     aws logs get-log-events \
         --log-group-name /aws/codebuild/my-web-app-build \
-        --log-stream-name $LOG_STREAM \
+        --log-stream-name "$LOG_STREAM" \
         --limit 20 \
         --region ap-south-1 \
         --query "events[*].message" \
         --output text
-}
-else {
-echo "  No build logs yet — build may not have started."
-}
+else
+    echo "  No build logs yet — build may not have started."
+fi
 
 # ── CODEDEPLOY DEPLOYMENTS ────────────────────────────────────────────────────
 echo ""
 echo -e "\e[33m--- CodeDeploy Deployment History ---\e[0m"
-aws deploy list-deployments \
+DEPLOYMENTS=$(aws deploy list-deployments \
     --application-name my-web-app \
     --deployment-group-name production \
     --region ap-south-1 \
     --query "deployments" \
-    --output text | ForEach-Object {
-    if ($_) {
-        aws deploy get-deployment --deployment-id $_ --region ap-south-1 \
+    --output text)
+
+for DEPLOYMENT_ID in $DEPLOYMENTS; do
+    if [ -n "$DEPLOYMENT_ID" ] && [ "$DEPLOYMENT_ID" != "None" ]; then
+        aws deploy get-deployment --deployment-id "$DEPLOYMENT_ID" --region ap-south-1 \
             --query "deploymentInfo.{ID:deploymentId,Status:status,Created:createTime}" \
             --output table
-    }
-}
+    fi
+done
 
 # ── ALL EXECUTIONS ────────────────────────────────────────────────────────────
 echo ""

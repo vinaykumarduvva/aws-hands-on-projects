@@ -12,18 +12,18 @@ echo ""
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 ARTIFACT_BUCKET="codepipeline-artifacts-$ACCOUNT_ID-ap-south-1"
 
-if (-not $PIPELINE_ROLE_ARN) {
+if [ -z "$PIPELINE_ROLE_ARN" ]; then
     PIPELINE_ROLE_ARN=$(aws iam get-role \
         --role-name codepipeline-service-role \
         --query "Role.Arn" --output text)
-}
+fi
 
 echo "Pipeline Role ARN: $PIPELINE_ROLE_ARN"
 echo "Artifact Bucket:   $ARTIFACT_BUCKET"
 echo ""
 echo -e "\e[33mBuilding pipeline definition...\e[0m"
 
-PIPELINE_DEF=@"
+cat > pipeline-definition.json << EOF
 {
   "name": "my-web-app-pipeline",
   "roleArn": "$PIPELINE_ROLE_ARN",
@@ -95,15 +95,14 @@ PIPELINE_DEF=@"
     }
   ]
 }
-"@
+EOF
 
-$PIPELINE_DEF | Out-File -FilePath "pipeline-definition.json" -Encoding utf8
 echo "Pipeline definition saved to pipeline-definition.json"
 
 echo -e "\e[33mCreating pipeline...\e[0m"
 aws codepipeline create-pipeline \
     --pipeline file://pipeline-definition.json \
-    --region ap-south-1 | Out-Null
+    --region ap-south-1 > /dev/null 2>&1
 
 echo -e "\e[32mPipeline created!\e[0m"
 echo ""
@@ -128,4 +127,4 @@ aws codepipeline get-pipeline-state \
 
 echo ""
 echo -e "\e[36m=== Pipeline Created ===\e[0m"
-echo -e "\e[36mNext step: Run 08-monitor-pipeline.ps1 to watch execution\e[0m"
+echo -e "\e[36mNext step: Run 08-monitor-pipeline.sh to watch execution\e[0m"

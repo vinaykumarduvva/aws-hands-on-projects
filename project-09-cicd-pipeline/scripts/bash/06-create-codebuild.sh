@@ -11,11 +11,11 @@ echo ""
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 ARTIFACT_BUCKET="codepipeline-artifacts-$ACCOUNT_ID-ap-south-1"
 
-if (-not $CODEBUILD_ROLE_ARN) {
+if [ -z "$CODEBUILD_ROLE_ARN" ]; then
     CODEBUILD_ROLE_ARN=$(aws iam get-role \
         --role-name codebuild-service-role \
         --query "Role.Arn" --output text)
-}
+fi
 
 echo "CodeBuild Role ARN:  $CODEBUILD_ROLE_ARN"
 echo "Artifact Bucket:     $ARTIFACT_BUCKET"
@@ -31,7 +31,7 @@ aws codebuild create-project \
     --environment "type=LINUX_CONTAINER,computeType=BUILD_GENERAL1_SMALL,image=aws/codebuild/standard:7.0" \
     --service-role $CODEBUILD_ROLE_ARN \
     --logs-config "cloudWatchLogs={status=ENABLED,groupName=/aws/codebuild/my-web-app-build}" \
-    --region ap-south-1 | Out-Null
+    --region ap-south-1 > /dev/null 2>&1
 
 echo -e "\e[32mCodeBuild project created.\e[0m"
 
@@ -53,4 +53,4 @@ echo "Buildspec:  buildspec.yml (in repo root)"
 echo "Artifacts:  S3 — $ARTIFACT_BUCKET"
 echo "Logs:       /aws/codebuild/my-web-app-build"
 echo ""
-echo -e "\e[36mNext step: Run 07-create-codepipeline.ps1\e[0m"
+echo -e "\e[36mNext step: Run 07-create-codepipeline.sh\e[0m"

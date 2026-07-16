@@ -1,56 +1,143 @@
-# 🧹 Project 09 Cleanup Guide
+# Cleanup Guide — CI/CD Pipeline Project
 
-To avoid incurring any unexpected charges on your AWS account, it is important to delete all the resources provisioned during this project. Follow these steps in order to cleanly tear down the CI/CD pipeline.
+## Why Cleanup Matters
 
-> [!WARNING]
-> **Data Loss Warning**: Deleting the CodeCommit repository will permanently destroy the source code hosted on AWS. Ensure you have a local copy of your code before proceeding.
+Most services in this project are within the Free Tier, however:
+- EC2 instances consume free tier hours (750 hrs/month shared across all instances)
+- The CodePipeline free tier covers only 1 active pipeline for 12 months
+- S3 artifact storage grows with each pipeline execution
+- Leaving IAM roles behind creates security surface area
 
-## 1. Delete EC2 Instance and Security Group
-- [ ] Go to the **EC2 Console** > **Instances**.
-- [ ] Select the instance named **`cicd-deploy-server`**.
-- [ ] Click **Instance state** > **Terminate instance** and confirm.
-- [ ] Wait for the instance state to change to *Terminated*.
-- [ ] Navigate to **Security Groups** (under Network & Security).
-- [ ] Select **`cicd-deploy-sg`**, click **Actions** > **Delete security groups**, and confirm.
-
-## 2. Delete CodePipeline
-- [ ] Go to the **CodePipeline Console** > **Pipelines**.
-- [ ] Select **`my-web-app-pipeline`**.
-- [ ] Click **Delete** and type the pipeline name to confirm.
-
-## 3. Delete CodeDeploy Application
-- [ ] Go to the **CodeDeploy Console** > **Applications**.
-- [ ] Select **`my-web-app`**.
-- [ ] Click **Delete application** and type the application name to confirm. *(This automatically deletes the `production` deployment group as well).*
-
-## 4. Delete CodeBuild Project & Logs
-- [ ] Go to the **CodeBuild Console** > **Build projects**.
-- [ ] Select **`my-web-app-build`**.
-- [ ] Click **Delete build project** and confirm.
-- [ ] Go to the **CloudWatch Console** > **Log groups**.
-- [ ] Search for **`/aws/codebuild/my-web-app-build`**, select it, and click **Actions** > **Delete log group(s)**.
-
-## 5. Delete CodeCommit Repository
-- [ ] Go to the **CodeCommit Console** > **Repositories**.
-- [ ] Select **`my-web-app`**.
-- [ ] Click **Delete repository** and type `delete` to confirm.
-
-## 6. Empty and Delete S3 Artifact Bucket
-- [ ] Go to the **S3 Console**.
-- [ ] Find the bucket named **`codepipeline-artifacts-[YOUR_ACCOUNT]-ap-south-1`**.
-- [ ] Select the bucket, click **Empty**, and type *permanently delete* to confirm.
-- [ ] Once emptied, select the bucket again, click **Delete**, and type the bucket name to confirm.
-
-## 7. Delete IAM Roles
-- [ ] Go to the **IAM Console** > **Roles**.
-- [ ] Search for and delete the following roles one by one:
-  - [ ] **`codebuild-service-role`**
-  - [ ] **`codedeploy-service-role`**
-  - [ ] **`codepipeline-service-role`**
-  - [ ] **`ec2-codedeploy-role`**
-- [ ] *Note: When you delete `ec2-codedeploy-role`, the associated instance profile is also deleted.*
+Script: `scripts/powershell/10-cleanup.ps1` or `scripts/bash/10-cleanup.sh`
 
 ---
 
-**🎉 Cleanup Complete!**
-Your AWS environment is now clean from Project 09 resources and you will not incur further charges related to this pipeline.
+## Cleanup Sequence
+
+Resources must be deleted in dependency order: pipeline first (it references other services), then the services, then infrastructure.
+
+### Step 1 — Delete CodePipeline
+
+```powershell
+aws codepipeline delete-pipeline --name my-web-app-pipeline
+Write-Host "Pipeline deleted"
+```
+
+This immediately stops all automated pipeline executions. CodeBuild, CodeDeploy, and CodeCommit remain untouched.
+
+### Step 2 — Delete CodeDeploy
+
+```powershell
+aws deploy delete-deployment-group `
+  --application-name my-web-app `
+  --deployment-group-name production
+
+aws deploy delete-application --application-name my-web-app
+Write-Host "CodeDeploy deleted"
+```
+
+Deleting the application automatically deletes all deployment groups and revision history.
+
+### Step 3 — Delete CodeBuild
+
+```powershell
+aws codebuild delete-project --name my-web-app-build
+Write-Host "CodeBuild deleted"
+```
+
+Build history and logs remain in CloudWatch Logs until the log group is deleted separately.
+
+### Step 4 — Delete CodeCommit
+
+```powershell
+aws codecommit delete-repository --repository-name my-web-app
+Write-Host "CodeCommit deleted"
+```
+
+> ⚠️ This permanently destroys the source code on AWS. Ensure you have a local copy before proceeding.
+
+### Step 5 — Terminate EC2 and Delete Security Group
+
+```powershell
+aws ec2 terminate-instances --instance-ids $DEPLOY_INSTANCE_ID
+aws ec2 wait instance-terminated --instance-ids $DEPLOY_INSTANCE_ID
+aws ec2 delete-security-group --group-id $DEPLOY_SG
+Write-Host "EC2 and security group deleted"
+```
+
+The security group cannot be deleted until the instance is fully terminated.
+
+### Step 6 — Empty and Delete S3 Bucket
+
+```powershell
+aws s3 rm s3://$ARTIFACT_BUCKET --recursive
+aws s3api delete-bucket --bucket $ARTIFACT_BUCKET --region ap-south-1
+Write-Host "S3 bucket deleted"
+```
+
+S3 buckets must be empty before deletion. The `--recursive` flag removes all objects and versions.
+
+### Step 7 — Delete IAM Roles
+
+```powershell
+$ROLES = @("codebuild-service-role","codedeploy-service-role","codepipeline-service-role","ec2-codedeploy-role")
+foreach ($ROLE in $ROLES) {
+    $POLICIES = aws iam list-attached-role-policies `
+      --role-name $ROLE `
+      --query "AttachedPolicies[*].PolicyArn" --output text
+    foreach ($P in $POLICIES.Split()) {
+        if ($P) {
+            aws iam detach-role-policy --role-name $ROLE --policy-arn $P
+        }
+    }
+    aws iam delete-role --role-name $ROLE 2>$null
+    Write-Host "Deleted role: $ROLE"
+}
+
+aws iam remove-role-from-instance-profile `
+  --instance-profile-name ec2-codedeploy-profile `
+  --role-name ec2-codedeploy-role 2>$null
+aws iam delete-instance-profile `
+  --instance-profile-name ec2-codedeploy-profile 2>$null
+```
+
+IAM roles cannot be deleted while they have attached policies — all managed policies must be detached first.
+
+---
+
+## Verification
+
+```powershell
+# Pipeline gone
+aws codepipeline get-pipeline --name my-web-app-pipeline 2>&1
+# Expected: PipelineNotFoundException
+
+# CodeDeploy gone
+aws deploy get-application --application-name my-web-app 2>&1
+# Expected: ApplicationDoesNotExistException
+
+# CodeBuild gone
+aws codebuild batch-get-projects --names my-web-app-build `
+  --query "projects" --output text
+# Expected: empty
+
+# CodeCommit gone
+aws codecommit get-repository --repository-name my-web-app 2>&1
+# Expected: RepositoryDoesNotExistException
+```
+
+---
+
+## Cost Check
+
+After cleanup, check **AWS Billing → Cost Explorer** in 24 hours.
+
+Expected charges:
+- CodeCommit: $0.00 (5 users free forever)
+- CodeBuild: $0.00 (within 100 free build minutes)
+- CodeDeploy: $0.00 (EC2 deployments always free)
+- CodePipeline: $0.00 (1 pipeline free for 12 months)
+- EC2: $0.00 (within 750 free hours)
+- S3: $0.00–$0.01 (minimal artifact storage)
+
+Total: **$0.00**

@@ -1,11 +1,11 @@
 <div align="center">
-  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 09: CI/CD Pipeline with CodeCommit, CodeBuild & CodeDeploy</h1>
+  <h1><img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/aws/aws.png" width="36" height="36" style="vertical-align: middle"/> Project 09: CI/CD Pipeline with CodeCommit, CodeBuild, CodeDeploy & CodePipeline</h1>
 
-  <p><i>Construct an end-to-end Continuous Integration and Continuous Deployment pipeline using AWS-native developer tools. Code pushed to CodeCommit triggers CodeBuild for compilation and testing, then CodeDeploy performs rolling deployments to EC2 instances — enabling automated, repeatable, and auditable software delivery.</i></p>
+  <p><i>Build a fully automated CI/CD pipeline that detects code changes in CodeCommit, automatically builds and tests the application via CodeBuild, and deploys it to an EC2 instance using CodeDeploy — all orchestrated by CodePipeline. This is the same pipeline pattern used by engineering teams at every scale to ship code reliably and repeatedly.</i></p>
 
   <p>
-    <img src="https://img.shields.io/badge/Level-Intermediate/Advanced-blue" alt="Level"/>
-    <img src="https://img.shields.io/badge/Time-4--5%20Hours-orange" alt="Time"/>
+    <img src="https://img.shields.io/badge/Level-Intermediate-blue" alt="Level"/>
+    <img src="https://img.shields.io/badge/Time-5--6%20Hours-orange" alt="Time"/>
     <img src="https://img.shields.io/badge/Cost-$0.00%20(Free%20Tier)-brightgreen" alt="Cost"/>
     <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License"/>
     <img src="https://img.shields.io/badge/Build-Passing-success" alt="Build"/>
@@ -27,9 +27,9 @@
 
 ## 🏗️ Architecture Overview
 
-<img src="./architecture/cicd-architecture.svg" alt="CI/CD Pipeline with CodeCommit, CodeBuild & CodeDeploy — System Architecture" width="800"/>
+<img src="./architecture/cicd-architecture.svg" alt="CI/CD Pipeline with CodeCommit, CodeBuild, CodeDeploy & CodePipeline — System Architecture" width="800"/>
 
-<p><i>▲ High-level architecture diagram showing the interaction between CodeCommit, CodeBuild, CodeDeploy, CodePipeline, S3, IAM services</i></p>
+<p><i>▲ High-level architecture diagram showing the interaction between CodeCommit, CodeBuild, CodeDeploy, CodePipeline, EC2, S3, IAM services</i></p>
 
 </div>
 
@@ -37,44 +37,45 @@
 
 | Resource | Configuration |
 |:---------|:--------------|
-| **CodeCommit Repository** | Git repository hosting application source code with branch-based workflow |
-| **CodeBuild Project** | Ubuntu Standard 7.0 image; buildspec.yml defines install → build → test → artifact phases |
-| **CodeDeploy Application** | EC2/On-Premises compute platform; `CodeDeployDefault.OneAtATime` deployment config |
-| **CodePipeline** | 3-stage pipeline: Source (CodeCommit) → Build (CodeBuild) → Deploy (CodeDeploy) |
-| **S3 Artifact Bucket** | Pipeline artifact store for build outputs and deployment packages |
-| **IAM Roles** | Separate roles for CodePipeline, CodeBuild, and CodeDeploy with least-privilege policies |
-| **AppSpec** | YAML deployment specification defining lifecycle hooks: BeforeInstall, AfterInstall, ApplicationStart |
+| **CodeCommit** | Managed Git repository `my-web-app`; `main` branch triggers pipeline via CloudWatch Events |
+| **CodeBuild** | `aws/codebuild/standard:7.0` Linux container; Python 3.11 runtime; `buildspec.yml` defines install → pre_build → build → post_build phases |
+| **CodeDeploy** | EC2/On-Premises compute platform; `CodeDeployDefault.AllAtOnce` config; auto-rollback on `DEPLOYMENT_FAILURE` |
+| **CodePipeline** | 3-stage pipeline: Source (CodeCommit) → Build (CodeBuild) → Deploy (CodeDeploy); `PollForSourceChanges: false` |
+| **EC2 Instance** | Amazon Linux 2023, `t2.micro`; CodeDeploy agent installed; Apache httpd web server; tag `Environment=production` |
+| **S3 Artifact Bucket** | `codepipeline-artifacts-<ACCOUNT_ID>-ap-south-1`; versioning enabled; all public access blocked |
+| **IAM Roles** | 4 separate roles: `codebuild-service-role`, `codedeploy-service-role`, `codepipeline-service-role`, `ec2-codedeploy-role` |
+| **Security Group** | `cicd-deploy-sg`: SSH (port 22) restricted to admin IP `/32`, HTTP (port 80) open `0.0.0.0/0` |
 | **Region** | ap-south-1 |
 
 ## 🧩 Key Components
 
 ### CodeCommit Repository
-Fully-managed Git repository with IAM-based authentication and encryption at rest
+Fully-managed Git repository with IAM-based HTTPS authentication, encryption at rest, and CloudWatch Events for automatic pipeline triggering on push
 
 ### CodeBuild Project
-Managed build service executing buildspec.yml in isolated Docker containers
+Managed build service executing `buildspec.yml` in isolated Docker containers — installs runtimes, validates HTML syntax, packages application files into a `dist/` artifact
 
 ### CodeDeploy Application
-Deployment orchestrator managing rollouts with lifecycle hooks and rollback triggers
+Deployment orchestrator that reads `appspec.yml` to map files to EC2 destinations, set permissions, and run lifecycle hook scripts (BeforeInstall → AfterInstall → ApplicationStart → ValidateService)
 
 ### CodePipeline
-Continuous delivery orchestrator connecting Source → Build → Deploy stages
+Continuous delivery orchestrator connecting Source → Build → Deploy stages with S3 artifact passing between each stage
 
 ### buildspec.yml
-Build specification defining phases (install, pre_build, build, post_build) and artifact outputs
+Build specification defining 4 phases (install, pre_build, build, post_build), artifact output from `dist/`, and pip cache configuration
 
 ### appspec.yml
-Deployment specification defining file mappings, permissions, and lifecycle hook scripts
+Deployment specification defining file mappings (`index.html` → `/var/www/html/`), Apache file permissions (`644`, owner `apache`), and 4 lifecycle hook scripts
 
 ## ⚡ Core Features
 
 - **Fully Automated Pipeline** – Git push triggers build, test, and deploy without manual intervention
-- **Buildspec-Driven Builds** – Declarative YAML defines install dependencies, run tests, and package artifacts
-- **Rolling Deployments** – CodeDeploy updates instances one-at-a-time to maintain availability during deploy
-- **Automatic Rollback** – Deployment fails → CodeDeploy rolls back to last known-good revision automatically
-- **Lifecycle Hooks** – Custom scripts run at BeforeInstall, AfterInstall, and ApplicationStart stages
+- **Buildspec-Driven Builds** – Declarative YAML installs Python 3.11, validates HTML syntax, and packages deployment artifacts
+- **AppSpec Lifecycle Hooks** – Custom scripts run at BeforeInstall, AfterInstall, ApplicationStart, and ValidateService stages
+- **Automatic Rollback** – Deployment failure triggers CodeDeploy to roll back to the last known-good revision automatically
+- **Health Check Validation** – `validate_service.sh` performs HTTP 200 check against localhost before marking deployment successful
 - **Artifact Versioning** – S3 stores every build artifact with pipeline execution ID for full traceability
-- **Branch-Based Workflow** – Pipeline triggers on `main` branch pushes; feature branches build independently
+- **Branch-Based Workflow** – Pipeline triggers on `main` branch pushes via CloudWatch Events (not polling)
 
 ## 🛠️ Setup & Installation
 
@@ -82,8 +83,8 @@ Deployment specification defining file mappings, permissions, and lifecycle hook
 
 - AWS CLI v2 configured with IAM credentials (from Project 01)
 - Git client installed (`git --version` ≥ 2.x)
-- At least one EC2 instance with CodeDeploy agent installed (from Project 03)
-- HTTPS Git credentials configured for CodeCommit access
+- Python 3.x installed locally (for sample app validation)
+- An existing EC2 key pair named `aws-ec2-keypair` (from Project 03)
 
 ### Installation
 
@@ -103,48 +104,33 @@ Create a `.env` file in the project root:
 
 ```bash
 export AWS_REGION="ap-south-1"
-export REPO_NAME="my-app-repo"
-export BUILD_PROJECT="my-app-build"
-export DEPLOY_APP="my-app-deploy"
-export DEPLOY_GROUP="my-app-deploy-group"
-export PIPELINE_NAME="my-app-pipeline"
+export REPO_NAME="my-web-app"
+export BUILD_PROJECT="my-web-app-build"
+export DEPLOY_APP="my-web-app"
+export DEPLOY_GROUP="production"
+export PIPELINE_NAME="my-web-app-pipeline"
+export KEY_PAIR_NAME="aws-ec2-keypair"
 ```
 
 ### Run Commands
 
 Choose your platform and execute the scripts in order:
 
-<table>
-<tr><th>Step</th><th>Script</th><th>Description</th></tr>
-<tr><td>🐧</td><td><code>scripts/bash/01-create-iam-roles.sh</code></td><td>Execute Create iam roles</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/01-create-iam-roles.ps1</code></td><td>Execute Create iam roles</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/02-create-s3-bucket.sh</code></td><td>Execute Create s3 bucket</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/02-create-s3-bucket.ps1</code></td><td>Execute Create s3 bucket</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/03-create-codecommit.sh</code></td><td>Execute Create codecommit</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/03-create-codecommit.ps1</code></td><td>Execute Create codecommit</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/04-launch-ec2.sh</code></td><td>Execute Launch ec2</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/04-launch-ec2.ps1</code></td><td>Execute Launch ec2</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/05-create-codedeploy.sh</code></td><td>Execute Create codedeploy</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/05-create-codedeploy.ps1</code></td><td>Execute Create codedeploy</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/06-create-codebuild.sh</code></td><td>Execute Create codebuild</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/06-create-codebuild.ps1</code></td><td>Execute Create codebuild</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/07-create-codepipeline.sh</code></td><td>Execute Create codepipeline</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/07-create-codepipeline.ps1</code></td><td>Execute Create codepipeline</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/08-monitor-pipeline.sh</code></td><td>Execute Monitor pipeline</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/08-monitor-pipeline.ps1</code></td><td>Execute Monitor pipeline</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/09-trigger-deployment.sh</code></td><td>Execute Trigger deployment</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/09-trigger-deployment.ps1</code></td><td>Execute Trigger deployment</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/10-cleanup.sh</code></td><td>Execute Cleanup</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/10-cleanup.ps1</code></td><td>Execute Cleanup</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/after_install.sh</code></td><td>Execute After_install</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/after_install.ps1</code></td><td>Execute After_install</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/before_install.sh</code></td><td>Execute Before_install</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/before_install.ps1</code></td><td>Execute Before_install</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/start_application.sh</code></td><td>Execute Start_application</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/start_application.ps1</code></td><td>Execute Start_application</td></tr>
-<tr><td>🐧</td><td><code>scripts/bash/validate_service.sh</code></td><td>Execute Validate_service</td></tr>
-<tr><td>🖥️</td><td><code>scripts/powershell/validate_service.ps1</code></td><td>Execute Validate_service</td></tr>
-</table>
+| Step | Bash Script | PowerShell Script | Description |
+| :---: | :--- | :--- | :--- |
+| 01 | `scripts/bash/01-create-iam-roles.sh` | `scripts/powershell/01-create-iam-roles.ps1` | Create IAM roles for CodeBuild, CodeDeploy, CodePipeline, EC2 |
+| 02 | `scripts/bash/02-create-s3-bucket.sh` | `scripts/powershell/02-create-s3-bucket.ps1` | Create S3 artifact bucket with versioning enabled |
+| 03 | `scripts/bash/03-create-codecommit.sh` | `scripts/powershell/03-create-codecommit.ps1` | Create CodeCommit repository and push application code |
+| 04 | `scripts/bash/04-launch-ec2.sh` | `scripts/powershell/04-launch-ec2.ps1` | Launch EC2 with CodeDeploy agent and Apache httpd |
+| 05 | `scripts/bash/05-create-codedeploy.sh` | `scripts/powershell/05-create-codedeploy.ps1` | Create CodeDeploy application and deployment group |
+| 06 | `scripts/bash/06-create-codebuild.sh` | `scripts/powershell/06-create-codebuild.ps1` | Create CodeBuild project linked to CodeCommit |
+| 07 | `scripts/bash/07-create-codepipeline.sh` | `scripts/powershell/07-create-codepipeline.ps1` | Create CodePipeline (Source → Build → Deploy) |
+| 08 | `scripts/bash/08-monitor-pipeline.sh` | `scripts/powershell/08-monitor-pipeline.ps1` | Monitor pipeline execution and verify all stages green |
+| 09 | `scripts/bash/09-trigger-deployment.sh` | `scripts/powershell/09-trigger-deployment.ps1` | Update app to Version 2.0, push, watch auto-deploy |
+| 10 | `scripts/bash/10-cleanup.sh` | `scripts/powershell/10-cleanup.ps1` | Delete all AWS resources created by this project |
+
+### 📸 Screenshots & Validation
+Throughout the documentation and `images/` directory, you will find screenshots captured during the deployment process. These visual artifacts serve as verification that the UI steps were successfully executed and validate the final architecture.
 
 ## 📚 Documentation Suite
 
@@ -156,6 +142,10 @@ Choose your platform and execute the scripts in order:
 | 🔐 [Security Protocols](docs/security-protocols.md) | IAM policies, encryption, network security, and compliance controls |
 | 🧪 [Testing Procedures](docs/testing-procedures.md) | Validation scripts, smoke tests, and integration test suites |
 | 🛠️ [Troubleshooting](docs/troubleshooting.md) | Common issues, error codes, debugging steps, and resolution guides |
+| 🧹 [Cleanup Guide](docs/cleanup-guide.md) | Instructions for tearing down AWS resources to avoid charges |
+| 📋 [Pipeline Stages](docs/pipeline-stages.md) | Detailed breakdown of Source, Build, and Deploy stage configurations |
+| 📦 [BuildSpec Explained](docs/buildspec-explained.md) | Line-by-line annotation of buildspec.yml phases and artifacts |
+| 📜 [AppSpec Explained](docs/appspec-explained.md) | Line-by-line annotation of appspec.yml file mappings and hooks |
 
 ## 🤝 Contribution & Maintenance
 
@@ -192,5 +182,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](../LICE
 ---
 
 <div align="center">
-  <b>[⬅️ Previous: Project 08](../project-08-serverless-rest-api) &nbsp;|&nbsp; [Next: Project 10 ➡️](../project-10-auto-scaling-alb)</b>
+  <b><a href="../project-08-serverless-rest-api">⬅️ Previous: Project 08</a> &nbsp;|&nbsp; <a href="../project-10-auto-scaling-alb">Next: Project 10 ➡️</a></b>
 </div>
