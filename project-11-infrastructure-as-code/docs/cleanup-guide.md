@@ -1,4 +1,4 @@
-# Cleanup Guide
+﻿# Cleanup Guide
 
 One of the primary benefits of using Infrastructure as Code (CloudFormation) is the ability to cleanly and completely tear down an entire environment without leaving orphaned resources behind.
 
@@ -14,7 +14,7 @@ Write-Host "Stack deletion initiated..."
 aws cloudformation wait stack-delete-complete `
   --stack-name my-app-stack
 
-Write-Host "Stack fully deleted â€” all resources removed"
+Write-Host "Stack fully deleted all resources removed"
 
 # Verify nothing remains
 aws cloudformation describe-stacks `
