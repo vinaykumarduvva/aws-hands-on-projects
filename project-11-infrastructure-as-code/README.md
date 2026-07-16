@@ -115,5 +115,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](../LICE
 ---
 
 <div align="center">
-  <b>[⬅️ Previous: Project 10](../project-10-auto-scaling-alb) &nbsp;|&nbsp; [Next: Project 12 ➡️](../project-12-event-driven-pipeline)</b>
+  <b><a href="../project-10-auto-scaling-alb">⬅️ Previous: Project 10</a> &nbsp;|&nbsp; <a href="../project-12-event-driven-pipeline">Next: Project 12 ➡️</a></b>
 </div>
