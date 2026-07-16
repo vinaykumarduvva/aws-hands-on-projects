@@ -73,6 +73,9 @@ There are no wrapper scripts or `.env` files. You will run the raw `aws cloudfor
 
 **For full, step-by-step deployment, update, and teardown instructions, please follow the [Deployment Guide](docs/deployment-guide.md).**
 
+### 📸 Screenshots & Validation
+Throughout the documentation and `images/` directory, you will find screenshots captured during the deployment process. These visual artifacts serve as verification that the UI steps were successfully executed and validate the final architecture.
+
 ## 📚 Documentation Suite
 
 | Document | Description |

@@ -1,4 +1,4 @@
-﻿# Cleanup Guide
+# Cleanup Guide
 
 One of the primary benefits of using Infrastructure as Code (CloudFormation) is the ability to cleanly and completely tear down an entire environment without leaving orphaned resources behind.
 
@@ -30,6 +30,6 @@ aws ec2 describe-instances `
 # Expected: empty
 ```
 
-âœ… One command â€” every VPC, subnet, security group, launch template, ALB, target group, and ASG instance is gone.
+✅ One command — every VPC, subnet, security group, launch template, ALB, target group, and ASG instance is gone.
 
 
