@@ -1,0 +1,12 @@
+﻿{
+  "name": "project-14-capstone-3-tier",
+  "version": "1.0.0",
+  "description": "AWS Hands-on Project",
+  "author": "Vinay Kumar Duvva",
+  "license": "MIT",
+  "tags": [
+    "aws",
+    "cloud",
+    "hands-on"
+  ]
+}

@@ -1,0 +1,12 @@
+﻿{
+  "name": "project-01-iam-setup",
+  "version": "1.0.0",
+  "description": "AWS Hands-on Project",
+  "author": "Vinay Kumar Duvva",
+  "license": "MIT",
+  "tags": [
+    "aws",
+    "cloud",
+    "hands-on"
+  ]
+}
