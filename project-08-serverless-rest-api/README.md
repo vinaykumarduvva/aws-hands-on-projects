@@ -196,10 +196,9 @@ This project is licensed under the **MIT License** — see the [LICENSE](./LICEN
 
 ### Contact & Credits
 
-- **Author:** Vinay Kumar
-- **GitHub:** [@vinay1515](https://github.com/vinay1515)
-- **Repository:** [Vinay_kumar_AWS_Beginner_level_projects](https://github.com/vinay1515/Vinay_kumar_AWS_Beginner_level_projects)
-
+- **Author:** Vinay Kumar Duvva
+- **GitHub:** [@vinaykumarduvva]( https://github.com/vinaykumarduvva)
+- **Repository:** [aws-hands-on-projects]( https://github.com/vinaykumarduvva/aws-hands-on-projects)
 ---
 
 <div align="center">

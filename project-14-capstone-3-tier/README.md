@@ -10,3 +10,9 @@ This project is currently marked as **⏳ Upcoming**.
 
 ## 🚀 Overview
 *(Content to be developed)*
+
+### Contact & Credits
+
+- **Author:** Vinay Kumar Duvva
+- **GitHub:** [@vinaykumarduvva]( https://github.com/vinaykumarduvva)
+- **Repository:** [aws-hands-on-projects]( https://github.com/vinaykumarduvva/aws-hands-on-projects)

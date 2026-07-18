@@ -171,6 +171,12 @@ For full deployment procedures across dev, staging, and production environments,
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
+### Contact & Credits
+
+- **Author:** Vinay Kumar Duvva
+- **GitHub:** [@vinaykumarduvva]( https://github.com/vinaykumarduvva)
+- **Repository:** [aws-hands-on-projects]( https://github.com/vinaykumarduvva/aws-hands-on-projects)
+
 ---
 
 <div align="center">
