@@ -47,6 +47,14 @@ The `README.md` is the entry point for the project and must follow this exact se
 10. **License:** Link explicitly to `./LICENSE` (the project-local MIT license).
 11. **Footer:** Prev/Next project navigation block.
 
+### Architecture Diagrams (`architecture/*.svg`)
+All project architecture diagrams must conform to the established modern SVG design language:
+- **Format:** Pure SVG (`.svg`) is mandatory. No raster images (PNG/JPG) for architectures.
+- **Styling & Theme:** Use the standardized light-theme gradient backgrounds (e.g., `#F8FAFC` to `#EFF6FF`). Avoid dark themes.
+- **Interactivity:** Elements must have CSS-driven hover states (e.g., `transform: scale(1.05)`, dynamic drop shadows) to provide a modern, interactive experience.
+- **Animations:** Data flow and component states should be represented dynamically using CSS keyframe animations (e.g., floating instances, pulsing alerts for failure states, dashed moving lines for data flow).
+- **Icons:** Use official AWS architectural icons embedded directly into the SVG to maximize visual appeal.
+
 ### Cleanup Guide (`docs/cleanup-guide.md`)
 Must include the following sections:
 - `> [!CAUTION]` block warning of irreversible action
@@ -70,6 +78,22 @@ Must address the security posture of the deployed architecture:
 - `## 🛡️ Network Security` (Security group chaining, VPC isolation)
 - `## 🔒 Encryption` (Data at rest via KMS, data in transit via TLS)
 - `## 📋 Compliance & Best Practices` (Audit logging, IMDSv2, least privilege)
+
+## 💻 Scripting & Automation Standards
+
+All automation scripts must be robust, user-friendly, and include proper error handling. Each project must provide both Bash (`.sh`) and PowerShell (`.ps1`) equivalents.
+
+### Bash Guidelines
+- **Strict Mode:** Always use `set -e` (exit on error) and `set -u` (treat unset variables as an error) at the top of the script.
+- **Variable Assignment:** Prefer `aws [service] ... --query ... --output text` for clean variable assignment.
+- **Logging:** Use explicit logging with prefixes to inform the user of progress (e.g., `echo "=> Creating VPC..."`).
+- **Idempotency:** Implement cleanup scripts that suppress "does not exist" errors (e.g., `2>/dev/null`) to allow the script to be run multiple times safely.
+
+### PowerShell Guidelines
+- **Strict Mode:** Always set `$ErrorActionPreference = "Stop"` at the top of the script.
+- **Suppress Noise:** Assign read-only AWS CLI command outputs to `$null = aws ...` or pipe to `| Out-Null` to suppress unwanted terminal noise and keep the console clean.
+- **Logging:** Use `Write-Host` for user-facing console output, utilizing colors where appropriate to indicate success or failure.
+- **Idempotency:** In cleanup scripts, append `2>$null` to deletion commands to prevent red error text when resources are already deleted.
 
 ## 🎨 Design System
 
