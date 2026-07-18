@@ -1,315 +1,204 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" font-family="Arial, Helvetica, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" width="100%" height="100%">
   <defs>
-
-  <style>
-    :root {
-      --bg: #0a0a1a;
-      --bg-gradient-start: #0a0a1a;
-      --bg-gradient-end: #1a1a2e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --box-bg: #1a1a3a;
-      --box-bg-light: #2a2a4a;
-      --orange: #FF9900;
-      --blue: #1a73e8;
-      --green: #2E8B57;
-      --red: #cc3333;
-      --purple: #9B59B6;
-      --teal: #00897B;
-      --grid: #ffffff08;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc;
-        --bg-gradient-start: #f8fafc;
-        --bg-gradient-end: #e2e8f0;
-        --text-main: #0f172a;
-        --text-muted: #475569;
-        --box-bg: #ffffff;
-        --box-bg-light: #f1f5f9;
-        --orange: #e68a00;
-        --blue: #1557b0;
-        --green: #1f6b42;
-        --red: #b32424;
-        --purple: #7a4694;
-        --teal: #00695C;
-        --grid: #00000008;
-      }
-    }
-    svg { background-color: var(--bg); }
-    text { transition: fill 0.3s ease; }
-    .text-title { fill: var(--orange); font-weight: 800; }
-    .text-main { fill: var(--text-main); }
-    .text-muted { fill: var(--text-muted); }
-    .box-bg { fill: var(--box-bg); transition: fill 0.3s ease, stroke 0.3s ease; }
-    .float { animation: float 6s ease-in-out infinite; }
-    .pulse { animation: pulse 2s ease-in-out infinite; }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { opacity: 0.8; }
-      50% { opacity: 1; filter: brightness(1.2); }
-      100% { opacity: 0.8; }
-    }
-  </style>
-
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="var(--bg-gradient-start)"/>
-      <stop offset="100%" stop-color="var(--bg-gradient-end)"/>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
     </linearGradient>
-    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FF9900"/>
-      <stop offset="100%" style="stop-color:#FFB84D"/>
-    </linearGradient>
+
+    <!-- Component Gradients -->
     <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a73e8"/>
-      <stop offset="100%" style="stop-color:#4d94ff"/>
+      <stop offset="0%" stop-color="#0073BB"/>
+      <stop offset="100%" stop-color="#005A9E"/>
     </linearGradient>
     <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2E8B57"/>
-      <stop offset="100%" style="stop-color:#3CB371"/>
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
     </linearGradient>
-    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6C3483"/>
-      <stop offset="100%" style="stop-color:#9B59B6"/>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F58536"/>
+      <stop offset="100%" stop-color="#D35400"/>
     </linearGradient>
     <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00695C"/>
-      <stop offset="100%" style="stop-color:#00897B"/>
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0F766E"/>
     </linearGradient>
-    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
-      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+
+    <!-- Shadows -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.06"/>
     </filter>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+    <filter id="hoverShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <filter id="greenGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feFlood flood-color="#10B981" flood-opacity="0.6"/>
+      <feComposite in2="blur" operator="in" />
       <feMerge>
-        <feMergeNode in="coloredBlur"/>
+        <feMergeNode/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="var(--orange)"/>
-    </marker>
-    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="var(--blue)"/>
-    </marker>
-    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="var(--green)"/>
-    </marker>
-    <marker id="arrowTeal" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="var(--teal)"/>
-    </marker>
-  
-  
 
-  
-  <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#f8f9fa" />
-    <stop offset="100%" stop-color="#e2e8f0" />
-  </linearGradient>
-  <style>
-    /* Injected Interactive Styles */
-    svg {
-      --transition-speed: 0.3s;
-    }
-    rect[fill="#f8f9fa"], rect[width="800"][height="500"], rect[width="860"][height="640"] {
-      fill: url(#bg-gradient) !important;
-    }
-    rect, circle, polygon {
-      transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--transition-speed) ease, fill var(--transition-speed) ease;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-    rect:hover, circle:hover, polygon:hover {
-      filter: drop-shadow(0px 8px 24px rgba(26, 115, 232, 0.5)) brightness(1.05);
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    line, path {
-      transition: stroke-width var(--transition-speed) ease, stroke var(--transition-speed) ease, filter var(--transition-speed) ease;
-    }
-    line:hover, path:hover {
-      stroke-width: 4px;
-      filter: drop-shadow(0px 4px 12px rgba(255, 153, 0, 0.7));
-      cursor: pointer;
-    }
-    text {
-      pointer-events: none;
-      transition: fill 0.3s ease;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-      50% { filter: drop-shadow(0 0 12px rgba(26,115,232,0.8)); }
-      100% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-    }
-  </style>
-
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#0073BB" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#10B981" />
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#F58536" />
+    </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="850" fill="url(#bg)" class="box-bg"/>
-  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--grid)" stroke-width="0.5"/>
-  </pattern>
-  <rect width="1200" height="850" fill="url(#grid)"/>
+  <style>
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .flow-line { stroke-dasharray: 6 6; animation: dash 1.5s linear infinite; }
+    .flow-line:hover { stroke-width: 4px; cursor: pointer; filter: url(#glow); }
+    .node { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+    .node:hover { transform: translateY(-5px); }
+    .node:hover .card { filter: url(#hoverShadow); }
+    .floating { animation: float 6s ease-in-out infinite; }
+    .floating-delay { animation: float 6s ease-in-out infinite; animation-delay: 3s; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    @keyframes pulse-green {
+      0% { filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4)); }
+      50% { filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8)); }
+      100% { filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4)); }
+    }
+    .pulse-obj .card { animation: pulse-green 3s infinite; }
 
-  <!-- Title -->
-  <text x="600" y="42" text-anchor="middle" fill="var(--orange)" font-size="24" font-weight="bold" filter="url(#glow)">
-    Project 10 — Auto Scaling Group + ALB Architecture
-  </text>
-  <text x="600" y="66" text-anchor="middle" fill="var(--text-muted)" font-size="13">
-    ap-south-1 (Mumbai) • Fault-Tolerant, Self-Healing, Elastic Web Infrastructure
-  </text>
-  <line x1="150" y1="78" x2="1050" y2="78" stroke="var(--orange)" stroke-width="0.5" opacity="0.3"/>
+    text { font-family: 'Inter', -apple-system, sans-serif; }
+    .title { font-weight: 700; fill: #111827; }
+    .label { font-weight: 500; fill: #6B7280; font-size: 13px; }
+  </style>
 
-  <!-- ====== INTERNET / USERS ====== -->
-  <rect x="440" y="95" width="320" height="65" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1.5" filter="url(#shadow)"/>
-  <rect x="440" y="95" width="320" height="26" rx="8" fill="url(#orangeGrad)" opacity="0.9"/>
-  <rect x="440" y="113" width="320" height="8" fill="url(#orangeGrad)" opacity="0.9"/>
-  <text x="600" y="113" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="bold"><tspan class="float">🌐 Internet / Users</tspan></text>
-  <text x="600" y="143" text-anchor="middle" fill="var(--text-muted)" font-size="11">HTTP requests from browsers worldwide</text>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  
+  <text x="600" y="40" font-size="28" font-weight="800" fill="#111827" text-anchor="middle">Project 10 — Auto Scaling Group + ALB Architecture</text>
+  <text x="600" y="65" font-size="14" font-weight="500" fill="#6B7280" text-anchor="middle">Fault-Tolerant, Self-Healing, Elastic Web Infrastructure in Default VPC</text>
 
-  <!-- Arrow: Internet to ALB -->
-  <line x1="600" y1="160" x2="600" y2="195" stroke="var(--orange)" stroke-width="2" marker-end="url(#arrowOrange)"/>
-  <text x="625" y="183" fill="var(--text-muted)" font-size="9">HTTP :80</text>
+  <!-- AWS Cloud Boundary -->
+  <rect x="50" y="200" width="1100" height="600" rx="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="8,8"/>
+  <rect x="70" y="185" width="220" height="30" fill="#F8FAFC"/>
+  <text x="80" y="207" font-size="20" font-weight="700" fill="#F58536">AWS Cloud (ap-south-1)</text>
 
-  <!-- ====== VPC BOUNDARY ====== -->
-  <rect x="60" y="200" width="1080" height="580" rx="12" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="10,5" opacity="0.5"/>
-  <text x="80" y="222" fill="var(--blue)" font-size="12" font-weight="bold">VPC: Default VPC (ap-south-1)</text>
+  <!-- Internet Users -->
+  <g class="node">
+    <rect class="card" x="480" y="100" width="240" height="60" rx="30" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="600" y="135" font-size="18" font-weight="700" fill="#374151" text-anchor="middle">🌐 Internet / Users</text>
+  </g>
 
-  <!-- ====== APPLICATION LOAD BALANCER ====== -->
-  <rect x="250" y="240" width="700" height="110" rx="8" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="1.5" filter="url(#shadow)"/>
-  <rect x="250" y="240" width="700" height="28" rx="8" fill="url(#blueGrad)" opacity="0.9"/>
-  <rect x="250" y="260" width="700" height="8" fill="url(#blueGrad)" opacity="0.9"/>
-  <text x="600" y="259" text-anchor="middle" fill="var(--text-main)" font-size="13" font-weight="bold"><tspan class="float">⚖️ Application Load Balancer (ALB)</tspan></text>
-  <text x="270" y="290" fill="var(--text-muted)" font-size="10">Name: my-alb</text>
-  <text x="270" y="306" fill="var(--text-muted)" font-size="10">DNS: my-alb-xxxxx.ap-south-1.elb.amazonaws.com</text>
-  <text x="270" y="322" fill="var(--text-muted)" font-size="10">Listener: HTTP:80 → Forward to web-server-tg</text>
-  <text x="270" y="338" fill="var(--blue)" font-size="9">Security Group: alb-sg (HTTP:80, HTTPS:443 from 0.0.0.0/0)</text>
+  <path d="M 600 160 L 600 240" fill="none" stroke="#0073BB" stroke-width="3" marker-end="url(#arrow-blue)" class="flow-line"/>
 
-  <text x="680" y="290" fill="var(--text-muted)" font-size="10">Scheme: internet-facing</text>
-  <text x="680" y="306" fill="var(--text-muted)" font-size="10">Type: application (Layer 7)</text>
-  <text x="680" y="322" fill="var(--text-muted)" font-size="10">AZs: ap-south-1a, ap-south-1b</text>
-  <text x="680" y="338" fill="var(--green)" font-size="9" class="pulse">Health Check: HTTP GET / every 30s</text>
+  <!-- Application Load Balancer -->
+  <g class="node floating">
+    <rect class="card" x="250" y="240" width="700" height="100" rx="12" fill="#FFFFFF" stroke="#0073BB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="250" y="240" width="700" height="30" rx="12" fill="url(#blueGrad)"/>
+    <rect x="250" y="255" width="700" height="15" fill="url(#blueGrad)"/>
+    <text x="600" y="260" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Application Load Balancer</text>
+    
+    <text x="400" y="300" font-size="13" class="title" text-anchor="middle">my-alb (internet-facing)</text>
+    <text x="400" y="320" font-size="11" class="label" text-anchor="middle">Listener: HTTP:80</text>
+    
+    <text x="800" y="300" font-size="13" class="title" text-anchor="middle">Spans Multi-AZ</text>
+    <text x="800" y="320" font-size="11" class="label" text-anchor="middle">SG: alb-sg (0.0.0.0/0)</text>
+  </g>
 
-  <!-- Arrows: ALB to EC2 instances -->
-  <line x1="400" y1="350" x2="250" y2="440" stroke="var(--green)" stroke-width="2" marker-end="url(#arrowGreen)"/>
-  <line x1="600" y1="350" x2="600" y2="440" stroke="var(--green)" stroke-width="2" marker-end="url(#arrowGreen)"/>
-  <line x1="800" y1="350" x2="950" y2="440" stroke="var(--green)" stroke-width="2" marker-end="url(#arrowGreen)"/>
-  <text x="600" y="400" text-anchor="middle" fill="var(--green)" font-size="10">Round-Robin Distribution</text>
 
-  <!-- ====== ASG BOUNDARY ====== -->
-  <rect x="100" y="420" width="1000" height="200" rx="10" fill="var(--box-bg)" stroke="var(--teal)" stroke-width="2" stroke-dasharray="8,4" filter="url(#shadow)" opacity="0.8"/>
-  <text x="600" y="415" text-anchor="middle" fill="var(--teal)" font-size="14" font-weight="bold">Auto Scaling Group: web-server-asg</text>
+  <!-- ASG Boundary -->
+  <rect x="150" y="380" width="900" height="230" rx="16" fill="#F0FDF4" stroke="#10B981" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="170" y="365" width="300" height="30" fill="#F0FDF4"/>
+  <text x="180" y="387" font-size="16" font-weight="700" fill="#047857">Auto Scaling Group: web-server-asg</text>
+  
+  <text x="180" y="415" font-size="13" font-weight="700" fill="#10B981">Min: 2 | Desired: 2 | Max: 4</text>
 
-  <!-- ASG details on the boundary -->
-  <text x="120" y="442" fill="var(--teal)" font-size="10">Min: 2 | Desired: 2 | Max: 4</text>
-  <text x="120" y="456" fill="var(--teal)" font-size="10">Health Check: ELB | Grace: 120s</text>
+  <!-- ALB to EC2 Lines -->
+  <path d="M 450 340 L 320 440" fill="none" stroke="#10B981" stroke-width="3" marker-end="url(#arrow-green)" class="flow-line"/>
+  <path d="M 600 340 L 600 440" fill="none" stroke="#10B981" stroke-width="3" marker-end="url(#arrow-green)" class="flow-line"/>
+  <path d="M 750 340 L 880 440" fill="none" stroke="#10B981" stroke-width="3" marker-end="url(#arrow-green)" class="flow-line"/>
 
-  <!-- ====== EC2 INSTANCE 1 (AZ-a) ====== -->
-  <rect x="130" y="470" width="260" height="130" rx="8" fill="var(--box-bg)" stroke="var(--green)" stroke-width="1.5" filter="url(#shadow)"/>
-  <rect x="130" y="470" width="260" height="26" rx="8" fill="url(#greenGrad)" opacity="0.9"/>
-  <rect x="130" y="488" width="260" height="8" fill="url(#greenGrad)" opacity="0.9"/>
-  <text x="260" y="488" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold"><tspan class="float">🖥️ EC2 Instance #1</tspan></text>
-  <text x="150" y="515" fill="var(--text-muted)" font-size="10">AZ: ap-south-1a</text>
-  <text x="150" y="531" fill="var(--text-muted)" font-size="10">Type: t2.micro</text>
-  <text x="150" y="547" fill="var(--text-muted)" font-size="10">Apache httpd (port 80)</text>
-  <text x="150" y="563" fill="var(--text-muted)" font-size="10">SG: asg-ec2-sg</text>
-  <text x="150" y="579" fill="var(--green)" font-size="9" class="pulse">✅ Healthy — InService</text>
-  <text x="290" y="515" fill="var(--text-muted)" font-size="9">AMI: AL2023</text>
-  <text x="290" y="531" fill="var(--text-muted)" font-size="9">Key: aws-ec2-keypair</text>
-  <text x="290" y="547" fill="var(--text-muted)" font-size="9">stress tool</text>
 
-  <!-- ====== EC2 INSTANCE 2 (AZ-b) ====== -->
-  <rect x="470" y="470" width="260" height="130" rx="8" fill="var(--box-bg)" stroke="var(--green)" stroke-width="1.5" filter="url(#shadow)"/>
-  <rect x="470" y="470" width="260" height="26" rx="8" fill="url(#greenGrad)" opacity="0.9"/>
-  <rect x="470" y="488" width="260" height="8" fill="url(#greenGrad)" opacity="0.9"/>
-  <text x="600" y="488" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold"><tspan class="float">🖥️ EC2 Instance #2</tspan></text>
-  <text x="490" y="515" fill="var(--text-muted)" font-size="10">AZ: ap-south-1b</text>
-  <text x="490" y="531" fill="var(--text-muted)" font-size="10">Type: t2.micro</text>
-  <text x="490" y="547" fill="var(--text-muted)" font-size="10">Apache httpd (port 80)</text>
-  <text x="490" y="563" fill="var(--text-muted)" font-size="10">SG: asg-ec2-sg</text>
-  <text x="490" y="579" fill="var(--green)" font-size="9" class="pulse">✅ Healthy — InService</text>
-  <text x="630" y="515" fill="var(--text-muted)" font-size="9">AMI: AL2023</text>
-  <text x="630" y="531" fill="var(--text-muted)" font-size="9">Key: aws-ec2-keypair</text>
-  <text x="630" y="547" fill="var(--text-muted)" font-size="9">stress tool</text>
+  <!-- EC2 Instance 1 -->
+  <g class="node floating">
+    <rect class="card" x="190" y="440" width="230" height="130" rx="12" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="190" y="440" width="230" height="36" rx="12" fill="url(#greenGrad)"/>
+    <text x="305" y="465" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">EC2 Instance #1</text>
+    <text x="305" y="500" font-size="13" class="title" text-anchor="middle">ap-south-1a</text>
+    <text x="305" y="520" font-size="11" class="label" text-anchor="middle">Amazon Linux 2023 · t2.micro</text>
+    <text x="305" y="540" font-size="11" class="label" text-anchor="middle">Apache httpd</text>
+    <text x="305" y="560" font-size="12" font-weight="700" fill="#10B981" text-anchor="middle">✅ Healthy</text>
+  </g>
 
-  <!-- ====== EC2 INSTANCE 3 (Scaled Out — dashed) ====== -->
-  <rect x="810" y="470" width="260" height="130" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="6,3" filter="url(#shadow)"/>
-  <rect x="810" y="470" width="260" height="26" rx="8" fill="url(#orangeGrad)" opacity="0.5"/>
-  <rect x="810" y="488" width="260" height="8" fill="url(#orangeGrad)" opacity="0.5"/>
-  <text x="940" y="488" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold">🖥️ EC2 Instance #3</text>
-  <text x="830" y="515" fill="var(--text-muted)" font-size="10">AZ: ap-south-1a</text>
-  <text x="830" y="531" fill="var(--text-muted)" font-size="10">Type: t2.micro</text>
-  <text x="830" y="547" fill="var(--text-muted)" font-size="10">Apache httpd (port 80)</text>
-  <text x="830" y="563" fill="var(--text-muted)" font-size="10">SG: asg-ec2-sg</text>
-  <text x="830" y="579" fill="var(--orange)" font-size="9">⏳ Scaled out (CPU > 50%)</text>
-  <text x="970" y="515" fill="var(--text-muted)" font-size="9">AMI: AL2023</text>
-  <text x="970" y="531" fill="var(--text-muted)" font-size="9">Launched by ASG</text>
+  <!-- EC2 Instance 2 -->
+  <g class="node floating-delay">
+    <rect class="card" x="485" y="440" width="230" height="130" rx="12" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="485" y="440" width="230" height="36" rx="12" fill="url(#greenGrad)"/>
+    <text x="600" y="465" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">EC2 Instance #2</text>
+    <text x="600" y="500" font-size="13" class="title" text-anchor="middle">ap-south-1b</text>
+    <text x="600" y="520" font-size="11" class="label" text-anchor="middle">Amazon Linux 2023 · t2.micro</text>
+    <text x="600" y="540" font-size="11" class="label" text-anchor="middle">Apache httpd</text>
+    <text x="600" y="560" font-size="12" font-weight="700" fill="#10B981" text-anchor="middle">✅ Healthy</text>
+  </g>
 
-  <!-- ====== LAUNCH TEMPLATE (bottom left) ====== -->
-  <rect x="80" y="650" width="300" height="110" rx="8" fill="var(--box-bg)" stroke="var(--purple)" stroke-width="1.5" filter="url(#shadow)"/>
-  <rect x="80" y="650" width="300" height="26" rx="8" fill="url(#purpleGrad)" opacity="0.9"/>
-  <rect x="80" y="668" width="300" height="8" fill="url(#purpleGrad)" opacity="0.9"/>
-  <text x="230" y="668" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold"><tspan class="float">📋 Launch Template</tspan></text>
-  <text x="100" y="695" fill="var(--text-muted)" font-size="10">Name: web-server-lt (v1)</text>
-  <text x="100" y="711" fill="var(--text-muted)" font-size="10">AMI: Amazon Linux 2023</text>
-  <text x="100" y="727" fill="var(--text-muted)" font-size="10">Type: t2.micro | Key: aws-ec2-keypair</text>
-  <text x="100" y="743" fill="var(--purple)" font-size="9">User Data: Apache + stress + custom HTML</text>
+  <!-- EC2 Instance 3 (Scaled) -->
+  <g class="node pulse-obj">
+    <rect class="card" x="780" y="440" width="230" height="130" rx="12" fill="#FFFFFF" stroke="#F58536" stroke-width="1.5" stroke-dasharray="4,4" filter="url(#greenGlow)"/>
+    <rect x="780" y="440" width="230" height="36" rx="12" fill="url(#orangeGrad)"/>
+    <text x="895" y="465" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">EC2 Instance #3</text>
+    <text x="895" y="500" font-size="13" class="title" text-anchor="middle">ap-south-1a or 1b</text>
+    <text x="895" y="520" font-size="11" class="label" text-anchor="middle">Amazon Linux 2023 · t2.micro</text>
+    <text x="895" y="540" font-size="11" class="label" text-anchor="middle">Apache httpd</text>
+    <text x="895" y="560" font-size="12" font-weight="700" fill="#EA580C" text-anchor="middle">⏳ Scaled out (CPU > 50%)</text>
+  </g>
 
-  <!-- Arrow: Launch Template to ASG -->
-  <path d="M 380 700 Q 430 650 450 620" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowGreen)"/>
-  <text x="430" y="670" fill="var(--purple)" font-size="9">Blueprint</text>
 
-  <!-- ====== CLOUDWATCH (bottom center) ====== -->
-  <rect x="450" y="650" width="300" height="110" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="1.5" filter="url(#shadow)"/>
-  <rect x="450" y="650" width="300" height="26" rx="8" fill="url(#orangeGrad)" opacity="0.9"/>
-  <rect x="450" y="668" width="300" height="8" fill="url(#orangeGrad)" opacity="0.9"/>
-  <text x="600" y="668" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold"><tspan class="float">📊 CloudWatch</tspan></text>
-  <text x="470" y="695" fill="var(--text-muted)" font-size="10">Metric: ASGAverageCPUUtilization</text>
-  <text x="470" y="711" fill="var(--text-muted)" font-size="10">Target: 50% CPU</text>
-  <text x="470" y="727" fill="var(--text-muted)" font-size="10">Alarm High: > 50% for 3 min → scale out</text>
-  <text x="470" y="743" fill="var(--orange)" font-size="9">Alarm Low: &lt; 35% for 15 min → scale in</text>
+  <!-- Bottom Supporting Services -->
+  
+  <!-- Launch Template -->
+  <g class="node">
+    <rect class="card" x="150" y="650" width="250" height="120" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="150" y="650" width="250" height="30" rx="12" fill="#F3F4F6"/>
+    <rect x="150" y="665" width="250" height="15" fill="#F3F4F6"/>
+    <text x="275" y="670" font-size="13" font-weight="700" fill="#374151" text-anchor="middle">Launch Template</text>
+    <text x="275" y="705" font-size="13" class="title" text-anchor="middle">web-server-lt</text>
+    <text x="275" y="725" font-size="11" class="label" text-anchor="middle">AMI: AL2023</text>
+    <text x="275" y="745" font-size="11" class="label" text-anchor="middle">User Data: Installs Apache &amp; Stress</text>
+  </g>
 
-  <!-- Arrow: CloudWatch to ASG -->
-  <path d="M 600 650 Q 600 630 600 620" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowOrange)"/>
-  <text x="610" y="640" fill="var(--orange)" font-size="9">Scaling Trigger</text>
+  <!-- CloudWatch -->
+  <g class="node">
+    <rect class="card" x="475" y="650" width="250" height="120" rx="12" fill="#FFFFFF" stroke="#FCE7F3" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="475" y="650" width="250" height="30" rx="12" fill="#FCE7F3"/>
+    <rect x="475" y="665" width="250" height="15" fill="#FCE7F3"/>
+    <text x="600" y="670" font-size="13" font-weight="700" fill="#DB2777" text-anchor="middle">CloudWatch Alarms</text>
+    <text x="600" y="705" font-size="13" class="title" text-anchor="middle">Metric: CPU Utilization</text>
+    <text x="600" y="725" font-size="11" class="label" text-anchor="middle">High: > 50% → Scale Out</text>
+    <text x="600" y="745" font-size="11" class="label" text-anchor="middle">Low: &lt; 35% → Scale In</text>
+  </g>
 
-  <!-- ====== TARGET GROUP (bottom right) ====== -->
-  <rect x="820" y="650" width="300" height="110" rx="8" fill="var(--box-bg)" stroke="var(--teal)" stroke-width="1.5" filter="url(#shadow)"/>
-  <rect x="820" y="650" width="300" height="26" rx="8" fill="url(#tealGrad)" opacity="0.9"/>
-  <rect x="820" y="668" width="300" height="8" fill="url(#tealGrad)" opacity="0.9"/>
-  <text x="970" y="668" text-anchor="middle" fill="var(--text-main)" font-size="11" font-weight="bold"><tspan class="float">🎯 Target Group</tspan></text>
-  <text x="840" y="695" fill="var(--text-muted)" font-size="10">Name: web-server-tg</text>
-  <text x="840" y="711" fill="var(--text-muted)" font-size="10">Protocol: HTTP | Port: 80</text>
-  <text x="840" y="727" fill="var(--text-muted)" font-size="10">Health: HTTP GET / (30s interval, 5s timeout)</text>
-  <text x="840" y="743" fill="var(--teal)" font-size="9">Thresholds: 2 healthy / 2 unhealthy | Code: 200</text>
+  <!-- Target Group -->
+  <g class="node">
+    <rect class="card" x="800" y="650" width="250" height="120" rx="12" fill="#FFFFFF" stroke="#CCFBF1" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="800" y="650" width="250" height="30" rx="12" fill="#CCFBF1"/>
+    <rect x="800" y="665" width="250" height="15" fill="#CCFBF1"/>
+    <text x="925" y="670" font-size="13" font-weight="700" fill="#0F766E" text-anchor="middle">Target Group</text>
+    <text x="925" y="705" font-size="13" class="title" text-anchor="middle">web-server-tg</text>
+    <text x="925" y="725" font-size="11" class="label" text-anchor="middle">Protocol: HTTP / Port: 80</text>
+    <text x="925" y="745" font-size="11" class="label" text-anchor="middle">Health Check: HTTP GET /</text>
+  </g>
 
-  <!-- Arrow: TG to ALB -->
-  <path d="M 970 650 Q 980 400 950 350" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowTeal)"/>
-  <text x="990" y="500" fill="var(--teal)" font-size="9">Reports Health</text>
+  <path d="M 600 650 L 600 610" fill="none" stroke="#DB2777" stroke-width="3" marker-end="url(#arrow-purple)" class="flow-line"/>
 
-  <!-- Legend -->
-  <rect x="60" y="820" width="1080" height="22" rx="5" fill="var(--box-bg)" stroke="#333" stroke-width="0.5"/>
-  <circle cx="90" cy="831" r="5" fill="var(--orange)"/>
-  <text x="102" y="835" fill="var(--text-muted)" font-size="10">Internet Traffic</text>
-  <circle cx="220" cy="831" r="5" fill="var(--blue)"/>
-  <text x="232" y="835" fill="var(--text-muted)" font-size="10">ALB / VPC</text>
-  <circle cx="320" cy="831" r="5" fill="var(--green)"/>
-  <text x="332" y="835" fill="var(--text-muted)" font-size="10">EC2 Instances</text>
-  <circle cx="440" cy="831" r="5" fill="var(--teal)"/>
-  <text x="452" y="835" fill="var(--text-muted)" font-size="10">Target Group</text>
-  <circle cx="560" cy="831" r="5" fill="var(--purple)"/>
-  <text x="572" y="835" fill="var(--text-muted)" font-size="10">Launch Template</text>
-  <line x1="690" y1="831" x2="730" y2="831" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <text x="738" y="835" fill="var(--text-muted)" font-size="10">Scale-Out (on demand)</text>
-  <text x="900" y="835" fill="var(--text-muted)" font-size="10">All services in ap-south-1 (Mumbai) • Free Tier Eligible</text>
 </svg>

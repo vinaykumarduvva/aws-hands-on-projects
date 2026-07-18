@@ -117,7 +117,7 @@ Explore the live static websites I've deployed on AWS S3 & CloudFront!
 | **10** | [**Auto Scaling Group + ALB**](project-10-auto-scaling-alb) | 🟡 Intermediate | EC2, ALB, ASG | ✅ Done |
 | **11** | [**Infrastructure as Code**](project-11-infrastructure-as-code) | 🟡 Intermediate | CloudFormation | ✅ Done |
 | **12** | [**Event-Driven Pipeline**](project-12-event-driven-pipeline) | 🟡 Intermediate | S3, SQS, Lambda | ✅ Done |
-| **13** | Containerized App on ECS Fargate | 🔴 Advanced | ECS, ECR, Fargate, ALB | ⏳ Upcoming |
+| **13** | [**Containerized App on ECS Fargate**](project-13-ecs-fargate-container) | 🔴 Advanced | ECS, ECR, Fargate, ALB | ✅ Done |
 | **14** | Capstone: 3-Tier HA Architecture | 🔴 Advanced | VPC, ALB, ASG, RDS Multi-AZ | ⏳ Upcoming |
 
 <br/>
@@ -179,7 +179,7 @@ Each project README provides absolute transparency on billing:
 | 📊 **Monitoring & Observability** | ⭐⭐⭐☆☆ |
 | ⚡ **Serverless** | ⭐⭐⭐☆☆ |
 | ♾️ **DevOps / CI/CD** | ⭐⭐⭐☆☆ |
-| 📦 **Containers** | ⭐☆☆☆☆ |
+| 📦 **Containers** | ⭐⭐⭐☆☆ |
 | 🏗️ **IaC** | ⭐☆☆☆☆ |
 
 </div>

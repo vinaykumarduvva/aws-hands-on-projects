@@ -1,227 +1,166 @@
-<svg width="860" height="640" viewBox="0 0 860 640" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 800" width="100%" height="100%">
   <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
+    </linearGradient>
 
-  <style>
-    :root {
-      --bg: #0a0a1a;
-      --bg-gradient-start: #0a0a1a;
-      --bg-gradient-end: #1a1a2e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --box-bg: #1a1a3a;
-      --box-bg-light: #2a2a4a;
-      --orange: #FF9900;
-      --blue: #1a73e8;
-      --green: #2E8B57;
-      --red: #cc3333;
-      --purple: #9B59B6;
-      --grid: #ffffff08;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc;
-        --bg-gradient-start: #f8fafc;
-        --bg-gradient-end: #e2e8f0;
-        --text-main: #0f172a;
-        --text-muted: #475569;
-        --box-bg: #ffffff;
-        --box-bg-light: #f1f5f9;
-        --orange: #e68a00;
-        --blue: #1557b0;
-        --green: #1f6b42;
-        --red: #b32424;
-        --purple: #7a4694;
-        --grid: #00000008;
-      }
-    }
-    svg {
-      background-color: var(--bg);
-      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
-    }
-    text {
-      transition: fill 0.3s ease;
-    }
-    .text-title { fill: var(--orange); font-weight: 800; }
-    .text-main { fill: var(--text-main); }
-    .text-muted { fill: var(--text-muted); }
-    .box-bg { fill: var(--box-bg); transition: fill 0.3s ease, stroke 0.3s ease; }
-    .float { animation: float 6s ease-in-out infinite; }
-    .pulse { animation: pulse 2s ease-in-out infinite; }
-    .draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s forwards; }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { opacity: 0.8; }
-      50% { opacity: 1; filter: brightness(1.2); }
-      100% { opacity: 0.8; }
-    }
-    @keyframes draw {
-      to { stroke-dashoffset: 0; }
-    }
-  </style>
+    <!-- Shadows -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+    <filter id="hoverShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
 
-    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></marker>
-    <marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"/></marker>
-    <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round"/></marker>
-    <marker id="arrOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round"/></marker>
-    <marker id="arrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#6f42c1" stroke-width="2" stroke-linecap="round"/></marker>
-  
-  
-
-  
-  <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#f8f9fa" />
-    <stop offset="100%" stop-color="#e2e8f0" />
-  </linearGradient>
-  <style>
-    /* Injected Interactive Styles */
-    svg {
-      --transition-speed: 0.3s;
-    }
-    rect[fill="#f8f9fa"], rect[width="800"][height="500"], rect[width="860"][height="640"] {
-      fill: url(#bg-gradient) !important;
-    }
-    rect, circle, polygon {
-      transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--transition-speed) ease, fill var(--transition-speed) ease;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-    rect:hover, circle:hover, polygon:hover {
-      filter: drop-shadow(0px 8px 24px rgba(26, 115, 232, 0.5)) brightness(1.05);
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    line, path {
-      transition: stroke-width var(--transition-speed) ease, stroke var(--transition-speed) ease, filter var(--transition-speed) ease;
-    }
-    line:hover, path:hover {
-      stroke-width: 4px;
-      filter: drop-shadow(0px 4px 12px rgba(255, 153, 0, 0.7));
-      cursor: pointer;
-    }
-    text {
-      pointer-events: none;
-      transition: fill 0.3s ease;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-      50% { filter: drop-shadow(0 0 12px rgba(26,115,232,0.8)); }
-      100% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-    }
-  </style>
-
+    <!-- Markers -->
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#0073BB" />
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#8C4FFF" />
+    </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="860" height="640" fill="#f8f9fa" rx="12"/>
+  <style>
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .flow-line { stroke-dasharray: 6 6; animation: dash 1.5s linear infinite; }
+    .flow-line:hover { stroke-width: 4px; cursor: pointer; filter: url(#glow); }
+    .node { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+    .node:hover { transform: translateY(-5px); }
+    .node:hover .card { filter: url(#hoverShadow); }
+    .floating { animation: float 6s ease-in-out infinite; }
+    .floating-delay { animation: float 6s ease-in-out infinite; animation-delay: 3s; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+    text { font-family: 'Inter', -apple-system, sans-serif; }
+    .title { font-weight: 700; fill: #111827; }
+    .label { font-weight: 500; fill: #6B7280; font-size: 13px; }
+  </style>
 
-  <!-- Title -->
-  <text x="430" y="34" text-anchor="middle" font-size="18" font-weight="bold" fill="#232f3e">Project 6 — Two-Tier Architecture: EC2 + RDS MySQL</text>
-  <text x="430" y="54" text-anchor="middle" font-size="12" fill="#666">VPC: 10.0.0.0/16 · Region: us-east-1 · MySQL 8.0</text>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  
+  <text x="550" y="40" font-size="28" font-weight="800" fill="#111827" text-anchor="middle">Project 6 — Two-Tier Architecture: EC2 + RDS MySQL</text>
+  <text x="550" y="65" font-size="14" font-weight="500" fill="#6B7280" text-anchor="middle">VPC: 10.0.0.0/16 · Region: us-east-1 · MySQL 8.0</text>
 
-  <!-- Internet -->
-  <rect x="320" y="68" width="220" height="42" rx="8" fill="#e8f4fd" stroke="var(--blue)" stroke-width="1.5"/>
-  <text x="430" y="87" text-anchor="middle" font-size="13" font-weight="bold" fill="var(--blue)"><tspan class="float">🌐 Internet</tspan></text>
-  <text x="430" y="103" text-anchor="middle" font-size="11" fill="var(--blue)">SSH port 22 (My IP) · HTTP port 80</text>
-
-  <!-- Arrow Internet to IGW -->
-  <line x1="430" y1="110" x2="430" y2="134" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrBlue)"/>
-
-  <!-- IGW -->
-  <rect x="300" y="134" width="260" height="40" rx="8" fill="#fff3cd" stroke="#ff9900" stroke-width="1.5"/>
-  <text x="430" y="150" text-anchor="middle" font-size="12" font-weight="bold" fill="#b36800">Internet Gateway — my-vpc-igw</text>
-  <text x="430" y="167" text-anchor="middle" font-size="11" fill="#b36800">Bidirectional internet access</text>
-
-  <!-- VPC box -->
-  <rect x="28" y="188" width="804" height="408" rx="14" fill="none" stroke="#232f3e" stroke-width="2" stroke-dasharray="8,4"/>
-  <text x="48" y="208" font-size="13" font-weight="bold" fill="#232f3e">VPC: my-custom-vpc — 10.0.0.0/16</text>
+  <!-- AWS Cloud Boundary -->
+  <rect x="50" y="200" width="800" height="550" rx="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="8,8"/>
+  <rect x="70" y="185" width="220" height="30" fill="#F8FAFC"/>
+  <text x="80" y="207" font-size="20" font-weight="700" fill="#F58536">AWS Cloud (VPC)</text>
 
   <!-- Public Subnet -->
-  <rect x="44" y="216" width="772" height="148" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
-  <text x="430" y="234" text-anchor="middle" font-size="12" font-weight="bold" fill="#155724">Public Subnet A — 10.0.1.0/24 · us-east-1a</text>
+  <rect x="80" y="240" width="740" height="180" rx="16" fill="#F0FDF4" stroke="#16A34A" stroke-width="2"/>
+  <rect x="100" y="225" width="340" height="30" fill="#F8FAFC"/>
+  <text x="110" y="247" font-size="16" font-weight="700" fill="#16A34A">Public Subnet A — 10.0.1.0/24 (us-east-1a)</text>
 
-  <!-- EC2 App Server box -->
-  <rect x="220" y="244" width="420" height="104" rx="8" fill="#ffffff" stroke="#28a745" stroke-width="1.5"/>
-  <text x="430" y="264" text-anchor="middle" font-size="13" font-weight="bold" fill="#155724">EC2 App Server — app-server</text>
-  <text x="430" y="282" text-anchor="middle" font-size="11" fill="#444"><tspan class="float">Amazon Linux 2023 · t2.micro · Public IP ✅</tspan></text>
-  <text x="430" y="298" text-anchor="middle" font-size="11" fill="#444">MySQL Client + Apache installed via User Data</text>
-  <text x="430" y="314" text-anchor="middle" font-size="11" fill="#28a745">Security Group: ec2-app-sg</text>
-  <text x="430" y="330" text-anchor="middle" font-size="11" fill="#555">SSH :22 (My IP) · HTTP :80 (0.0.0.0/0)</text>
+  <!-- Private Subnet (DB Tier) -->
+  <rect x="80" y="460" width="740" height="260" rx="16" fill="#FEF2F2" stroke="#DC2626" stroke-width="2"/>
+  <rect x="100" y="445" width="240" height="30" fill="#F8FAFC"/>
+  <text x="110" y="467" font-size="16" font-weight="700" fill="#DC2626">Private Subnets (DB Tier)</text>
 
-  <!-- Arrow IGW to Public subnet -->
-  <line x1="430" y1="174" x2="430" y2="244" stroke="#ff9900" stroke-width="2" marker-end="url(#arrOrange)"/>
+  <!-- Nodes (Outside VPC) -->
+  <g class="node">
+    <rect class="card" x="180" y="80" width="200" height="50" rx="25" fill="#FFFFFF" stroke="#0073BB" stroke-width="2" filter="url(#shadow)"/>
+    <circle cx="205" cy="105" r="14" fill="#E0F2FE"/>
+    <text x="290" y="111" font-size="18" font-weight="700" fill="#0073BB" text-anchor="middle">Internet</text>
+  </g>
 
-  <!-- Private Subnets label -->
-  <rect x="44" y="380" width="772" height="200" rx="10" fill="#fce8e8" stroke="#dc3545" stroke-width="1.5"/>
-  <text x="430" y="400" text-anchor="middle" font-size="12" font-weight="bold" fill="#721c24">Private Subnets — DB Tier</text>
-  <text x="200" y="418" text-anchor="middle" font-size="11" fill="#721c24">private-subnet-a · 10.0.3.0/24 · us-east-1a</text>
-  <text x="660" y="418" text-anchor="middle" font-size="11" fill="#721c24">private-subnet-b · 10.0.4.0/24 · us-east-1b</text>
+  <!-- Internet to IGW -->
+  <path d="M 280 130 L 280 160" fill="none" stroke="#0073BB" stroke-width="3" marker-end="url(#arrow-blue)" class="flow-line"/>
 
-  <!-- RDS box -->
-  <rect x="160" y="424" width="540" height="140" rx="8" fill="#ffffff" stroke="#dc3545" stroke-width="1.5"/>
-  <text x="430" y="446" text-anchor="middle" font-size="13" font-weight="bold" fill="#721c24">RDS MySQL 8.0 — myapp-database</text>
-  <text x="430" y="464" text-anchor="middle" font-size="11" fill="#444">db.t3.micro · 20 GB gp2 · Encryption enabled</text>
-  <text x="430" y="480" text-anchor="middle" font-size="11" fill="#444">Automated backups: 1 day · No public access</text>
-  <text x="430" y="496" text-anchor="middle" font-size="11" fill="#dc3545">Security Group: rds-sg · Port: 3306</text>
-  <text x="430" y="512" text-anchor="middle" font-size="11" fill="#555">DB: appdb · Tables: users, products, orders</text>
-  <text x="430" y="528" text-anchor="middle" font-size="10" fill="var(--text-muted)">Endpoint: myapp-database.xxxxxxxx.us-east-1.rds.amazonaws.com</text>
-  <text x="430" y="548" text-anchor="middle" font-size="11" fill="#dc3545">Subnet Group: rds-subnet-group (spans both AZs)</text>
+  <!-- IGW -->
+  <g class="node floating">
+    <rect class="card" x="180" y="140" width="200" height="40" rx="12" fill="#FFFFFF" stroke="#F58536" stroke-width="2" filter="url(#shadow)"/>
+    <text x="280" y="166" font-size="16" font-weight="700" fill="#C2410C" text-anchor="middle">Internet Gateway</text>
+  </g>
 
-  <!-- Arrow EC2 to RDS -->
-  <line x1="430" y1="348" x2="430" y2="424" stroke="#6f42c1" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#arrPurple)"/>
-  <rect x="342" y="374" width="176" height="22" rx="4" fill="#f8f4ff" stroke="#6f42c1" stroke-width="1"/>
-  <text x="430" y="389" text-anchor="middle" font-size="11" font-weight="bold" fill="#6f42c1">MySQL Port 3306</text>
+  <path d="M 280 180 L 280 270" fill="none" stroke="#F58536" stroke-width="3" marker-end="url(#arrow-blue)" class="flow-line"/>
 
-  <!-- Secrets Manager box -->
-  <rect x="614" y="216" width="200" height="148" rx="8" fill="#f0f0ff" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <text x="714" y="236" text-anchor="middle" font-size="11" font-weight="bold" fill="#6f42c1">Secrets Manager</text>
-  <text x="714" y="254" text-anchor="middle" font-size="10" fill="#444">rds/myapp/credentials</text>
-  <text x="714" y="272" text-anchor="middle" font-size="10" fill="#444">username: admin</text>
-  <text x="714" y="288" text-anchor="middle" font-size="10" fill="#444">password: ••••••••</text>
-  <text x="714" y="304" text-anchor="middle" font-size="10" fill="#444">engine: mysql</text>
-  <text x="714" y="320" text-anchor="middle" font-size="10" fill="#444">port: 3306</text>
-  <text x="714" y="338" text-anchor="middle" font-size="10" fill="#6f42c1">ec2-app-role access only</text>
-  <text x="714" y="354" text-anchor="middle" font-size="10" fill="var(--text-muted)">IAM: secretsmanager:</text>
-  <text x="714" y="368" text-anchor="middle" font-size="10" fill="var(--text-muted)">GetSecretValue</text>
+  <!-- EC2 App Server -->
+  <g class="node floating">
+    <rect class="card" x="120" y="270" width="660" height="120" rx="12" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="120" y="270" width="660" height="36" rx="12" fill="#F0FDF4"/>
+    <rect x="120" y="286" width="660" height="20" fill="#F0FDF4"/>
+    <text x="450" y="294" font-size="14" font-weight="700" fill="#15803D" text-anchor="middle">EC2 App Server</text>
+    
+    <text x="450" y="330" font-size="16" class="title" text-anchor="middle">Amazon Linux 2023 · t2.micro</text>
+    <text x="450" y="350" font-size="13" class="label" text-anchor="middle">MySQL Client + Apache installed via User Data · Public IP ✅</text>
+    
+    <rect x="140" y="315" width="220" height="60" rx="8" fill="#F3F4F6"/>
+    <text x="250" y="340" font-size="12" font-weight="700" fill="#111827" text-anchor="middle">Security Group: ec2-app-sg</text>
+    <text x="250" y="360" font-size="11" fill="#4B5563" text-anchor="middle">SSH :22 (My IP) · HTTP :80 (Any)</text>
+  </g>
 
-  <!-- Arrow EC2 to Secrets Manager -->
-  <line x1="640" y1="296" x2="614" y2="296" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrPurple)"/>
+  <!-- Flow App Server to RDS -->
+  <path d="M 450 390 L 450 490" fill="none" stroke="#8C4FFF" stroke-width="3" marker-end="url(#arrow-purple)" class="flow-line"/>
+  <rect x="370" y="430" width="160" height="20" rx="10" fill="#F3E8FF"/>
+  <text x="450" y="444" font-size="11" font-weight="700" fill="#6D28D9" text-anchor="middle">MySQL Port 3306</text>
 
-  <!-- CloudWatch box -->
-  <rect x="46" y="216" width="162" height="148" rx="8" fill="#fff8e1" stroke="#ff9900" stroke-width="1.5" stroke-dasharray="5,3"/>
-  <text x="127" y="236" text-anchor="middle" font-size="11" font-weight="bold" fill="#b36800">CloudWatch</text>
-  <text x="127" y="254" text-anchor="middle" font-size="10" fill="#444">RDS Metrics:</text>
-  <text x="127" y="270" text-anchor="middle" font-size="10" fill="#444">· CPUUtilization</text>
-  <text x="127" y="286" text-anchor="middle" font-size="10" fill="#444">· DB Connections</text>
-  <text x="127" y="302" text-anchor="middle" font-size="10" fill="#444">· FreeStorageSpace</text>
-  <text x="127" y="318" text-anchor="middle" font-size="10" fill="#444">· ReadIOPS</text>
-  <text x="127" y="334" text-anchor="middle" font-size="10" fill="#444">· WriteIOPS</text>
-  <text x="127" y="350" text-anchor="middle" font-size="10" fill="#b36800">Auto-collected</text>
-  <text x="127" y="366" text-anchor="middle" font-size="10" fill="var(--text-muted)">every 60 seconds</text>
 
-  <!-- Arrow RDS to CloudWatch (dashed) -->
-  <line x1="208" y1="296" x2="220" y2="296" stroke="#ff9900" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrOrange)"/>
+  <!-- RDS Database -->
+  <g class="node floating-delay">
+    <rect class="card" x="120" y="490" width="660" height="200" rx="12" fill="#FFFFFF" stroke="#DC2626" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="120" y="490" width="660" height="40" rx="12" fill="#FEF2F2"/>
+    <rect x="120" y="510" width="660" height="20" fill="#FEF2F2"/>
+    <text x="450" y="515" font-size="16" font-weight="700" fill="#B91C1C" text-anchor="middle">RDS MySQL 8.0 — myapp-database</text>
+    
+    <text x="450" y="560" font-size="18" class="title" text-anchor="middle">db.t3.micro · 20 GB gp2</text>
+    <text x="450" y="585" font-size="13" class="label" text-anchor="middle">Subnet Group: rds-subnet-group (spans both AZs)</text>
+    <text x="450" y="605" font-size="13" class="label" text-anchor="middle">Endpoint: myapp-database.xxxx.us-east-1.rds.amazonaws.com</text>
+    <text x="450" y="625" font-size="13" class="label" text-anchor="middle">DB: appdb · Tables: users, products, orders</text>
+    
+    <rect x="140" y="540" width="220" height="60" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+    <text x="250" y="565" font-size="12" font-weight="700" fill="#B91C1C" text-anchor="middle">Security Group: rds-sg</text>
+    <text x="250" y="585" font-size="11" fill="#DC2626" text-anchor="middle">Port 3306 (From App SG only)</text>
+  </g>
 
-  <!-- Legend -->
-  <rect x="28" y="606" width="804" height="26" rx="6" fill="#f1f3f4" stroke="#dee2e6" stroke-width="1"/>
-  <line x1="50" y1="619" x2="72" y2="619" stroke="#ff9900" stroke-width="2"/>
-  <text x="78" y="623" font-size="10" fill="#444">Public internet access</text>
-  <line x1="190" y1="619" x2="212" y2="619" stroke="#6f42c1" stroke-width="2" stroke-dasharray="5,3"/>
-  <text x="218" y="623" font-size="10" fill="#444">MySQL :3306 (SG chaining)</text>
-  <line x1="360" y1="619" x2="382" y2="619" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="4,3"/>
-  <text x="388" y="623" font-size="10" fill="#444">Secrets Manager fetch</text>
-  <rect x="515" y="612" width="12" height="12" rx="2" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
-  <text x="531" y="623" font-size="10" fill="#444">Public subnet</text>
-  <rect x="610" y="612" width="12" height="12" rx="2" fill="#fce8e8" stroke="#dc3545" stroke-width="1"/>
-  <text x="626" y="623" font-size="10" fill="#444">Private subnet (DB tier)</text>
-  <rect x="740" y="612" width="12" height="12" rx="2" fill="#f0f0ff" stroke="#6f42c1" stroke-width="1" stroke-dasharray="3,2"/>
-  <text x="756" y="623" font-size="10" fill="#444">AWS services</text>
+
+  <!-- AWS Managed Services Area -->
+  <rect x="880" y="240" width="180" height="480" rx="16" fill="#F8FAFC" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="890" y="225" width="160" height="30" fill="#F8FAFC"/>
+  <text x="970" y="247" font-size="16" font-weight="700" fill="#6B7280" text-anchor="middle">Managed Services</text>
+
+  <!-- Secrets Manager -->
+  <g class="node">
+    <rect class="card" x="900" y="280" width="140" height="180" rx="12" fill="#FFFFFF" stroke="#8C4FFF" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="900" y="280" width="140" height="36" rx="12" fill="#F5F3FF"/>
+    <rect x="900" y="296" width="140" height="20" fill="#F5F3FF"/>
+    <text x="970" y="304" font-size="13" font-weight="700" fill="#6D28D9" text-anchor="middle">Secrets Manager</text>
+    
+    <text x="970" y="335" font-size="12" font-weight="600" fill="#111827" text-anchor="middle">rds/myapp/creds</text>
+    <text x="970" y="355" font-size="11" fill="#4B5563" text-anchor="middle">user: admin</text>
+    <text x="970" y="370" font-size="11" fill="#4B5563" text-anchor="middle">pass: ••••••••</text>
+    <text x="970" y="385" font-size="11" fill="#4B5563" text-anchor="middle">port: 3306</text>
+    <text x="970" y="405" font-size="10" font-weight="600" fill="#6D28D9" text-anchor="middle">IAM: GetSecretValue</text>
+    <text x="970" y="420" font-size="10" fill="#6D28D9" text-anchor="middle">via ec2-app-role</text>
+  </g>
+
+  <!-- CloudWatch -->
+  <g class="node">
+    <rect class="card" x="900" y="490" width="140" height="190" rx="12" fill="#FFFFFF" stroke="#F58536" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="900" y="490" width="140" height="36" rx="12" fill="#FFF7ED"/>
+    <rect x="900" y="506" width="140" height="20" fill="#FFF7ED"/>
+    <text x="970" y="514" font-size="13" font-weight="700" fill="#C2410C" text-anchor="middle">CloudWatch</text>
+    
+    <text x="970" y="545" font-size="12" font-weight="600" fill="#111827" text-anchor="middle">RDS Metrics</text>
+    <text x="970" y="565" font-size="11" fill="#4B5563" text-anchor="middle">CPUUtilization</text>
+    <text x="970" y="580" font-size="11" fill="#4B5563" text-anchor="middle">DB Connections</text>
+    <text x="970" y="595" font-size="11" fill="#4B5563" text-anchor="middle">FreeStorageSpace</text>
+    <text x="970" y="610" font-size="11" fill="#4B5563" text-anchor="middle">Read/Write IOPS</text>
+    <text x="970" y="635" font-size="10" font-weight="600" fill="#C2410C" text-anchor="middle">Auto-collected</text>
+  </g>
+
+  <!-- App Server to Secrets Manager -->
+  <path d="M 780 340 L 890 340" fill="none" stroke="#8C4FFF" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-purple)"/>
+
+  <!-- RDS to CloudWatch -->
+  <path d="M 780 580 L 890 580" fill="none" stroke="#F58536" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-orange)"/>
 </svg>

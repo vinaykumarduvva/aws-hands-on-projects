@@ -1,163 +1,171 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" font-family="Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 800" width="100%" height="100%">
   <defs>
-    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#FF6600;stop-opacity:1" />
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
     </linearGradient>
-    <linearGradient id="lambdaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#EC7211;stop-opacity:1" />
-    </linearGradient>
+
+    <!-- Component Gradients -->
     <linearGradient id="apiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6B46C1;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#553C9A;stop-opacity:1" />
+      <stop offset="0%" stop-color="#8C4FFF"/>
+      <stop offset="100%" stop-color="#6B2ED5"/>
     </linearGradient>
+
+    <linearGradient id="lambdaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F58536"/>
+      <stop offset="100%" stop-color="#D35400"/>
+    </linearGradient>
+
     <linearGradient id="dbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2E8B57;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1E6B3A;stop-opacity:1" />
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
     </linearGradient>
-    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
-      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+
+    <!-- Shadows -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.06"/>
     </filter>
-    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#FF9900"/>
-    </marker>
-    <marker id="arrowPurple" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#6B46C1"/>
-    </marker>
-    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#2E8B57"/>
-    </marker>
-  
-  
+    <filter id="hoverShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
 
-  
-  <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#f8f9fa" />
-    <stop offset="100%" stop-color="#e2e8f0" />
-  </linearGradient>
-  <style>
-    /* Injected Interactive Styles */
-    svg {
-      --transition-speed: 0.3s;
-    }
-    rect[fill="#f8f9fa"], rect[width="800"][height="500"], rect[width="860"][height="640"] {
-      fill: url(#bg-gradient) !important;
-    }
-    rect, circle, polygon {
-      transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--transition-speed) ease, fill var(--transition-speed) ease;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-    rect:hover, circle:hover, polygon:hover {
-      filter: drop-shadow(0px 8px 24px rgba(26, 115, 232, 0.5)) brightness(1.05);
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    line, path {
-      transition: stroke-width var(--transition-speed) ease, stroke var(--transition-speed) ease, filter var(--transition-speed) ease;
-    }
-    line:hover, path:hover {
-      stroke-width: 4px;
-      filter: drop-shadow(0px 4px 12px rgba(255, 153, 0, 0.7));
-      cursor: pointer;
-    }
-    text {
-      pointer-events: none;
-      transition: fill 0.3s ease;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-      50% { filter: drop-shadow(0 0 12px rgba(26,115,232,0.8)); }
-      100% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-    }
-  </style>
-
+    <!-- Markers -->
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#8C4FFF" />
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#EA580C" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#10B981" />
+    </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="900" height="600" fill="#1a1a2e" rx="10"/>
+  <style>
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .flow-line { stroke-dasharray: 6 6; animation: dash 1.5s linear infinite; }
+    .flow-line:hover { stroke-width: 4px; cursor: pointer; filter: url(#glow); }
+    .node { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+    .node:hover { transform: translateY(-5px); }
+    .node:hover .card { filter: url(#hoverShadow); }
+    .floating { animation: float 6s ease-in-out infinite; }
+    .floating-delay { animation: float 6s ease-in-out infinite; animation-delay: 3s; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+    text { font-family: 'Inter', -apple-system, sans-serif; }
+    .title { font-weight: 700; fill: #111827; }
+    .label { font-weight: 500; fill: #6B7280; font-size: 13px; }
+  </style>
+
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
   
-  <!-- Title -->
-  <text x="450" y="40" text-anchor="middle" fill="white" font-size="24" font-weight="bold">Serverless REST API Architecture</text>
-  <text x="450" y="65" text-anchor="middle" fill="#999" font-size="14">Lambda + API Gateway + DynamoDB</text>
+  <text x="550" y="40" font-size="28" font-weight="800" fill="#111827" text-anchor="middle">Project 8 — Serverless REST API Architecture</text>
+  <text x="550" y="65" font-size="14" font-weight="500" fill="#6B7280" text-anchor="middle">Lambda + API Gateway + DynamoDB (Fully Managed &amp; Serverless)</text>
 
-  <!-- Client -->
-  <rect x="50" y="100" width="120" height="60" rx="10" fill="#2d2d44" stroke="#FF9900" stroke-width="2" filter="url(#shadow)"/>
-  <text x="110" y="125" text-anchor="middle" fill="white" font-size="14" font-weight="bold">🌐 Client</text>
-  <text x="110" y="145" text-anchor="middle" fill="#999" font-size="11">Browser / curl</text>
+  <!-- AWS Cloud Boundary -->
+  <rect x="50" y="200" width="1000" height="520" rx="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="8,8"/>
+  <rect x="70" y="185" width="130" height="30" fill="#F8FAFC"/>
+  <text x="80" y="207" font-size="20" font-weight="700" fill="#F58536">AWS Cloud</text>
 
-  <!-- Internet Cloud -->
-  <ellipse cx="300" cy="130" rx="60" ry="30" fill="none" stroke="#6B46C1" stroke-width="2" stroke-dasharray="5,5"/>
-  <text x="300" y="135" text-anchor="middle" fill="#6B46C1" font-size="12">HTTPS</text>
 
-  <!-- API Gateway -->
-  <rect x="400" y="100" width="200" height="100" rx="10" fill="url(#apiGrad)" filter="url(#shadow)"/>
-  <text x="500" y="130" text-anchor="middle" fill="white" font-size="16" font-weight="bold">API Gateway</text>
-  <text x="500" y="150" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">REST API (Regional)</text>
-  <text x="500" y="170" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">users-api (prod stage)</text>
+  <!-- Flow Lines -->
   
-  <!-- API Routes inside Gateway -->
-  <rect x="420" y="180" width="160" height="15" rx="3" fill="rgba(255,255,255,0.15)"/>
-  <text x="500" y="191" text-anchor="middle" fill="white" font-size="9">POST/GET /users | GET/PUT/DELETE /users/{id}</text>
-
-  <!-- Lambda Function -->
-  <rect x="400" y="280" width="200" height="100" rx="10" fill="url(#lambdaGrad)" filter="url(#shadow)"/>
-  <text x="500" y="310" text-anchor="middle" fill="white" font-size="16" font-weight="bold">⚡ AWS Lambda</text>
-  <text x="500" y="330" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">Python 3.12</text>
-  <text x="500" y="350" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">users-api | 128MB | 30s</text>
-  <rect x="420" y="360" width="160" height="15" rx="3" fill="rgba(255,255,255,0.15)"/>
-  <text x="500" y="371" text-anchor="middle" fill="white" font-size="9">5 CRUD Operations</text>
-
-  <!-- DynamoDB -->
-  <rect x="400" y="460" width="200" height="80" rx="10" fill="url(#dbGrad)" filter="url(#shadow)"/>
-  <text x="500" y="490" text-anchor="middle" fill="white" font-size="16" font-weight="bold">🗄️ DynamoDB</text>
-  <text x="500" y="510" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">users Table</text>
-  <text x="500" y="528" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">PK: userId | On-demand</text>
-
-  <!-- IAM Role -->
-  <rect x="700" y="340" width="160" height="80" rx="10" fill="#2d2d44" stroke="#FF9900" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="780" y="365" text-anchor="middle" fill="#FF9900" font-size="14" font-weight="bold">🔑 IAM Role</text>
-  <text x="780" y="385" text-anchor="middle" fill="#999" font-size="10">lambda-users-api-role</text>
-  <text x="780" y="405" text-anchor="middle" fill="#666" font-size="9">DynamoDB + CloudWatch</text>
-
-  <!-- CloudWatch -->
-  <rect x="50" y="460" width="160" height="60" rx="10" fill="#2d2d44" stroke="#6B46C1" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="130" y="485" text-anchor="middle" fill="#6B46C1" font-size="14" font-weight="bold">📊 CloudWatch</text>
-  <text x="130" y="505" text-anchor="middle" fill="#999" font-size="10">Logs + Metrics</text>
-
-  <!-- Arrows -->
   <!-- Client to API Gateway -->
-  <line x1="170" y1="130" x2="395" y2="130" stroke="#6B46C1" stroke-width="2" marker-end="url(#arrowPurple)"/>
-  
+  <path d="M 550 140 L 550 240" fill="none" stroke="#8C4FFF" stroke-width="3" marker-end="url(#arrow-purple)" class="flow-line"/>
+  <rect x="490" y="170" width="120" height="20" rx="10" fill="#F3E8FF"/>
+  <text x="550" y="184" font-size="11" font-weight="700" fill="#6D28D9" text-anchor="middle">HTTPS Requests</text>
+
   <!-- API Gateway to Lambda -->
-  <line x1="500" y1="200" x2="500" y2="275" stroke="#FF9900" stroke-width="2" marker-end="url(#arrowOrange)"/>
-  <text x="520" y="245" fill="#FF9900" font-size="9">Invoke</text>
+  <path d="M 550 380 L 550 440" fill="none" stroke="#EA580C" stroke-width="3" marker-end="url(#arrow-orange)" class="flow-line"/>
+  <rect x="490" y="400" width="120" height="20" rx="10" fill="#FFEDD5"/>
+  <text x="550" y="414" font-size="11" font-weight="700" fill="#C2410C" text-anchor="middle">Triggers Event</text>
 
   <!-- Lambda to DynamoDB -->
-  <line x1="500" y1="380" x2="500" y2="455" stroke="#2E8B57" stroke-width="2" marker-end="url(#arrowGreen)"/>
-  <text x="520" y="425" fill="#2E8B57" font-size="9">CRUD Ops</text>
+  <path d="M 550 560 L 550 600" fill="none" stroke="#10B981" stroke-width="3" marker-end="url(#arrow-green)" class="flow-line"/>
+  <rect x="490" y="570" width="120" height="20" rx="10" fill="#D1FAE5"/>
+  <text x="550" y="584" font-size="11" font-weight="700" fill="#047857" text-anchor="middle">CRUD Operations</text>
 
-  <!-- Lambda to CloudWatch -->
-  <line x1="400" y1="330" x2="215" y2="490" stroke="#6B46C1" stroke-width="1.5" stroke-dasharray="5,5"/>
-  <text x="280" y="420" fill="#6B46C1" font-size="9" transform="rotate(-45, 280, 420)">Logs</text>
 
-  <!-- IAM to Lambda -->
-  <line x1="700" y1="370" x2="605" y2="330" stroke="#FF9900" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <!-- Nodes -->
+
+  <!-- Client -->
+  <g class="node">
+    <rect class="card" x="430" y="80" width="240" height="60" rx="30" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1.5" filter="url(#shadow)"/>
+    <circle cx="465" cy="110" r="14" fill="#F3F4F6"/>
+    <text x="550" y="115" font-size="18" font-weight="700" fill="#374151" text-anchor="middle">Client (Browser / Curl)</text>
+  </g>
+
+
+  <!-- API Gateway -->
+  <g class="node floating">
+    <rect class="card" x="350" y="250" width="400" height="130" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="350" y="250" width="400" height="40" rx="12" fill="url(#apiGrad)"/>
+    <text x="550" y="275" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Amazon API Gateway</text>
+
+    <text x="550" y="315" font-size="16" class="title" text-anchor="middle">REST API (Regional)</text>
+    <text x="550" y="335" font-size="13" class="label" text-anchor="middle">Stage: prod · API Name: users-api</text>
+    
+    <rect x="380" y="345" width="340" height="20" rx="4" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1"/>
+    <text x="550" y="358" font-size="11" font-weight="600" fill="#6D28D9" text-anchor="middle">POST/GET /users | GET/PUT/DELETE /users/{id}</text>
+  </g>
+
+
+  <!-- AWS Lambda -->
+  <g class="node floating-delay">
+    <rect class="card" x="350" y="440" width="400" height="120" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="350" y="440" width="400" height="40" rx="12" fill="url(#lambdaGrad)"/>
+    <text x="550" y="465" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">AWS Lambda</text>
+
+    <text x="550" y="505" font-size="16" class="title" text-anchor="middle">Compute Function</text>
+    <text x="550" y="525" font-size="13" class="label" text-anchor="middle">users-api · Python 3.12 · 128MB Memory · 30s Timeout</text>
+    <text x="550" y="545" font-size="13" class="label" text-anchor="middle">Executes CRUD logic autonomously</text>
+  </g>
+
+  <!-- Amazon DynamoDB -->
+  <g class="node floating">
+    <rect class="card" x="350" y="600" width="400" height="100" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="350" y="600" width="400" height="40" rx="12" fill="url(#dbGrad)"/>
+    <text x="550" y="625" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Amazon DynamoDB</text>
+
+    <text x="550" y="665" font-size="16" class="title" text-anchor="middle">NoSQL Database</text>
+    <text x="550" y="685" font-size="13" class="label" text-anchor="middle">Table: users · PK: userId · On-Demand Capacity</text>
+  </g>
+
+
+  <!-- Supporting Services (Right Side) -->
   
-  <!-- IAM to DynamoDB -->
-  <line x1="700" y1="400" x2="605" y2="500" stroke="#2E8B57" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <!-- IAM Role -->
+  <g class="node">
+    <rect class="card" x="800" y="380" width="220" height="100" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="800" y="380" width="220" height="30" rx="12" fill="#F3F4F6"/>
+    <rect x="800" y="395" width="220" height="15" fill="#F3F4F6"/>
+    <text x="910" y="400" font-size="13" font-weight="700" fill="#4B5563" text-anchor="middle">IAM Execution Role</text>
+    
+    <text x="910" y="435" font-size="13" class="title" text-anchor="middle">lambda-users-api-role</text>
+    <text x="910" y="455" font-size="11" class="label" text-anchor="middle">Grants access to DynamoDB &amp; CW</text>
+  </g>
 
-  <!-- Legend -->
-  <rect x="50" y="540" width="800" height="45" rx="8" fill="#2d2d44" opacity="0.8"/>
-  <text x="70" y="560" fill="#6B46C1" font-size="10">HTTPS</text>
-  <text x="130" y="560" fill="#FF9900" font-size="10">Invocation</text>
-  <text x="210" y="560" fill="#2E8B57" font-size="10">Data Access</text>
-  <text x="300" y="560" fill="#999" font-size="10">- - - Permissions/Logs</text>
-  <text x="470" y="560" fill="white" font-size="10">Free Tier: Lambda (1M req/mo) | API Gateway (1M calls) | DynamoDB (25GB)</text>
+  <path d="M 750 430 L 800 430" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="4,4"/>
+
+  <!-- CloudWatch -->
+  <g class="node">
+    <rect class="card" x="800" y="520" width="220" height="100" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="800" y="520" width="220" height="30" rx="12" fill="#FCE7F3"/>
+    <rect x="800" y="535" width="220" height="15" fill="#FCE7F3"/>
+    <text x="910" y="540" font-size="13" font-weight="700" fill="#DB2777" text-anchor="middle">CloudWatch</text>
+    
+    <text x="910" y="575" font-size="13" class="title" text-anchor="middle">Logs &amp; Metrics</text>
+    <text x="910" y="595" font-size="11" class="label" text-anchor="middle">Captures execution logs</text>
+  </g>
+
+  <path d="M 750 560 L 800 560" fill="none" stroke="#DB2777" stroke-width="2" stroke-dasharray="4,4"/>
+
 </svg>

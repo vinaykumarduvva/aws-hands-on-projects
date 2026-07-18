@@ -1,183 +1,159 @@
-<svg width="900" height="620" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
-  <rect width="900" height="620" fill="#f8f9fa" rx="12"/>
-  <text x="450" y="36" text-anchor="middle" font-size="18" font-weight="bold" fill="#232f3e">Project 5 — Custom VPC Architecture</text>
-  <text x="450" y="56" text-anchor="middle" font-size="12" fill="#666">CIDR: 10.0.0.0/16 · Region: us-east-1</text>
-  <rect x="350" y="72" width="200" height="44" rx="8" fill="#e8f4fd" stroke="var(--blue)" stroke-width="1.5"/>
-  <text x="450" y="92" text-anchor="middle" font-size="13" font-weight="bold" fill="var(--blue)">Internet</text>
-  <text x="450" y="108" text-anchor="middle" font-size="11" fill="var(--blue)">Public Traffic</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 800" width="100%" height="100%">
   <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
+    </linearGradient>
 
-  <style>
-    :root {
-      --bg: #0a0a1a;
-      --bg-gradient-start: #0a0a1a;
-      --bg-gradient-end: #1a1a2e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --box-bg: #1a1a3a;
-      --box-bg-light: #2a2a4a;
-      --orange: #FF9900;
-      --blue: #1a73e8;
-      --green: #2E8B57;
-      --red: #cc3333;
-      --purple: #9B59B6;
-      --grid: #ffffff08;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc;
-        --bg-gradient-start: #f8fafc;
-        --bg-gradient-end: #e2e8f0;
-        --text-main: #0f172a;
-        --text-muted: #475569;
-        --box-bg: #ffffff;
-        --box-bg-light: #f1f5f9;
-        --orange: #e68a00;
-        --blue: #1557b0;
-        --green: #1f6b42;
-        --red: #b32424;
-        --purple: #7a4694;
-        --grid: #00000008;
-      }
-    }
-    svg {
-      background-color: var(--bg);
-      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
-    }
-    text {
-      transition: fill 0.3s ease;
-    }
-    .text-title { fill: var(--orange); font-weight: 800; }
-    .text-main { fill: var(--text-main); }
-    .text-muted { fill: var(--text-muted); }
-    .box-bg { fill: var(--box-bg); transition: fill 0.3s ease, stroke 0.3s ease; }
-    .float { animation: float 6s ease-in-out infinite; }
-    .pulse { animation: pulse 2s ease-in-out infinite; }
-    .draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s forwards; }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { opacity: 0.8; }
-      50% { opacity: 1; filter: brightness(1.2); }
-      100% { opacity: 0.8; }
-    }
-    @keyframes draw {
-      to { stroke-dashoffset: 0; }
-    }
-  </style>
+    <!-- Shadows -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+    <filter id="hoverShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
 
-    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"/></marker>
-    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="round"/></marker>
-    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#6f42c1" stroke-width="2" stroke-linecap="round"/></marker>
-    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#17a2b8" stroke-width="1.5" stroke-linecap="round"/></marker>
-  
-  
-
-  
-  <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#f8f9fa" />
-    <stop offset="100%" stop-color="#e2e8f0" />
-  </linearGradient>
-  <style>
-    /* Injected Interactive Styles */
-    svg {
-      --transition-speed: 0.3s;
-    }
-    rect[fill="#f8f9fa"], rect[width="800"][height="500"], rect[width="860"][height="640"] {
-      fill: url(#bg-gradient) !important;
-    }
-    rect, circle, polygon {
-      transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--transition-speed) ease, fill var(--transition-speed) ease;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-    rect:hover, circle:hover, polygon:hover {
-      filter: drop-shadow(0px 8px 24px rgba(26, 115, 232, 0.5)) brightness(1.05);
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    line, path {
-      transition: stroke-width var(--transition-speed) ease, stroke var(--transition-speed) ease, filter var(--transition-speed) ease;
-    }
-    line:hover, path:hover {
-      stroke-width: 4px;
-      filter: drop-shadow(0px 4px 12px rgba(255, 153, 0, 0.7));
-      cursor: pointer;
-    }
-    text {
-      pointer-events: none;
-      transition: fill 0.3s ease;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-      50% { filter: drop-shadow(0 0 12px rgba(26,115,232,0.8)); }
-      100% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-    }
-  </style>
-
+    <!-- Markers -->
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#0073BB" />
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#EA580C" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#16A34A" />
+    </marker>
   </defs>
-  <line x1="450" y1="116" x2="450" y2="146" stroke="var(--blue)" stroke-width="2" marker-end="url(#arrowBlue)" class="draw"/>
-  <rect x="320" y="146" width="260" height="44" rx="8" fill="#fff3cd" stroke="#ff9900" stroke-width="1.5"/>
-  <text x="450" y="165" text-anchor="middle" font-size="13" font-weight="bold" fill="#b36800">Internet Gateway (IGW)</text>
-  <text x="450" y="181" text-anchor="middle" font-size="11" fill="#b36800">my-vpc-igw · Bidirectional</text>
-  <line x1="450" y1="190" x2="450" y2="206" stroke="#ff9900" stroke-width="2"/>
-  <line x1="235" y1="206" x2="665" y2="206" stroke="#ff9900" stroke-width="2"/>
-  <line x1="235" y1="206" x2="235" y2="268" stroke="#ff9900" stroke-width="2" marker-end="url(#arrowOrange)" class="draw"/>
-  <line x1="665" y1="206" x2="665" y2="268" stroke="#ff9900" stroke-width="2" marker-end="url(#arrowOrange)" class="draw"/>
-  <rect x="30" y="214" width="840" height="352" rx="14" fill="none" stroke="#232f3e" stroke-width="2" stroke-dasharray="8,4"/>
-  <text x="50" y="234" font-size="13" font-weight="bold" fill="#232f3e">VPC: my-custom-vpc · 10.0.0.0/16</text>
-  <rect x="46" y="244" width="378" height="306" rx="10" fill="#f0f7ff" stroke="#4a90d9" stroke-width="1" stroke-dasharray="5,3"/>
-  <text x="235" y="262" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a90d9">Availability Zone A · us-east-1a</text>
-  <rect x="476" y="244" width="378" height="306" rx="10" fill="#fff5f0" stroke="#e8632a" stroke-width="1" stroke-dasharray="5,3"/>
-  <text x="665" y="262" text-anchor="middle" font-size="12" font-weight="bold" fill="#e8632a">Availability Zone B · us-east-1b</text>
-  <rect x="62" y="272" width="346" height="120" rx="8" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
-  <text x="235" y="290" text-anchor="middle" font-size="12" font-weight="bold" fill="#155724">Public Subnet A · 10.0.1.0/24</text>
-  <rect x="78" y="298" width="140" height="78" rx="6" fill="#fff" stroke="#28a745" stroke-width="1"/>
-  <text x="148" y="316" text-anchor="middle" font-size="11" font-weight="bold" fill="#155724">Bastion Host</text>
-  <text x="148" y="332" text-anchor="middle" font-size="10" fill="#444">Amazon Linux 2023</text>
-  <text x="148" y="347" text-anchor="middle" font-size="10" fill="#444">t2.micro</text>
-  <text x="148" y="362" text-anchor="middle" font-size="10" fill="#28a745">Public IP: 54.x.x.x</text>
-  <rect x="234" y="298" width="158" height="78" rx="6" fill="#fff3cd" stroke="#ff9900" stroke-width="1"/>
-  <text x="313" y="316" text-anchor="middle" font-size="11" font-weight="bold" fill="#b36800">NAT Gateway</text>
-  <text x="313" y="332" text-anchor="middle" font-size="10" fill="#444">Elastic IP attached</text>
-  <text x="313" y="347" text-anchor="middle" font-size="10" fill="#444">Outbound only</text>
-  <text x="313" y="362" text-anchor="middle" font-size="10" fill="#b36800">EIP: 3.x.x.x</text>
-  <rect x="62" y="408" width="346" height="120" rx="8" fill="#fce8e8" stroke="#dc3545" stroke-width="1.5"/>
-  <text x="235" y="426" text-anchor="middle" font-size="12" font-weight="bold" fill="#721c24">Private Subnet A · 10.0.3.0/24</text>
-  <rect x="78" y="434" width="314" height="78" rx="6" fill="#fff" stroke="#dc3545" stroke-width="1"/>
-  <text x="235" y="452" text-anchor="middle" font-size="11" font-weight="bold" fill="#721c24">Private Instance</text>
-  <text x="235" y="468" text-anchor="middle" font-size="10" fill="#444">Amazon Linux 2023 · t2.micro</text>
-  <text x="235" y="483" text-anchor="middle" font-size="10" fill="#dc3545">No Public IP · 10.0.3.X</text>
-  <text x="235" y="498" text-anchor="middle" font-size="10" fill="#666">Internet via NAT Gateway only</text>
-  <rect x="492" y="272" width="346" height="120" rx="8" fill="#d4edda" stroke="#28a745" stroke-width="1.5"/>
-  <text x="665" y="290" text-anchor="middle" font-size="12" font-weight="bold" fill="#155724">Public Subnet B · 10.0.2.0/24</text>
-  <rect x="508" y="298" width="314" height="78" rx="6" fill="#f8f9fa" stroke="#adb5bd" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="665" y="332" text-anchor="middle" font-size="11" fill="#6c757d">Future: ALB Node</text>
-  <text x="665" y="350" text-anchor="middle" font-size="10" fill="#adb5bd">Project 10 — Auto Scaling + ALB</text>
-  <rect x="492" y="408" width="346" height="120" rx="8" fill="#fce8e8" stroke="#dc3545" stroke-width="1.5"/>
-  <text x="665" y="426" text-anchor="middle" font-size="12" font-weight="bold" fill="#721c24">Private Subnet B · 10.0.4.0/24</text>
-  <rect x="508" y="434" width="314" height="78" rx="6" fill="#f8f9fa" stroke="#adb5bd" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="665" y="468" text-anchor="middle" font-size="11" fill="#6c757d">Future: RDS Multi-AZ Standby</text>
-  <text x="665" y="486" text-anchor="middle" font-size="10" fill="#adb5bd">Project 6 — RDS + EC2</text>
-  <line x1="313" y1="376" x2="235" y2="408" stroke="#6f42c1" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowPurple)" class="draw"/>
-  <line x1="148" y1="376" x2="148" y2="434" stroke="#17a2b8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowTeal)" class="draw"/>
-  <rect x="30" y="578" width="840" height="32" rx="6" fill="#f1f3f4" stroke="#dee2e6" stroke-width="1"/>
-  <line x1="55" y1="594" x2="80" y2="594" stroke="#ff9900" stroke-width="2"/>
-  <text x="86" y="598" font-size="11" fill="#444">IGW route (bidirectional)</text>
-  <line x1="220" y1="594" x2="245" y2="594" stroke="#6f42c1" stroke-width="2" stroke-dasharray="5,3"/>
-  <text x="251" y="598" font-size="11" fill="#444">NAT route (outbound only)</text>
-  <line x1="395" y1="594" x2="420" y2="594" stroke="#17a2b8" stroke-width="1.5" stroke-dasharray="4,3"/>
-  <text x="426" y="598" font-size="11" fill="#444">SSH hop (bastion)</text>
-  <rect x="560" y="586" width="12" height="12" rx="2" fill="#d4edda" stroke="#28a745" stroke-width="1"/>
-  <text x="577" y="598" font-size="11" fill="#444">Public subnet</text>
-  <rect x="670" y="586" width="12" height="12" rx="2" fill="#fce8e8" stroke="#dc3545" stroke-width="1"/>
-  <text x="687" y="598" font-size="11" fill="#444">Private subnet</text>
+
+  <style>
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .flow-line { stroke-dasharray: 6 6; animation: dash 1.5s linear infinite; }
+    .flow-line:hover { stroke-width: 4px; cursor: pointer; filter: url(#glow); }
+    .node { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+    .node:hover { transform: translateY(-5px); }
+    .node:hover .card { filter: url(#hoverShadow); }
+    .floating { animation: float 6s ease-in-out infinite; }
+    .floating-delay { animation: float 6s ease-in-out infinite; animation-delay: 3s; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+    text { font-family: 'Inter', -apple-system, sans-serif; }
+    .title { font-weight: 700; fill: #111827; }
+    .label { font-weight: 500; fill: #6B7280; font-size: 13px; }
+  </style>
+
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  <text x="550" y="40" font-size="28" font-weight="800" fill="#111827" text-anchor="middle">Project 5 — Custom VPC Architecture</text>
+  <text x="550" y="65" font-size="14" font-weight="500" fill="#6B7280" text-anchor="middle">CIDR: 10.0.0.0/16 · Region: us-east-1</text>
+
+  <!-- AWS Cloud Boundary -->
+  <rect x="50" y="200" width="1000" height="560" rx="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="8,8"/>
+  <rect x="70" y="185" width="220" height="30" fill="#F8FAFC"/>
+  <text x="80" y="207" font-size="20" font-weight="700" fill="#F58536">AWS Cloud (VPC)</text>
+
+  <!-- Availability Zones -->
+  <!-- AZ A -->
+  <rect x="80" y="240" width="440" height="490" rx="16" fill="#F0F8FF" stroke="#0073BB" stroke-width="2"/>
+  <rect x="100" y="225" width="230" height="30" fill="#F8FAFC"/>
+  <text x="110" y="247" font-size="16" font-weight="700" fill="#0073BB">Availability Zone A (us-east-1a)</text>
+
+  <!-- AZ B -->
+  <rect x="580" y="240" width="440" height="490" rx="16" fill="#FFF7ED" stroke="#EA580C" stroke-width="2"/>
+  <rect x="600" y="225" width="230" height="30" fill="#F8FAFC"/>
+  <text x="610" y="247" font-size="16" font-weight="700" fill="#EA580C">Availability Zone B (us-east-1b)</text>
+
+  <!-- Subnets in AZ A -->
+  <rect x="100" y="280" width="400" height="200" rx="12" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5"/>
+  <text x="120" y="305" font-size="14" font-weight="700" fill="#15803D">Public Subnet A (10.0.1.0/24)</text>
+
+  <rect x="100" y="500" width="400" height="200" rx="12" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5"/>
+  <text x="120" y="525" font-size="14" font-weight="700" fill="#B91C1C">Private Subnet A (10.0.3.0/24)</text>
+
+  <!-- Subnets in AZ B -->
+  <rect x="600" y="280" width="400" height="200" rx="12" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="620" y="305" font-size="14" font-weight="700" fill="#15803D">Public Subnet B (10.0.2.0/24)</text>
+
+  <rect x="600" y="500" width="400" height="200" rx="12" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="620" y="525" font-size="14" font-weight="700" fill="#B91C1C">Private Subnet B (10.0.4.0/24)</text>
+
+  <!-- Nodes (Outside VPC) -->
+  <g class="node">
+    <rect class="card" x="430" y="80" width="240" height="50" rx="25" fill="#FFFFFF" stroke="#0073BB" stroke-width="2" filter="url(#shadow)"/>
+    <circle cx="455" cy="105" r="14" fill="#E0F2FE"/>
+    <text x="550" y="111" font-size="18" font-weight="700" fill="#0073BB" text-anchor="middle">Internet</text>
+  </g>
+
+  <!-- Internet to IGW Flow -->
+  <path d="M 550 130 L 550 170" fill="none" stroke="#0073BB" stroke-width="3" marker-end="url(#arrow-blue)" class="flow-line"/>
+
+  <!-- IGW -->
+  <g class="node floating">
+    <rect class="card" x="450" y="150" width="200" height="60" rx="12" fill="#FFFFFF" stroke="#F58536" stroke-width="2" filter="url(#shadow)"/>
+    <text x="550" y="175" font-size="16" font-weight="700" fill="#C2410C" text-anchor="middle">Internet Gateway</text>
+    <text x="550" y="195" font-size="12" font-weight="500" fill="#6B7280" text-anchor="middle">my-vpc-igw</text>
+  </g>
+
+  <!-- Flow Lines inside VPC -->
+  <path d="M 450 180 L 300 180 L 300 280" fill="none" stroke="#EA580C" stroke-width="3" marker-end="url(#arrow-orange)" class="flow-line"/>
+  <path d="M 650 180 L 800 180 L 800 280" fill="none" stroke="#EA580C" stroke-width="3" marker-end="url(#arrow-orange)" class="flow-line"/>
+
+  <!-- NAT Route -->
+  <path d="M 390 410 L 390 500" fill="none" stroke="#16A34A" stroke-width="3" marker-end="url(#arrow-green)" class="flow-line"/>
+  <rect x="340" y="445" width="100" height="20" rx="10" fill="#DCFCE7"/>
+  <text x="390" y="459" font-size="11" font-weight="700" fill="#15803D" text-anchor="middle">NAT Route</text>
+
+
+  <!-- Instances in AZ A -->
+  <!-- Bastion -->
+  <g class="node floating">
+    <rect class="card" x="120" y="325" width="170" height="130" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="120" y="325" width="170" height="36" rx="12" fill="#F0FDF4"/>
+    <rect x="120" y="341" width="170" height="20" fill="#F0FDF4"/>
+    <text x="205" y="349" font-size="14" font-weight="700" fill="#15803D" text-anchor="middle">Bastion Host</text>
+    <text x="205" y="385" font-size="13" class="label" text-anchor="middle">Amazon Linux</text>
+    <text x="205" y="405" font-size="13" class="label" text-anchor="middle">t2.micro</text>
+    <text x="205" y="435" font-size="12" font-weight="600" fill="#0073BB" text-anchor="middle">Public IP: 54.x.x.x</text>
+  </g>
+
+  <!-- NAT Gateway -->
+  <g class="node floating-delay">
+    <rect class="card" x="310" y="325" width="170" height="130" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="310" y="325" width="170" height="36" rx="12" fill="#FFF7ED"/>
+    <rect x="310" y="341" width="170" height="20" fill="#FFF7ED"/>
+    <text x="395" y="349" font-size="14" font-weight="700" fill="#C2410C" text-anchor="middle">NAT Gateway</text>
+    <text x="395" y="385" font-size="13" class="label" text-anchor="middle">Outbound Only</text>
+    <text x="395" y="405" font-size="13" class="label" text-anchor="middle">Elastic IP Attached</text>
+    <text x="395" y="435" font-size="12" font-weight="600" fill="#C2410C" text-anchor="middle">EIP: 3.x.x.x</text>
+  </g>
+
+  <!-- Private Instance -->
+  <g class="node floating">
+    <rect class="card" x="120" y="550" width="360" height="130" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="120" y="550" width="360" height="36" rx="12" fill="#FEF2F2"/>
+    <rect x="120" y="566" width="360" height="20" fill="#FEF2F2"/>
+    <text x="300" y="574" font-size="14" font-weight="700" fill="#B91C1C" text-anchor="middle">Private Instance</text>
+    <text x="300" y="610" font-size="14" class="label" text-anchor="middle">Amazon Linux 2023 · t2.micro</text>
+    <text x="300" y="635" font-size="13" font-weight="600" fill="#B91C1C" text-anchor="middle">No Public IP · 10.0.3.X</text>
+    <text x="300" y="660" font-size="12" fill="#6B7280" text-anchor="middle">Internet access via NAT Gateway only</text>
+  </g>
+
+  <!-- Future Components in AZ B -->
+  <g class="node">
+    <rect class="card" x="620" y="340" width="360" height="100" rx="12" fill="#F8FAFC" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#shadow)"/>
+    <text x="800" y="390" font-size="16" font-weight="700" fill="#6B7280" text-anchor="middle">Future: Application Load Balancer Node</text>
+    <text x="800" y="415" font-size="12" font-weight="500" fill="#9CA3AF" text-anchor="middle">Project 10 — Auto Scaling + ALB</text>
+  </g>
+
+  <g class="node">
+    <rect class="card" x="620" y="565" width="360" height="100" rx="12" fill="#F8FAFC" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="6,4" filter="url(#shadow)"/>
+    <text x="800" y="615" font-size="16" font-weight="700" fill="#6B7280" text-anchor="middle">Future: RDS Multi-AZ Standby</text>
+    <text x="800" y="640" font-size="12" font-weight="500" fill="#9CA3AF" text-anchor="middle">Project 6 — RDS + EC2</text>
+  </g>
 </svg>

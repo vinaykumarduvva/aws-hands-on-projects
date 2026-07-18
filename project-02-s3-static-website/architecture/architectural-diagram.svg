@@ -1,159 +1,164 @@
-<svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
-    <rect width="900" height="680" fill="#f8f9fa" rx="12"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 750" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
+    </linearGradient>
 
-    <text x="450" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#232f3e">Project 2 — Static Website on S3 + CloudFront</text>
-  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#666">AWS Region: us-east-1</text>
+    <!-- Component Gradients -->
+    <linearGradient id="cfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8C4FFF"/>
+      <stop offset="100%" stop-color="#6B2ED5"/>
+    </linearGradient>
 
-    <rect x="30" y="75" width="840" height="580" rx="10" fill="none" stroke="#f90" stroke-width="2.5" stroke-dasharray="10,5"/>
-  <text x="50" y="98" font-size="13" font-weight="bold" fill="#f90">AWS Regional Infrastructure: us-east-1</text>
+    <linearGradient id="s3Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F58536"/>
+      <stop offset="100%" stop-color="#D35400"/>
+    </linearGradient>
+    
+    <!-- Shadows -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.06"/>
+    </filter>
+    <filter id="hoverShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
 
-    <rect x="370" y="82" width="220" height="38" rx="8" fill="#232f3e"/>
-  <text x="480" y="106" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Global Content Delivery Network</text>
-
-    <line x1="480" y1="120" x2="480" y2="148" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-
-    <rect x="360" y="148" width="240" height="44" rx="8" fill="#ff9900" />
-  <text x="480" y="172" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Global CloudFront Distribution</text>
-
-    <line x1="480" y1="192" x2="480" y2="222" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-
-    <rect x="360" y="222" width="240" height="44" rx="8" fill="#ff9900" />
-  <text x="480" y="246" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Origin Handoff (Global Origin)</text>
-
-  <line x1="480" y1="266" x2="480" y2="296" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="495" y="282" font-size="11" fill="#555">Origin Request</text>
-
-  <rect x="70" y="222" width="200" height="38" rx="8" fill="#232f3e"/>
-  <text x="170" y="246" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Internet / HTTPS</text>
-  <line x1="270" y1="170" x2="355" y2="170" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="310" y="160" font-size="11" fill="#555">Public Traffic</text>
-  <line x1="170" y1="260" x2="170" y2="290" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="185" y="280" font-size="11" fill="#555">Origin Flow</text>
-
-  <line x1="245" y1="192" x2="245" y2="222" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-
-    <rect x="55" y="296" width="380" height="312" rx="8" fill="#e8f4e8" stroke="#28a745" stroke-width="1.5"/>
-  <text x="75" y="316" font-size="12" font-weight="bold" fill="#28a745">Regional Origin Conceptual Zone</text>
-
-    <rect x="75" y="326" width="340" height="262" rx="8" fill="white" stroke="#ff9900" stroke-width="2"/>
-  <rect x="75" y="326" width="340" height="30" rx="8" fill="#ff9900"/>
-  <text x="245" y="346" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Amazon S3 — [Your bucket name]</text>
-  <text x="100" y="374" font-size="12" fill="#333">Bucket Region: us-east-1</text>
-  <text x="100" y="392" font-size="12" fill="#333">Website Hosting: Enabled ✓</text>
-  <text x="100" y="410" font-size="12" fill="#333">Index Document: index.html ✓</text>
-  <text x="100" y="428" font-size="12" fill="#333">Error Document: error.html ✓</text>
-  <text x="100" y="446" font-size="12" fill="#28a745">✓ Public Badge ✓ Accessible</text>
-  
-  <rect x="90" y="460" width="310" height="110" rx="6" fill="#ffe0b2" stroke="#f57c00" stroke-width="1.5"/>
-  <text x="110" y="480" font-size="11" font-weight="bold" fill="#232f3e">Bucket Policy</text>
-  <text x="110" y="500" font-size="10" fill="#333">Sid: PublicReadGetObject</text>
-  <text x="110" y="515" font-size="10" fill="#333">Effect: Allow</text>
-  <text x="110" y="530" font-size="10" fill="#333">Principal: *</text>
-  <text x="110" y="545" font-size="10" fill="#333">Action: s3:GetObject</text>
-  <text x="110" y="560" font-size="10" fill="#28a745">Resource: arn:aws:s3:::[bucket]/*</text>
-
-    <rect x="465" y="296" width="380" height="60" rx="8" fill="#e8f4e8" stroke="#28a745" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <text x="485" y="322" font-size="12" font-weight="bold" fill="#28a745">S3 Website Endpoint logical zone</text>
-  <text x="485" y="342" font-size="12" fill="#888">(Origin URL ending in s3-website-us-east-1...)</text>
-
-  <line x1="655" y1="192" x2="655" y2="296" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="670" y="248" font-size="11" fill="#555">Origin Req Flow</text>
-
-  <rect x="70" y="418" width="180" height="38" rx="8" fill="#eaf0fb" stroke="#1a73e8" stroke-width="1.5"/>
-  <text x="160" y="442" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a73e8">Update Traffic (CLI Sync)</text>
-  <line x1="250" y1="437" x2="310" y2="437" stroke="#1a73e8" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
-  <text x="270" y="427" font-size="11" fill="#1a73e8">File Sync</text>
-
-    <rect x="680" y="82" width="180" height="310" rx="8" fill="#fff8f0" stroke="#ff9900" stroke-width="1.5"/>
-  <text x="770" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#ff9900">Supporting Services</text>
-
-  <rect x="695" y="110" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="128" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">S3</text>
-  <text x="770" y="144" text-anchor="middle" font-size="10" fill="#555">Static Website Hosting ✓</text>
-
-  <rect x="695" y="162" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="180" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">CloudFront</text>
-  <text x="770" y="196" text-anchor="middle" font-size="10" fill="#555">Global CDN distribution ✓</text>
-
-  <rect x="695" y="214" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="232" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">IAM</text>
-  <text x="770" y="248" text-anchor="middle" font-size="10" fill="#555">Bucket Policy ✓</text>
-
-  <rect x="695" y="266" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="284" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">AWS CLI</text>
-  <text x="770" y="300" text-anchor="middle" font-size="10" fill="#555">s3 sync for upload ✓</text>
-
-  <rect x="695" y="318" width="150" height="44" rx="6" fill="#fff0e0" stroke="#ff9900" stroke-width="1"/>
-  <text x="770" y="336" text-anchor="middle" font-size="11" font-weight="bold" fill="#232f3e">CloudFront (Updates)</text>
-  <text x="770" y="352" text-anchor="middle" font-size="10" fill="#555">cache invalidation ✓</text>
-
-    <rect x="55" y="648" width="790" height="1" fill="#ddd"/>
-  <text x="55" y="668" font-size="11" fill="#888">Legend: </text>
-  <line x1="110" y1="663" x2="145" y2="663" stroke="#1a73e8" stroke-width="2.5" />
-  <text x="150" y="668" font-size="11" fill="#888">Update sync traffic</text>
-  <line x1="280" y1="663" x2="315" y2="663" stroke="#555" stroke-width="2"/>
-  <text x="320" y="668" font-size="11" fill="#888">Public HTTPS traffic</text>
-  <rect x="440" y="656" width="14" height="14" fill="#e8f4e8" stroke="#28a745" stroke-width="1.5"/>
-  <text x="460" y="668" font-size="11" fill="#888">Regional Origin Zone</text>
-  <rect x="580" y="656" width="14" height="14" fill="#ff9900" />
-  <text x="600" y="668" font-size="11" fill="#888">Global CDN Zone</text>
-
-    <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+    <!-- Markers -->
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#0073BB" />
     </marker>
-    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#1a73e8"/>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#EA580C" />
     </marker>
-  
-  
+    <marker id="arrow-gray" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#4B5563" />
+    </marker>
+  </defs>
 
-  
-  <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#f8f9fa" />
-    <stop offset="100%" stop-color="#e2e8f0" />
-  </linearGradient>
   <style>
-    /* Injected Interactive Styles */
-    svg {
-      --transition-speed: 0.3s;
+    @keyframes dash {
+      to { stroke-dashoffset: -20; }
     }
-    rect[fill="#f8f9fa"], rect[width="800"][height="500"], rect[width="860"][height="640"] {
-      fill: url(#bg-gradient) !important;
+    .flow-line {
+      stroke-dasharray: 6 6;
+      animation: dash 1.5s linear infinite;
     }
-    rect, circle, polygon {
-      transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--transition-speed) ease, fill var(--transition-speed) ease;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-    rect:hover, circle:hover, polygon:hover {
-      filter: drop-shadow(0px 8px 24px rgba(26, 115, 232, 0.5)) brightness(1.05);
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    line, path {
-      transition: stroke-width var(--transition-speed) ease, stroke var(--transition-speed) ease, filter var(--transition-speed) ease;
-    }
-    line:hover, path:hover {
+    .flow-line:hover {
       stroke-width: 4px;
-      filter: drop-shadow(0px 4px 12px rgba(255, 153, 0, 0.7));
+      cursor: pointer;
+      filter: url(#glow);
+    }
+    .node {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       cursor: pointer;
     }
-    text {
-      pointer-events: none;
-      transition: fill 0.3s ease;
+    .node:hover {
+      transform: translateY(-5px);
+    }
+    .node:hover .card {
+      filter: url(#hoverShadow);
+    }
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    .floating-delay {
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 3s;
     }
     @keyframes float {
       0% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
+      50% { transform: translateY(-6px); }
       100% { transform: translateY(0px); }
     }
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-      50% { filter: drop-shadow(0 0 12px rgba(26,115,232,0.8)); }
-      100% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-    }
+    text { font-family: 'Inter', -apple-system, sans-serif; }
+    .title { font-weight: 700; fill: #111827; }
+    .label { font-weight: 500; fill: #6B7280; font-size: 13px; }
   </style>
 
-  </defs>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  
+  <text x="550" y="50" font-size="28" font-weight="800" fill="#111827" text-anchor="middle">Project 2 — Static Website on S3 + CloudFront</text>
+
+  <!-- AWS Cloud Boundary -->
+  <rect x="250" y="90" width="750" height="580" rx="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="8,8"/>
+  <rect x="270" y="75" width="130" height="30" fill="#F8FAFC"/>
+  <text x="280" y="97" font-size="20" font-weight="700" fill="#F58536">AWS Cloud</text>
+
+  <!-- Regional Origin Zone (us-east-1) -->
+  <rect x="620" y="140" width="340" height="480" rx="16" fill="#F0F8FF" stroke="#0073BB" stroke-width="2"/>
+  <rect x="640" y="125" width="150" height="30" fill="#F8FAFC"/>
+  <text x="650" y="147" font-size="16" font-weight="700" fill="#0073BB">Region: us-east-1</text>
+
+  <!-- Flow Lines -->
+  
+  <!-- User to CloudFront -->
+  <path d="M 180 320 L 335 320" fill="none" stroke="#6B7280" stroke-width="3" marker-end="url(#arrow-gray)" class="flow-line"/>
+  <rect x="200" y="295" width="120" height="20" rx="10" fill="#F3F4F6"/>
+  <text x="260" y="309" font-size="11" font-weight="700" fill="#4B5563" text-anchor="middle">HTTPS / Public Web</text>
+
+  <!-- CloudFront to S3 -->
+  <path d="M 520 320 L 665 320" fill="none" stroke="#0073BB" stroke-width="3" marker-end="url(#arrow-blue)" class="flow-line"/>
+  <rect x="530" y="295" width="120" height="20" rx="10" fill="#ECFEFF"/>
+  <text x="590" y="309" font-size="11" font-weight="700" fill="#0073BB" text-anchor="middle">Origin Request</text>
+
+  <!-- Developer to S3 -->
+  <path d="M 790 530 L 790 415" fill="none" stroke="#EA580C" stroke-width="3" marker-end="url(#arrow-orange)" class="flow-line"/>
+  <rect x="730" y="460" width="120" height="20" rx="10" fill="#FFEDD5"/>
+  <text x="790" y="474" font-size="11" font-weight="700" fill="#EA580C" text-anchor="middle">AWS CLI Sync</text>
+
+  <!-- Nodes -->
+
+  <!-- End User -->
+  <g class="node">
+    <circle class="card" cx="110" cy="320" r="50" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="2" filter="url(#shadow)"/>
+    <text x="110" y="325" font-size="18" text-anchor="middle" class="title">Users</text>
+    <text x="110" y="345" font-size="12" text-anchor="middle" class="label">Global</text>
+  </g>
+
+  <!-- CloudFront -->
+  <g class="node floating">
+    <rect class="card" x="350" y="250" width="170" height="140" rx="16" fill="url(#cfGrad)" filter="url(#shadow)"/>
+    <circle cx="435" cy="290" r="20" fill="#ffffff" fill-opacity="0.2"/>
+    <path d="M 425 290 L 435 280 L 445 290 L 435 300 Z" fill="#ffffff"/>
+    <text x="435" y="340" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle">CloudFront</text>
+    <text x="435" y="360" font-size="13" font-weight="500" fill="#FFFFFF" text-anchor="middle" fill-opacity="0.9">CDN Edge Network</text>
+  </g>
+
+  <!-- S3 Bucket -->
+  <g class="node floating-delay">
+    <rect class="card" x="680" y="200" width="220" height="200" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="680" y="200" width="220" height="40" rx="12" fill="#FFF7ED"/>
+    <rect x="680" y="220" width="220" height="20" fill="#FFF7ED"/>
+    <text x="695" y="225" font-size="14" font-weight="700" fill="#C2410C">Amazon S3</text>
+    
+    <circle cx="875" cy="220" r="14" fill="#FFEDD5"/>
+    <path d="M 870 216 h 10 v 8 h -10 z" fill="#C2410C"/>
+
+    <text x="695" y="270" font-size="18" class="title">Website Bucket</text>
+    <text x="695" y="295" font-size="13" class="label">Website Hosting: Enabled</text>
+    <text x="695" y="315" font-size="13" class="label">Index Doc: index.html</text>
+    
+    <rect x="695" y="335" width="180" height="50" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1"/>
+    <text x="705" y="355" font-size="12" font-weight="600" fill="#166534">Bucket Policy</text>
+    <text x="705" y="370" font-size="11" font-weight="500" fill="#15803D">PublicReadGetObject (Allow)</text>
+  </g>
+
+  <!-- Developer -->
+  <g class="node">
+    <rect class="card" x="690" y="540" width="200" height="100" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="690" y="540" width="200" height="30" rx="12" fill="#F3F4F6"/>
+    <rect x="690" y="555" width="200" height="15" fill="#F3F4F6"/>
+    
+    <text x="790" y="560" font-size="13" font-weight="700" fill="#4B5563" text-anchor="middle">Developer Workstation</text>
+    
+    <text x="790" y="595" font-size="15" class="title" text-anchor="middle">CI/CD or Local</text>
+    <text x="790" y="615" font-size="12" class="label" text-anchor="middle">s3 sync index.html</text>
+  </g>
+
 </svg>

@@ -1,166 +1,156 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="Arial, Helvetica, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 650" width="100%" height="100%">
   <defs>
-
-  <style>
-    :root {
-      --bg: #0a0a1a;
-      --bg-gradient-start: #0a0a1a;
-      --bg-gradient-end: #1a1a2e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --box-bg: #1a1a3a;
-      --box-bg-light: #2a2a4a;
-      --orange: #FF9900;
-      --blue: #1a73e8;
-      --green: #2E8B57;
-      --red: #cc3333;
-      --purple: #9B59B6;
-      --grid: #ffffff08;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc;
-        --bg-gradient-start: #f8fafc;
-        --bg-gradient-end: #e2e8f0;
-        --text-main: #0f172a;
-        --text-muted: #475569;
-        --box-bg: #ffffff;
-        --box-bg-light: #f1f5f9;
-        --orange: #e68a00;
-        --blue: #1557b0;
-        --green: #1f6b42;
-        --red: #b32424;
-        --purple: #7a4694;
-        --grid: #00000008;
-      }
-    }
-    svg {
-      background-color: var(--bg);
-      font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
-    }
-    text {
-      transition: fill 0.3s ease;
-    }
-    .text-title { fill: var(--orange); font-weight: 800; }
-    .text-main { fill: var(--text-main); }
-    .text-muted { fill: var(--text-muted); }
-    .box-bg { fill: var(--box-bg); transition: fill 0.3s ease, stroke 0.3s ease; }
-    .float { animation: float 6s ease-in-out infinite; }
-    .pulse { animation: pulse 2s ease-in-out infinite; }
-    .draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s forwards; }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { opacity: 0.8; }
-      50% { opacity: 1; filter: brightness(1.2); }
-      100% { opacity: 0.8; }
-    }
-    @keyframes draw {
-      to { stroke-dashoffset: 0; }
-    }
-  </style>
-
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="var(--bg-gradient-start)"/>
-      <stop offset="100%" stop-color="var(--bg-gradient-end)"/>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EFF6FF"/>
     </linearGradient>
-    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#FF9900"/>
-      <stop offset="100%" style="stop-color:#FFB84D"/>
+
+    <!-- Component Gradients -->
+    <linearGradient id="ec2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F58536"/>
+      <stop offset="100%" stop-color="#D35400"/>
     </linearGradient>
-    <filter id="shadow" x="-3%" y="-3%" width="108%" height="110%">
-      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    
+    <linearGradient id="igwGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8C4FFF"/>
+      <stop offset="100%" stop-color="#6B2ED5"/>
+    </linearGradient>
+
+    <!-- Shadows -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.06"/>
     </filter>
-  
-  
+    <filter id="hoverShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
 
-  
-  <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#f8f9fa" />
-    <stop offset="100%" stop-color="#e2e8f0" />
-  </linearGradient>
-  <style>
-    /* Injected Interactive Styles */
-    svg {
-      --transition-speed: 0.3s;
-    }
-    rect[fill="#f8f9fa"], rect[width="800"][height="500"], rect[width="860"][height="640"] {
-      fill: url(#bg-gradient) !important;
-    }
-    rect, circle, polygon {
-      transition: transform var(--transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--transition-speed) ease, fill var(--transition-speed) ease;
-      transform-origin: center;
-      transform-box: fill-box;
-    }
-    rect:hover, circle:hover, polygon:hover {
-      filter: drop-shadow(0px 8px 24px rgba(26, 115, 232, 0.5)) brightness(1.05);
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-    line, path {
-      transition: stroke-width var(--transition-speed) ease, stroke var(--transition-speed) ease, filter var(--transition-speed) ease;
-    }
-    line:hover, path:hover {
-      stroke-width: 4px;
-      filter: drop-shadow(0px 4px 12px rgba(255, 153, 0, 0.7));
-      cursor: pointer;
-    }
-    text {
-      pointer-events: none;
-      transition: fill 0.3s ease;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-      50% { filter: drop-shadow(0 0 12px rgba(26,115,232,0.8)); }
-      100% { filter: drop-shadow(0 0 0 rgba(26,115,232,0.4)); }
-    }
-  </style>
-
+    <!-- Markers -->
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#0073BB" />
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,2 L0,8 L8,5 z" fill="#8C4FFF" />
+    </marker>
   </defs>
 
-  <rect width="1000" height="700" fill="url(#bg)" class="box-bg"/>
+  <style>
+    @keyframes dash {
+      to { stroke-dashoffset: -20; }
+    }
+    .flow-line {
+      stroke-dasharray: 6 6;
+      animation: dash 1.5s linear infinite;
+    }
+    .flow-line:hover {
+      stroke-width: 4px;
+      cursor: pointer;
+      filter: url(#glow);
+    }
+    .node {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+    }
+    .node:hover {
+      transform: translateY(-5px);
+    }
+    .node:hover .card {
+      filter: url(#hoverShadow);
+    }
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    .floating-delay {
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 3s;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+    text { font-family: 'Inter', -apple-system, sans-serif; }
+    .title { font-weight: 700; fill: #111827; }
+    .label { font-weight: 500; fill: #6B7280; font-size: 13px; }
+  </style>
+
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
   
-  <text x="500" y="50" text-anchor="middle" fill="var(--orange)" font-size="22" font-weight="bold">Project 3 — EC2 &amp; SSH Connect</text>
+  <text x="550" y="50" font-size="28" font-weight="800" fill="#111827" text-anchor="middle">Project 3 — EC2 &amp; SSH Connect</text>
+
+  <!-- AWS Cloud Boundary -->
+  <rect x="350" y="90" width="700" height="520" rx="20" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="8,8"/>
+  <rect x="370" y="75" width="200" height="30" fill="#F8FAFC"/>
+  <text x="380" y="97" font-size="20" font-weight="700" fill="#F58536">AWS Cloud (VPC)</text>
+
+  <!-- Public Subnet Boundary -->
+  <rect x="620" y="140" width="400" height="420" rx="16" fill="#F0FDF4" stroke="#16A34A" stroke-width="2"/>
+  <rect x="640" y="125" width="130" height="30" fill="#F8FAFC"/>
+  <text x="650" y="147" font-size="16" font-weight="700" fill="#16A34A">Public Subnet</text>
+
+  <!-- Security Group Boundary -->
+  <rect x="650" y="220" width="340" height="300" rx="12" fill="#FFFFFF" stroke="#DC2626" stroke-width="2" stroke-dasharray="6,4"/>
+  <rect x="670" y="205" width="140" height="30" fill="#F0FDF4"/>
+  <text x="680" y="227" font-size="14" font-weight="700" fill="#DC2626">Security Group</text>
+  <text x="825" y="227" font-size="12" font-weight="600" fill="#4B5563">Allow Inbound Port 22</text>
+
+  <!-- Flow Lines -->
+  
+  <!-- Developer to IGW -->
+  <path d="M 230 360 L 405 360" fill="none" stroke="#0073BB" stroke-width="3" marker-end="url(#arrow-blue)" class="flow-line"/>
+  <rect x="250" y="335" width="120" height="20" rx="10" fill="#ECFEFF"/>
+  <text x="310" y="349" font-size="11" font-weight="700" fill="#0073BB" text-anchor="middle">SSH over Internet</text>
+
+  <!-- IGW to EC2 -->
+  <path d="M 540 360 L 695 360" fill="none" stroke="#8C4FFF" stroke-width="3" marker-end="url(#arrow-purple)" class="flow-line"/>
+  <rect x="560" y="335" width="100" height="20" rx="10" fill="#F3E8FF"/>
+  <text x="610" y="349" font-size="11" font-weight="700" fill="#8C4FFF" text-anchor="middle">VPC Routing</text>
+
+  <!-- Nodes -->
 
   <!-- Developer Workstation -->
-  <rect x="50" y="300" width="180" height="100" rx="10" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="2" filter="url(#shadow)"/>
-  <text x="140" y="340" text-anchor="middle" fill="var(--text-main)" font-size="14" font-weight="bold"><tspan class="float">💻 Developer</tspan></text>
-  <text x="140" y="370" text-anchor="middle" fill="var(--text-muted)" font-size="12">ssh -i key.pem ec2-user@IP</text>
+  <g class="node">
+    <rect class="card" x="40" y="300" width="190" height="120" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="40" y="300" width="190" height="36" rx="12" fill="#F3F4F6"/>
+    <rect x="40" y="316" width="190" height="20" fill="#F3F4F6"/>
+    
+    <text x="55" y="324" font-size="14" font-weight="700" fill="#4B5563">Client</text>
+    
+    <text x="55" y="365" font-size="18" class="title">Developer</text>
+    <text x="55" y="390" font-size="12" class="label">ssh -i key.pem user@IP</text>
+    
+    <!-- Laptop Icon -->
+    <path d="M 195 320 h 14 v -8 c 0 -1 -1 -2 -2 -2 h -10 c -1 0 -2 1 -2 2 v 8 m -4 0 h 22 v 2 h -22 v -2" fill="#9CA3AF"/>
+  </g>
 
-  <!-- Arrow to IGW -->
-  <line x1="230" y1="350" x2="350" y2="350" stroke="var(--orange)" stroke-width="2"/>
-  
-  <!-- VPC -->
-  <rect x="400" y="150" width="550" height="400" rx="10" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="2" stroke-dasharray="8,4"/>
-  <text x="675" y="180" text-anchor="middle" fill="var(--blue)" font-size="16" font-weight="bold">AWS Cloud (VPC)</text>
-
-  <!-- IGW -->
-  <rect x="350" y="310" width="100" height="80" rx="10" fill="var(--box-bg)" stroke="var(--blue)" stroke-width="2" filter="url(#shadow)"/>
-  <text x="400" y="355" text-anchor="middle" fill="var(--text-main)" font-size="12" font-weight="bold"><tspan class="float">🌐 IGW</tspan></text>
-
-  <!-- Arrow IGW to EC2 -->
-  <line x1="450" y1="350" x2="600" y2="350" stroke="var(--orange)" stroke-width="2"/>
-
-  <!-- Public Subnet -->
-  <rect x="550" y="220" width="350" height="280" rx="10" fill="var(--box-bg)" stroke="var(--green)" stroke-width="2" filter="url(#shadow)"/>
-  <text x="725" y="250" text-anchor="middle" fill="var(--green)" font-size="14" font-weight="bold">Public Subnet</text>
-
-  <!-- Security Group -->
-  <rect x="620" y="280" width="220" height="180" rx="8" fill="var(--box-bg)" stroke="var(--red)" stroke-width="2" stroke-dasharray="4,2"/>
-  <text x="730" y="305" text-anchor="middle" fill="var(--red)" font-size="12" font-weight="bold"><tspan class="float">🛡️ Security Group</tspan></text>
-  <text x="730" y="325" text-anchor="middle" fill="var(--text-muted)" font-size="10">Allow Inbound Port 22 (SSH)</text>
+  <!-- Internet Gateway (IGW) -->
+  <g class="node floating">
+    <rect class="card" x="410" y="300" width="130" height="120" rx="16" fill="url(#igwGrad)" filter="url(#shadow)"/>
+    <!-- IGW Icon -->
+    <circle cx="475" cy="340" r="18" fill="#ffffff" fill-opacity="0.2"/>
+    <path d="M 465 340 A 10 10 0 1 1 485 340 A 10 10 0 1 1 465 340 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
+    <text x="475" y="385" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">IGW</text>
+    <text x="475" y="405" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle" fill-opacity="0.9">Internet Gateway</text>
+  </g>
 
   <!-- EC2 Instance -->
-  <rect x="650" y="350" width="160" height="80" rx="8" fill="var(--box-bg)" stroke="var(--orange)" stroke-width="2" filter="url(#shadow)"/>
-  <text x="730" y="390" text-anchor="middle" fill="var(--text-main)" font-size="14" font-weight="bold"><tspan class="float">🖥️ EC2 Instance</tspan></text>
-  <text x="730" y="410" text-anchor="middle" fill="var(--text-muted)" font-size="10">Amazon Linux</text>
+  <g class="node floating-delay">
+    <rect class="card" x="710" y="280" width="230" height="160" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect x="710" y="280" width="230" height="40" rx="12" fill="#FFF7ED"/>
+    <rect x="710" y="300" width="230" height="20" fill="#FFF7ED"/>
+    <text x="725" y="305" font-size="14" font-weight="700" fill="#C2410C">Amazon EC2</text>
+    
+    <circle cx="915" cy="300" r="14" fill="#FFEDD5"/>
+    <rect x="908" y="293" width="14" height="14" fill="none" stroke="#C2410C" stroke-width="2"/>
+
+    <text x="725" y="350" font-size="20" class="title">Virtual Server</text>
+    <text x="725" y="375" font-size="13" class="label">OS: Amazon Linux 2023</text>
+    <text x="725" y="395" font-size="13" class="label">Instance Type: t2.micro</text>
+    <text x="725" y="415" font-size="13" class="label">Public IP Auto-Assigned</text>
+  </g>
 
 </svg>
