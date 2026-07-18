@@ -4,62 +4,30 @@ This repository follows a strict structural template for all projects (01–14).
 
 ## 📁 Directory Structure
 
-```mermaid
-graph LR
-    classDef folder fill:#e5f5ff,stroke:#0078d4,stroke-width:2px,color:#000
-    classDef file fill:#ffffff,stroke:#666666,stroke-width:1px,color:#000
-    
-    Project["📁 project-NN-name/"]:::folder
-    
-    Env["📄 .env.example<br/>(Environment variable template)"]:::file
-    GitIgnore["📄 .gitignore<br/>(Standard AWS .gitignore)"]:::file
-    License["📄 LICENSE<br/>(MIT License)"]:::file
-    Readme["📄 README.md<br/>(Master guide)"]:::file
-    
-    Arch["📁 architecture/"]:::folder
-    ArchSvg["🖼️ *.svg<br/>(Architecture diagrams)"]:::file
-    
-    Docs["📁 docs/"]:::folder
-    Doc1["📄 project-overview.md<br/>(Business problem, solution)"]:::file
-    Doc2["📄 architecture.md<br/>(System diagram, security)"]:::file
-    Doc3["📄 deployment-guide.md<br/>(Console + CLI deployment)"]:::file
-    Doc4["📄 security-protocols.md<br/>(IAM, network, encryption)"]:::file
-    Doc5["📄 testing-procedures.md<br/>(Functional, performance)"]:::file
-    Doc6["📄 troubleshooting.md<br/>(Symptom/Cause/Fix)"]:::file
-    Doc7["📄 cleanup-guide.md<br/>(Resource table + Scripts)"]:::file
-    Doc8["📄 [topic-specific].md<br/>(Optional deep-dives)"]:::file
-    
-    Images["📁 images/"]:::folder
-    ImgPNG["🖼️ NN-descriptive-name.png<br/>(Sequential screenshots)"]:::file
-    
-    Scripts["📁 scripts/"]:::folder
-    Bash["📁 bash/"]:::folder
-    BashScript["📜 NN-script-name.sh"]:::file
-    PS["📁 powershell/"]:::folder
-    PSScript["📜 NN-script-name.ps1"]:::file
-
-    Project --> Env
-    Project --> GitIgnore
-    Project --> License
-    Project --> Readme
-    Project --> Arch
-    Arch --> ArchSvg
-    Project --> Docs
-    Docs --> Doc1
-    Docs --> Doc2
-    Docs --> Doc3
-    Docs --> Doc4
-    Docs --> Doc5
-    Docs --> Doc6
-    Docs --> Doc7
-    Docs --> Doc8
-    Project --> Images
-    Images --> ImgPNG
-    Project --> Scripts
-    Scripts --> Bash
-    Bash --> BashScript
-    Scripts --> PS
-    PS --> PSScript
+```text
+project-NN-name/
+├── .env.example              # Environment variable template
+├── .gitignore                # Standard AWS .gitignore
+├── LICENSE                   # MIT License
+├── README.md                 # Master guide (standard sections in exact order)
+├── architecture/
+│   └── *.svg                 # Architecture diagrams (SVG format preferred)
+├── docs/
+│   ├── project-overview.md   # CORE: Business problem, solution, learning objectives
+│   ├── architecture.md       # CORE: System diagram, data flow, security architecture
+│   ├── deployment-guide.md   # CORE: Step-by-step Console + CLI deployment
+│   ├── security-protocols.md # CORE: IAM, network, encryption, compliance
+│   ├── testing-procedures.md # CORE: Functional, security, performance tests
+│   ├── troubleshooting.md    # CORE: Symptom/Cause/Fix format
+│   ├── cleanup-guide.md      # CORE: Resource table + Console + Bash + PowerShell
+│   └── [topic-specific].md   # OPTIONAL: Deep-dive docs relevant to the project
+├── images/
+│   └── NN-descriptive-name.png  # Sequential screenshots with descriptive names
+└── scripts/
+    ├── bash/
+    │   └── NN-script-name.sh
+    └── powershell/
+        └── NN-script-name.ps1
 ```
 
 ## 📄 Core Document Templates
