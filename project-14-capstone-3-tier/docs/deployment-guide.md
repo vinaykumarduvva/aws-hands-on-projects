@@ -6,7 +6,7 @@ This guide covers the deployment of the complete Capstone Project architecture u
 - AWS CLI configured with appropriate permissions.
 - Default region set to `ap-south-1`.
 - Existing EC2 key pair named `aws-ec2-keypair`.
-- jq installed (if using Bash).
+- jq installed (if using Bash)
 
 ---
 
