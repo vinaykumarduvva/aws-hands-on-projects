@@ -2,7 +2,6 @@ $ErrorActionPreference = "Stop"
 $CLUSTER_NAME = "flask-app-cluster"
 $SERVICE_NAME = "flask-app-service"
 $TASK_FAMILY = "flask-app-task"
-$ACCOUNT_ID = aws sts get-caller-identity --query "Account" --output text
 $ECR_REPO_URI = aws ecr describe-repositories --repository-names flask-app --query "repositories[0].repositoryUri" --output text
 
 Write-Host "Updating app.py..."
