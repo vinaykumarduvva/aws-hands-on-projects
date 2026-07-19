@@ -2,9 +2,9 @@
 set -e
 set -u
 
-echo "=> PART 3 — DATABASE TIER (RDS Multi-AZ)"
+echo "=> PART 3 - DATABASE TIER (RDS Multi-AZ)"
 
-echo "=> Step 6 — Store credentials in Secrets Manager"
+echo "=> Step 6 - Store credentials in Secrets Manager"
 DB_SECRET_ARN=$(aws secretsmanager create-secret \
   --name "capstone/db/credentials" \
   --description "Capstone RDS MySQL admin credentials" \
@@ -18,7 +18,7 @@ DB_SECRET_ARN=$(aws secretsmanager create-secret \
   --query "ARN" --output text)
 echo "Secret ARN: $DB_SECRET_ARN"
 
-echo "=> Step 7 — Create RDS subnet group"
+echo "=> Step 7 - Create RDS subnet group"
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
 DB_A=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=private-db-subnet-a" --query "Subnets[0].SubnetId" --output text)
 DB_B=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=private-db-subnet-b" --query "Subnets[0].SubnetId" --output text)
@@ -29,7 +29,7 @@ aws rds create-db-subnet-group \
   --subnet-ids "$DB_A" "$DB_B" \
   --tags Key=Project,Value=project-14-capstone > /dev/null
 
-echo "=> Step 8 — Launch RDS Multi-AZ"
+echo "=> Step 8 - Launch RDS Multi-AZ"
 DB_SG=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=capstone-db-sg" --query "SecurityGroups[0].GroupId" --output text)
 
 aws rds create-db-instance \

@@ -1,6 +1,6 @@
-# PART 4 — APPLICATION TIER (ASG + Launch Template)
+# PART 4 - APPLICATION TIER (ASG + Launch Template)
 
-# Step 9 — Create IAM role for EC2
+# Step 9 - Create IAM role for EC2
 aws iam create-role `
   --role-name capstone-ec2-role `
   --assume-role-policy-document '{
@@ -41,7 +41,7 @@ aws iam add-role-to-instance-profile --instance-profile-name capstone-ec2-profil
 Start-Sleep -Seconds 10
 Write-Host "EC2 IAM role created"
 
-# Step 10 — Get latest AMI
+# Step 10 - Get latest AMI
 $AMI_ID = aws ec2 describe-images `
   --owners amazon `
   --filters "Name=name,Values=al2023-ami-*-x86_64" "Name=state,Values=available" `
@@ -50,7 +50,7 @@ $AMI_ID = aws ec2 describe-images `
   --output text
 Write-Host "AMI: $AMI_ID"
 
-# Step 11 — Create Launch Template
+# Step 11 - Create Launch Template
 # Ensure $APP_SG is available
 # $APP_SG = aws ec2 describe-security-groups --filters "Name=group-name,Values=capstone-app-sg" --query "SecurityGroups[0].GroupId" --output text
 
@@ -84,7 +84,7 @@ cat > /var/www/html/index.html << HTMLEOF
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Capstone — 3-Tier HA App</title>
+  <title>Capstone - 3-Tier HA App</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#232f3e,#1a73e8);
@@ -107,19 +107,19 @@ cat > /var/www/html/index.html << HTMLEOF
 </head>
 <body>
   <div class="card">
-    <span class="badge">Project 14 — Capstone Architecture</span>
+    <span class="badge">Project 14 - Capstone Architecture</span>
     <h1>3-Tier Highly Available Application</h1>
     <div class="tier">
       <span class="tier-label">WEB TIER</span>
-      <span class="tier-detail">Application Load Balancer — ap-south-1</span>
+      <span class="tier-detail">Application Load Balancer - ap-south-1</span>
     </div>
     <div class="tier">
       <span class="tier-label">APP TIER</span>
-      <span class="tier-detail">EC2 Auto Scaling Group — min:2 max:4</span>
+      <span class="tier-detail">EC2 Auto Scaling Group - min:2 max:4</span>
     </div>
     <div class="tier">
       <span class="tier-label">DB TIER</span>
-      <span class="tier-detail">RDS MySQL Multi-AZ — `$DB_NAME</span>
+      <span class="tier-detail">RDS MySQL Multi-AZ - `$DB_NAME</span>
     </div>
     <div class="info">
       <div class="label">Instance ID</div>
@@ -133,7 +133,7 @@ cat > /var/www/html/index.html << HTMLEOF
       <div class="label">Private IP</div>
       <div class="value">`$PRIVATE_IP</div>
     </div>
-    <div class="healthy">All Three Tiers Healthy — Production Ready</div>
+    <div class="healthy">All Three Tiers Healthy - Production Ready</div>
   </div>
 </body>
 </html>

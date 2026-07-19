@@ -2,9 +2,9 @@
 set -e
 set -u
 
-echo "=> PART 7 — MONITORING AND ALERTING"
+echo "=> PART 7 - MONITORING AND ALERTING"
 
-echo "=> Step 12 — Create SNS topic"
+echo "=> Step 12 - Create SNS topic"
 SNS_ARN=$(aws sns create-topic \
   --name capstone-alerts \
   --attributes DisplayName="Capstone Monitoring" \
@@ -15,7 +15,7 @@ aws sns subscribe \
   --protocol email \
   --notification-endpoint "your-email@gmail.com" > /dev/null
 
-echo "SNS topic created — confirm subscription email"
+echo "SNS topic created - confirm subscription email"
 
 ALB_ARN=$(aws elbv2 describe-load-balancers --names capstone-alb --query "LoadBalancers[0].LoadBalancerArn" --output text)
 TG_ARN=$(aws elbv2 describe-target-groups --names capstone-app-tg --query "TargetGroups[0].TargetGroupArn" --output text)
@@ -23,7 +23,7 @@ TG_ARN=$(aws elbv2 describe-target-groups --names capstone-app-tg --query "Targe
 ALB_ID=$(echo "$ALB_ARN" | awk -F'/' '{print $(NF-2)"/"$(NF-1)"/"$NF}')
 TG_ID=$(echo "$TG_ARN" | awk -F':' '{print $NF}')
 
-echo "=> Step 13 — Create CloudWatch alarms"
+echo "=> Step 13 - Create CloudWatch alarms"
 # ALB 5XX Error Rate alarm
 aws cloudwatch put-metric-alarm \
   --alarm-name "Capstone-ALB-5XX-High" \
@@ -93,7 +93,7 @@ aws cloudwatch put-metric-alarm \
 
 echo "All 5 CloudWatch alarms created"
 
-echo "=> Step 14 — Create CloudWatch Dashboard"
+echo "=> Step 14 - Create CloudWatch Dashboard"
 DASHBOARD=$(cat << EOF
 {
   "widgets": [

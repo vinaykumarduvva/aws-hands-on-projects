@@ -2,7 +2,7 @@
 set -e
 set -u
 
-echo "=> PART 8 — VERIFY RDS IS AVAILABLE"
+echo "=> PART 8 - VERIFY RDS IS AVAILABLE"
 aws rds describe-db-instances \
   --db-instance-identifier capstone-database \
   --query "DBInstances[0].{Status:DBInstanceStatus,MultiAZ:MultiAZ,Endpoint:Endpoint.Address,AZ:AvailabilityZone,SecondaryAZ:SecondaryAvailabilityZone}" \
@@ -14,7 +14,7 @@ echo "RDS available"
 RDS_ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier capstone-database --query "DBInstances[0].Endpoint.Address" --output text)
 echo "RDS Endpoint: $RDS_ENDPOINT"
 
-echo "=> PART 9 — VERIFY FULL STACK"
+echo "=> PART 9 - VERIFY FULL STACK"
 echo "=== FULL STACK VERIFICATION ==="
 
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
@@ -52,4 +52,4 @@ echo "Health check: $HEALTH"
 echo ""
 echo "=== ALL SYSTEMS OPERATIONAL ==="
 echo "Application URL: http://$ALB_DNS"
-echo "Dashboard: CloudWatch → Capstone-3Tier-Dashboard"
+echo "Dashboard: CloudWatch -> Capstone-3Tier-Dashboard"

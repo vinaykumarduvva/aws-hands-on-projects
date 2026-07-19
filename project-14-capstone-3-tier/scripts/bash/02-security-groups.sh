@@ -2,7 +2,7 @@
 set -e
 set -u
 
-echo "=> PART 2 — SECURITY GROUPS (3-TIER CHAINING)"
+echo "=> PART 2 - SECURITY GROUPS (3-TIER CHAINING)"
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
 
 echo "=> ALB Security Group (Web Tier)"
@@ -35,5 +35,5 @@ echo "DB SG: $DB_SG"
 
 echo ""
 echo "Security group chain:"
-echo "Internet → ALB SG → App SG → DB SG"
+echo "Internet -> ALB SG -> App SG -> DB SG"
 echo "Zero direct internet access to app or DB tiers"

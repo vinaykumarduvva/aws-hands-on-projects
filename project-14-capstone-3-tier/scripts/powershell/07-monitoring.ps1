@@ -1,6 +1,6 @@
-# PART 7 — MONITORING AND ALERTING
+# PART 7 - MONITORING AND ALERTING
 
-# Step 12 — Create SNS topic
+# Step 12 - Create SNS topic
 $SNS_ARN = aws sns create-topic `
   --name capstone-alerts `
   --attributes DisplayName="Capstone Monitoring" `
@@ -11,7 +11,7 @@ aws sns subscribe `
   --protocol email `
   --notification-endpoint "your-email@gmail.com"
 
-Write-Host "SNS topic created — confirm subscription email"
+Write-Host "SNS topic created - confirm subscription email"
 
 # Retrieve ALB_ARN and TG_ARN if needed
 # $ALB_ARN = aws elbv2 describe-load-balancers --names capstone-alb --query "LoadBalancers[0].LoadBalancerArn" --output text
@@ -19,7 +19,7 @@ Write-Host "SNS topic created — confirm subscription email"
 $ALB_ID = ($ALB_ARN -split '/')[-3..-1] -join '/'
 $TG_ID = ($TG_ARN -split ':')[-1]
 
-# Step 13 — Create CloudWatch alarms
+# Step 13 - Create CloudWatch alarms
 # ALB 5XX Error Rate alarm
 aws cloudwatch put-metric-alarm `
   --alarm-name "Capstone-ALB-5XX-High" `
@@ -89,7 +89,7 @@ aws cloudwatch put-metric-alarm `
 
 Write-Host "All 5 CloudWatch alarms created"
 
-# Step 14 — Create CloudWatch Dashboard
+# Step 14 - Create CloudWatch Dashboard
 $DASHBOARD = @"
 {
   "widgets": [

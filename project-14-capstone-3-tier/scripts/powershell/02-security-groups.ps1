@@ -1,4 +1,4 @@
-# PART 2 — SECURITY GROUPS (3-TIER CHAINING)
+# PART 2 - SECURITY GROUPS (3-TIER CHAINING)
 # Ensure $VPC_ID is available. You may need to retrieve it if running separately:
 # $VPC_ID = aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text
 
@@ -32,5 +32,5 @@ Write-Host "DB SG: $DB_SG"
 
 Write-Host ""
 Write-Host "Security group chain:"
-Write-Host "Internet → ALB SG → App SG → DB SG"
+Write-Host "Internet -> ALB SG -> App SG -> DB SG"
 Write-Host "Zero direct internet access to app or DB tiers"

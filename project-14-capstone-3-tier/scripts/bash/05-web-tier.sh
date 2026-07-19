@@ -2,7 +2,7 @@
 set -e
 set -u
 
-echo "=> PART 5 — WEB TIER (ALB + Target Group)"
+echo "=> PART 5 - WEB TIER (ALB + Target Group)"
 
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
 PUB_A=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=public-subnet-a" --query "Subnets[0].SubnetId" --output text)

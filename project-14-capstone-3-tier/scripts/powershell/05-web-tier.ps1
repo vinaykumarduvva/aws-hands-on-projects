@@ -1,4 +1,4 @@
-# PART 5 — WEB TIER (ALB + Target Group)
+# PART 5 - WEB TIER (ALB + Target Group)
 
 # Retrieve VPC and Subnets if needed
 # $VPC_ID = aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text

@@ -1,11 +1,11 @@
-# PART 8 — VERIFY RDS IS AVAILABLE
+# PART 8 - VERIFY RDS IS AVAILABLE
 # Check RDS status
 aws rds describe-db-instances `
   --db-instance-identifier capstone-database `
   --query "DBInstances[0].{Status:DBInstanceStatus,MultiAZ:MultiAZ,Endpoint:Endpoint.Address,AZ:AvailabilityZone,SecondaryAZ:SecondaryAvailabilityZone}" `
   --output table
 
-# If still creating — wait
+# If still creating - wait
 aws rds wait db-instance-available --db-instance-identifier capstone-database
 Write-Host "RDS available"
 
@@ -13,7 +13,7 @@ Write-Host "RDS available"
 $RDS_ENDPOINT = aws rds describe-db-instances --db-instance-identifier capstone-database --query "DBInstances[0].Endpoint.Address" --output text
 Write-Host "RDS Endpoint: $RDS_ENDPOINT"
 
-# PART 9 — VERIFY FULL STACK
+# PART 9 - VERIFY FULL STACK
 Write-Host "=== FULL STACK VERIFICATION ==="
 
 # Needed variables
@@ -62,4 +62,4 @@ Start-Process "http://$ALB_DNS"
 Write-Host ""
 Write-Host "=== ALL SYSTEMS OPERATIONAL ==="
 Write-Host "Application URL: http://$ALB_DNS"
-Write-Host "Dashboard: CloudWatch → Capstone-3Tier-Dashboard"
+Write-Host "Dashboard: CloudWatch -> Capstone-3Tier-Dashboard"

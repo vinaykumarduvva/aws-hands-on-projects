@@ -1,4 +1,4 @@
-# PART 6 — AUTO SCALING GROUP
+# PART 6 - AUTO SCALING GROUP
 
 # Retrieve LT, TG, App Subnets if needed
 # $LT_ID = aws ec2 describe-launch-templates --launch-template-names capstone-app-lt --query "LaunchTemplates[0].LaunchTemplateId" --output text
@@ -33,4 +33,4 @@ aws autoscaling put-scaling-policy `
     `"EstimatedInstanceWarmup`":180
   }"
 
-Write-Host "ASG created — instances launching..."
+Write-Host "ASG created - instances launching..."

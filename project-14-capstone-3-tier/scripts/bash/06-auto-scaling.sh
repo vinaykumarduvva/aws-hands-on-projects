@@ -2,7 +2,7 @@
 set -e
 set -u
 
-echo "=> PART 6 — AUTO SCALING GROUP"
+echo "=> PART 6 - AUTO SCALING GROUP"
 
 LT_ID=$(aws ec2 describe-launch-templates --launch-template-names capstone-app-lt --query "LaunchTemplates[0].LaunchTemplateId" --output text)
 TG_ARN=$(aws elbv2 describe-target-groups --names capstone-app-tg --query "TargetGroups[0].TargetGroupArn" --output text)
@@ -36,4 +36,4 @@ aws autoscaling put-scaling-policy \
     "EstimatedInstanceWarmup":180
   }' > /dev/null
 
-echo "ASG created — instances launching..."
+echo "ASG created - instances launching..."

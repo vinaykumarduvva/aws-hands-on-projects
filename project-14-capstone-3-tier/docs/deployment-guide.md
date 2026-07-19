@@ -87,7 +87,7 @@ chmod +x *.sh
 # Execute 02 through 08 sequentially
 ```
 
-<details><summary><b>View Full Bash Deployment Scripts</b></summary>
+<details><summary><mark><b>View Full Bash Deployment Scripts</b></mark></summary>
 
 ### 00-pre-flight.sh
 ```bash
@@ -120,8 +120,8 @@ mkdir -p templates scripts docs screenshots diagrams
 set -e
 set -u
 
-echo "=> PART 1 â€” BUILD THE NETWORK LAYER"
-echo "=> Step 1 â€” Create VPC"
+echo "=> PART 1 - BUILD THE NETWORK LAYER"
+echo "=> Step 1 - Create VPC"
 VPC_ID=$(aws ec2 create-vpc \
   --cidr-block 10.0.0.0/16 \
   --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=capstone-vpc},{Key=Project,Value=project-14-capstone}]" \
@@ -131,7 +131,7 @@ aws ec2 modify-vpc-attribute --vpc-id "$VPC_ID" --enable-dns-hostnames
 aws ec2 modify-vpc-attribute --vpc-id "$VPC_ID" --enable-dns-support
 echo "VPC: $VPC_ID"
 
-echo "=> Step 2 â€” Create all 6 subnets"
+echo "=> Step 2 - Create all 6 subnets"
 # Public subnets (Web Tier)
 PUB_A=$(aws ec2 create-subnet --vpc-id "$VPC_ID" --cidr-block 10.0.1.0/24 --availability-zone ap-south-1a --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=public-subnet-a},{Key=Tier,Value=web}]" --query "Subnet.SubnetId" --output text)
 PUB_B=$(aws ec2 create-subnet --vpc-id "$VPC_ID" --cidr-block 10.0.2.0/24 --availability-zone ap-south-1b --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=public-subnet-b},{Key=Tier,Value=web}]" --query "Subnet.SubnetId" --output text)
@@ -149,19 +149,19 @@ aws ec2 modify-subnet-attribute --subnet-id "$PUB_A" --map-public-ip-on-launch
 aws ec2 modify-subnet-attribute --subnet-id "$PUB_B" --map-public-ip-on-launch
 echo "All 6 subnets created"
 
-echo "=> Step 3 â€” Internet Gateway"
+echo "=> Step 3 - Internet Gateway"
 IGW_ID=$(aws ec2 create-internet-gateway --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=capstone-igw}]" --query "InternetGateway.InternetGatewayId" --output text)
 aws ec2 attach-internet-gateway --internet-gateway-id "$IGW_ID" --vpc-id "$VPC_ID"
 echo "IGW: $IGW_ID"
 
-echo "=> Step 4 â€” NAT Gateway"
+echo "=> Step 4 - NAT Gateway"
 EIP_ALLOC=$(aws ec2 allocate-address --domain vpc --query "AllocationId" --output text)
 NAT_GW_ID=$(aws ec2 create-nat-gateway --subnet-id "$PUB_A" --allocation-id "$EIP_ALLOC" --tag-specifications "ResourceType=natgateway,Tags=[{Key=Name,Value=capstone-nat}]" --query "NatGateway.NatGatewayId" --output text)
-echo "NAT Gateway: $NAT_GW_ID â€” waiting..."
+echo "NAT Gateway: $NAT_GW_ID - waiting..."
 aws ec2 wait nat-gateway-available --nat-gateway-ids "$NAT_GW_ID"
 echo "NAT Gateway available"
 
-echo "=> Step 5 â€” Route Tables"
+echo "=> Step 5 - Route Tables"
 PUB_RT=$(aws ec2 create-route-table --vpc-id "$VPC_ID" --tag-specifications "ResourceType=route-table,Tags=[{Key=Name,Value=public-rt}]" --query "RouteTable.RouteTableId" --output text)
 aws ec2 create-route --route-table-id "$PUB_RT" --destination-cidr-block 0.0.0.0/0 --gateway-id "$IGW_ID" > /dev/null
 aws ec2 associate-route-table --route-table-id "$PUB_RT" --subnet-id "$PUB_A" > /dev/null
@@ -182,7 +182,7 @@ echo "Route tables configured"
 set -e
 set -u
 
-echo "=> PART 2 â€” SECURITY GROUPS (3-TIER CHAINING)"
+echo "=> PART 2 - SECURITY GROUPS (3-TIER CHAINING)"
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
 
 echo "=> ALB Security Group (Web Tier)"
@@ -215,7 +215,7 @@ echo "DB SG: $DB_SG"
 
 echo ""
 echo "Security group chain:"
-echo "Internet â†’ ALB SG â†’ App SG â†’ DB SG"
+echo "Internet -> ALB SG -> App SG -> DB SG"
 echo "Zero direct internet access to app or DB tiers"
 ```
 
@@ -225,9 +225,9 @@ echo "Zero direct internet access to app or DB tiers"
 set -e
 set -u
 
-echo "=> PART 3 â€” DATABASE TIER (RDS Multi-AZ)"
+echo "=> PART 3 - DATABASE TIER (RDS Multi-AZ)"
 
-echo "=> Step 6 â€” Store credentials in Secrets Manager"
+echo "=> Step 6 - Store credentials in Secrets Manager"
 DB_SECRET_ARN=$(aws secretsmanager create-secret \
   --name "capstone/db/credentials" \
   --description "Capstone RDS MySQL admin credentials" \
@@ -241,7 +241,7 @@ DB_SECRET_ARN=$(aws secretsmanager create-secret \
   --query "ARN" --output text)
 echo "Secret ARN: $DB_SECRET_ARN"
 
-echo "=> Step 7 â€” Create RDS subnet group"
+echo "=> Step 7 - Create RDS subnet group"
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
 DB_A=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=private-db-subnet-a" --query "Subnets[0].SubnetId" --output text)
 DB_B=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=private-db-subnet-b" --query "Subnets[0].SubnetId" --output text)
@@ -252,7 +252,7 @@ aws rds create-db-subnet-group \
   --subnet-ids "$DB_A" "$DB_B" \
   --tags Key=Project,Value=project-14-capstone > /dev/null
 
-echo "=> Step 8 â€” Launch RDS Multi-AZ"
+echo "=> Step 8 - Launch RDS Multi-AZ"
 DB_SG=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=capstone-db-sg" --query "SecurityGroups[0].GroupId" --output text)
 
 aws rds create-db-instance \
@@ -282,9 +282,9 @@ echo "Continuing with other resources while RDS provisions..."
 set -e
 set -u
 
-echo "=> PART 4 â€” APPLICATION TIER (ASG + Launch Template)"
+echo "=> PART 4 - APPLICATION TIER (ASG + Launch Template)"
 
-echo "=> Step 9 â€” Create IAM role for EC2"
+echo "=> Step 9 - Create IAM role for EC2"
 aws iam create-role \
   --role-name capstone-ec2-role \
   --assume-role-policy-document '{
@@ -322,7 +322,7 @@ aws iam add-role-to-instance-profile --instance-profile-name capstone-ec2-profil
 sleep 10
 echo "EC2 IAM role created"
 
-echo "=> Step 10 â€” Get latest AMI"
+echo "=> Step 10 - Get latest AMI"
 AMI_ID=$(aws ec2 describe-images \
   --owners amazon \
   --filters "Name=name,Values=al2023-ami-*-x86_64" "Name=state,Values=available" \
@@ -331,7 +331,7 @@ AMI_ID=$(aws ec2 describe-images \
   --output text)
 echo "AMI: $AMI_ID"
 
-echo "=> Step 11 â€” Create Launch Template"
+echo "=> Step 11 - Create Launch Template"
 APP_SG=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=capstone-app-sg" --query "SecurityGroups[0].GroupId" --output text)
 
 USER_DATA_B64=$(cat << 'EOF' | base64 -w 0
@@ -364,7 +364,7 @@ cat > /var/www/html/index.html << HTMLEOF
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Capstone â€” 3-Tier HA App</title>
+  <title>Capstone - 3-Tier HA App</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#232f3e,#1a73e8);
@@ -387,19 +387,19 @@ cat > /var/www/html/index.html << HTMLEOF
 </head>
 <body>
   <div class="card">
-    <span class="badge">Project 14 â€” Capstone Architecture</span>
+    <span class="badge">Project 14 - Capstone Architecture</span>
     <h1>3-Tier Highly Available Application</h1>
     <div class="tier">
       <span class="tier-label">WEB TIER</span>
-      <span class="tier-detail">Application Load Balancer â€” ap-south-1</span>
+      <span class="tier-detail">Application Load Balancer - ap-south-1</span>
     </div>
     <div class="tier">
       <span class="tier-label">APP TIER</span>
-      <span class="tier-detail">EC2 Auto Scaling Group â€” min:2 max:4</span>
+      <span class="tier-detail">EC2 Auto Scaling Group - min:2 max:4</span>
     </div>
     <div class="tier">
       <span class="tier-label">DB TIER</span>
-      <span class="tier-detail">RDS MySQL Multi-AZ â€” $DB_NAME</span>
+      <span class="tier-detail">RDS MySQL Multi-AZ - $DB_NAME</span>
     </div>
     <div class="info">
       <div class="label">Instance ID</div>
@@ -413,7 +413,7 @@ cat > /var/www/html/index.html << HTMLEOF
       <div class="label">Private IP</div>
       <div class="value">$PRIVATE_IP</div>
     </div>
-    <div class="healthy">All Three Tiers Healthy â€” Production Ready</div>
+    <div class="healthy">All Three Tiers Healthy - Production Ready</div>
   </div>
 </body>
 </html>
@@ -456,7 +456,7 @@ echo "Launch Template: $LT_ID"
 set -e
 set -u
 
-echo "=> PART 5 â€” WEB TIER (ALB + Target Group)"
+echo "=> PART 5 - WEB TIER (ALB + Target Group)"
 
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
 PUB_A=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=public-subnet-a" --query "Subnets[0].SubnetId" --output text)
@@ -512,7 +512,7 @@ echo "ALB active: http://$ALB_DNS"
 set -e
 set -u
 
-echo "=> PART 6 â€” AUTO SCALING GROUP"
+echo "=> PART 6 - AUTO SCALING GROUP"
 
 LT_ID=$(aws ec2 describe-launch-templates --launch-template-names capstone-app-lt --query "LaunchTemplates[0].LaunchTemplateId" --output text)
 TG_ARN=$(aws elbv2 describe-target-groups --names capstone-app-tg --query "TargetGroups[0].TargetGroupArn" --output text)
@@ -546,7 +546,7 @@ aws autoscaling put-scaling-policy \
     "EstimatedInstanceWarmup":180
   }' > /dev/null
 
-echo "ASG created â€” instances launching..."
+echo "ASG created - instances launching..."
 ```
 
 ### 07-monitoring.sh
@@ -555,9 +555,9 @@ echo "ASG created â€” instances launching..."
 set -e
 set -u
 
-echo "=> PART 7 â€” MONITORING AND ALERTING"
+echo "=> PART 7 - MONITORING AND ALERTING"
 
-echo "=> Step 12 â€” Create SNS topic"
+echo "=> Step 12 - Create SNS topic"
 SNS_ARN=$(aws sns create-topic \
   --name capstone-alerts \
   --attributes DisplayName="Capstone Monitoring" \
@@ -568,7 +568,7 @@ aws sns subscribe \
   --protocol email \
   --notification-endpoint "your-email@gmail.com" > /dev/null
 
-echo "SNS topic created â€” confirm subscription email"
+echo "SNS topic created - confirm subscription email"
 
 ALB_ARN=$(aws elbv2 describe-load-balancers --names capstone-alb --query "LoadBalancers[0].LoadBalancerArn" --output text)
 TG_ARN=$(aws elbv2 describe-target-groups --names capstone-app-tg --query "TargetGroups[0].TargetGroupArn" --output text)
@@ -576,7 +576,7 @@ TG_ARN=$(aws elbv2 describe-target-groups --names capstone-app-tg --query "Targe
 ALB_ID=$(echo "$ALB_ARN" | awk -F'/' '{print $(NF-2)"/"$(NF-1)"/"$NF}')
 TG_ID=$(echo "$TG_ARN" | awk -F':' '{print $NF}')
 
-echo "=> Step 13 â€” Create CloudWatch alarms"
+echo "=> Step 13 - Create CloudWatch alarms"
 # ALB 5XX Error Rate alarm
 aws cloudwatch put-metric-alarm \
   --alarm-name "Capstone-ALB-5XX-High" \
@@ -646,7 +646,7 @@ aws cloudwatch put-metric-alarm \
 
 echo "All 5 CloudWatch alarms created"
 
-echo "=> Step 14 â€” Create CloudWatch Dashboard"
+echo "=> Step 14 - Create CloudWatch Dashboard"
 DASHBOARD=$(cat << EOF
 {
   "widgets": [
@@ -721,7 +721,7 @@ echo "CloudWatch Dashboard created"
 set -e
 set -u
 
-echo "=> PART 8 â€” VERIFY RDS IS AVAILABLE"
+echo "=> PART 8 - VERIFY RDS IS AVAILABLE"
 aws rds describe-db-instances \
   --db-instance-identifier capstone-database \
   --query "DBInstances[0].{Status:DBInstanceStatus,MultiAZ:MultiAZ,Endpoint:Endpoint.Address,AZ:AvailabilityZone,SecondaryAZ:SecondaryAvailabilityZone}" \
@@ -733,7 +733,7 @@ echo "RDS available"
 RDS_ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier capstone-database --query "DBInstances[0].Endpoint.Address" --output text)
 echo "RDS Endpoint: $RDS_ENDPOINT"
 
-echo "=> PART 9 â€” VERIFY FULL STACK"
+echo "=> PART 9 - VERIFY FULL STACK"
 echo "=== FULL STACK VERIFICATION ==="
 
 VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text)
@@ -771,7 +771,7 @@ echo "Health check: $HEALTH"
 echo ""
 echo "=== ALL SYSTEMS OPERATIONAL ==="
 echo "Application URL: http://$ALB_DNS"
-echo "Dashboard: CloudWatch â†’ Capstone-3Tier-Dashboard"
+echo "Dashboard: CloudWatch -> Capstone-3Tier-Dashboard"
 ```
 
 </details>
@@ -793,7 +793,7 @@ cd scripts/powershell
 # Execute 02 through 08 sequentially
 ```
 
-<details><summary><b>View Full PowerShell Deployment Scripts</b></summary>
+<details><summary><mark><b>View Full PowerShell Deployment Scripts</b></mark></summary>
 
 ### 00-pre-flight.ps1
 ```powershell
@@ -819,8 +819,8 @@ mkdir templates, scripts, docs, screenshots, diagrams
 
 ### 01-build-network.ps1
 ```powershell
-# PART 1 â€” BUILD THE NETWORK LAYER
-# Step 1 â€” Create VPC
+# PART 1 - BUILD THE NETWORK LAYER
+# Step 1 - Create VPC
 $VPC_ID = aws ec2 create-vpc `
   --cidr-block 10.0.0.0/16 `
   --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=capstone-vpc},{Key=Project,Value=project-14-capstone}]" `
@@ -830,7 +830,7 @@ aws ec2 modify-vpc-attribute --vpc-id $VPC_ID --enable-dns-hostnames
 aws ec2 modify-vpc-attribute --vpc-id $VPC_ID --enable-dns-support
 Write-Host "VPC: $VPC_ID"
 
-# Step 2 â€” Create all 6 subnets
+# Step 2 - Create all 6 subnets
 # Public subnets (Web Tier)
 $PUB_A = aws ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.0.1.0/24 --availability-zone ap-south-1a --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=public-subnet-a},{Key=Tier,Value=web}]" --query "Subnet.SubnetId" --output text
 $PUB_B = aws ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.0.2.0/24 --availability-zone ap-south-1b --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=public-subnet-b},{Key=Tier,Value=web}]" --query "Subnet.SubnetId" --output text
@@ -848,19 +848,19 @@ aws ec2 modify-subnet-attribute --subnet-id $PUB_A --map-public-ip-on-launch
 aws ec2 modify-subnet-attribute --subnet-id $PUB_B --map-public-ip-on-launch
 Write-Host "All 6 subnets created"
 
-# Step 3 â€” Internet Gateway
+# Step 3 - Internet Gateway
 $IGW_ID = aws ec2 create-internet-gateway --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=capstone-igw}]" --query "InternetGateway.InternetGatewayId" --output text
 aws ec2 attach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
 Write-Host "IGW: $IGW_ID"
 
-# Step 4 â€” NAT Gateway
+# Step 4 - NAT Gateway
 $EIP_ALLOC = aws ec2 allocate-address --domain vpc --query "AllocationId" --output text
 $NAT_GW_ID = aws ec2 create-nat-gateway --subnet-id $PUB_A --allocation-id $EIP_ALLOC --tag-specifications "ResourceType=natgateway,Tags=[{Key=Name,Value=capstone-nat}]" --query "NatGateway.NatGatewayId" --output text
-Write-Host "NAT Gateway: $NAT_GW_ID â€” waiting..."
+Write-Host "NAT Gateway: $NAT_GW_ID - waiting..."
 aws ec2 wait nat-gateway-available --nat-gateway-ids $NAT_GW_ID
 Write-Host "NAT Gateway available"
 
-# Step 5 â€” Route Tables
+# Step 5 - Route Tables
 $PUB_RT = aws ec2 create-route-table --vpc-id $VPC_ID --tag-specifications "ResourceType=route-table,Tags=[{Key=Name,Value=public-rt}]" --query "RouteTable.RouteTableId" --output text
 aws ec2 create-route --route-table-id $PUB_RT --destination-cidr-block 0.0.0.0/0 --gateway-id $IGW_ID
 aws ec2 associate-route-table --route-table-id $PUB_RT --subnet-id $PUB_A
@@ -876,11 +876,11 @@ Write-Host "Route tables configured"
 
 ### 02-security-groups.ps1
 ```powershell
-# PART 2 â€” SECURITY GROUPS (3-TIER CHAINING)
+# PART 2 - SECURITY GROUPS (3-TIER CHAINING)
 # Ensure $VPC_ID is available. You may need to retrieve it if running separately:
 # $VPC_ID = aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text
 
-# â”€â”€ ALB Security Group (Web Tier) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# - ALB Security Group (Web Tier) - -
 $ALB_SG = aws ec2 create-security-group `
   --group-name capstone-alb-sg `
   --description "Web Tier: ALB accepts HTTP from internet" `
@@ -890,7 +890,7 @@ aws ec2 authorize-security-group-ingress --group-id $ALB_SG --protocol tcp --por
 aws ec2 authorize-security-group-ingress --group-id $ALB_SG --protocol tcp --port 443 --cidr "0.0.0.0/0"
 Write-Host "ALB SG: $ALB_SG"
 
-# â”€â”€ App Server Security Group (App Tier) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# - App Server Security Group (App Tier) - -
 $APP_SG = aws ec2 create-security-group `
   --group-name capstone-app-sg `
   --description "App Tier: accepts HTTP from ALB only" `
@@ -910,15 +910,15 @@ Write-Host "DB SG: $DB_SG"
 
 Write-Host ""
 Write-Host "Security group chain:"
-Write-Host "Internet â†’ ALB SG â†’ App SG â†’ DB SG"
+Write-Host "Internet -> ALB SG -> App SG -> DB SG"
 Write-Host "Zero direct internet access to app or DB tiers"
 ```
 
 ### 03-database-tier.ps1
 ```powershell
-# PART 3 â€” DATABASE TIER (RDS Multi-AZ)
+# PART 3 - DATABASE TIER (RDS Multi-AZ)
 
-# Step 6 â€” Store credentials in Secrets Manager
+# Step 6 - Store credentials in Secrets Manager
 $DB_SECRET_ARN = aws secretsmanager create-secret `
   --name "capstone/db/credentials" `
   --description "Capstone RDS MySQL admin credentials" `
@@ -932,7 +932,7 @@ $DB_SECRET_ARN = aws secretsmanager create-secret `
   --query "ARN" --output text
 Write-Host "Secret ARN: $DB_SECRET_ARN"
 
-# Step 7 â€” Create RDS subnet group
+# Step 7 - Create RDS subnet group
 # Retrieve DB subnets if needed
 # $VPC_ID = aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text
 # $DB_A = aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" "Name=tag:Name,Values=private-db-subnet-a" --query "Subnets[0].SubnetId" --output text
@@ -944,7 +944,7 @@ aws rds create-db-subnet-group `
   --subnet-ids $DB_A $DB_B `
   --tags Key=Project,Value=project-14-capstone
 
-# Step 8 â€” Launch RDS Multi-AZ
+# Step 8 - Launch RDS Multi-AZ
 # Retrieve DB SG if needed
 # $DB_SG = aws ec2 describe-security-groups --filters "Name=group-name,Values=capstone-db-sg" --query "SecurityGroups[0].GroupId" --output text
 
@@ -971,9 +971,9 @@ Write-Host "Continuing with other resources while RDS provisions..."
 
 ### 04-application-tier.ps1
 ```powershell
-# PART 4 â€” APPLICATION TIER (ASG + Launch Template)
+# PART 4 - APPLICATION TIER (ASG + Launch Template)
 
-# Step 9 â€” Create IAM role for EC2
+# Step 9 - Create IAM role for EC2
 aws iam create-role `
   --role-name capstone-ec2-role `
   --assume-role-policy-document '{
@@ -1014,7 +1014,7 @@ aws iam add-role-to-instance-profile --instance-profile-name capstone-ec2-profil
 Start-Sleep -Seconds 10
 Write-Host "EC2 IAM role created"
 
-# Step 10 â€” Get latest AMI
+# Step 10 - Get latest AMI
 $AMI_ID = aws ec2 describe-images `
   --owners amazon `
   --filters "Name=name,Values=al2023-ami-*-x86_64" "Name=state,Values=available" `
@@ -1023,7 +1023,7 @@ $AMI_ID = aws ec2 describe-images `
   --output text
 Write-Host "AMI: $AMI_ID"
 
-# Step 11 â€” Create Launch Template
+# Step 11 - Create Launch Template
 # Ensure $APP_SG is available
 # $APP_SG = aws ec2 describe-security-groups --filters "Name=group-name,Values=capstone-app-sg" --query "SecurityGroups[0].GroupId" --output text
 
@@ -1057,7 +1057,7 @@ cat > /var/www/html/index.html << HTMLEOF
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Capstone â€” 3-Tier HA App</title>
+  <title>Capstone - 3-Tier HA App</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#232f3e,#1a73e8);
@@ -1080,19 +1080,19 @@ cat > /var/www/html/index.html << HTMLEOF
 </head>
 <body>
   <div class="card">
-    <span class="badge">Project 14 â€” Capstone Architecture</span>
+    <span class="badge">Project 14 - Capstone Architecture</span>
     <h1>3-Tier Highly Available Application</h1>
     <div class="tier">
       <span class="tier-label">WEB TIER</span>
-      <span class="tier-detail">Application Load Balancer â€” ap-south-1</span>
+      <span class="tier-detail">Application Load Balancer - ap-south-1</span>
     </div>
     <div class="tier">
       <span class="tier-label">APP TIER</span>
-      <span class="tier-detail">EC2 Auto Scaling Group â€” min:2 max:4</span>
+      <span class="tier-detail">EC2 Auto Scaling Group - min:2 max:4</span>
     </div>
     <div class="tier">
       <span class="tier-label">DB TIER</span>
-      <span class="tier-detail">RDS MySQL Multi-AZ â€” `$DB_NAME</span>
+      <span class="tier-detail">RDS MySQL Multi-AZ - `$DB_NAME</span>
     </div>
     <div class="info">
       <div class="label">Instance ID</div>
@@ -1106,7 +1106,7 @@ cat > /var/www/html/index.html << HTMLEOF
       <div class="label">Private IP</div>
       <div class="value">`$PRIVATE_IP</div>
     </div>
-    <div class="healthy">All Three Tiers Healthy â€” Production Ready</div>
+    <div class="healthy">All Three Tiers Healthy - Production Ready</div>
   </div>
 </body>
 </html>
@@ -1146,7 +1146,7 @@ Write-Host "Launch Template: $LT_ID"
 
 ### 05-web-tier.ps1
 ```powershell
-# PART 5 â€” WEB TIER (ALB + Target Group)
+# PART 5 - WEB TIER (ALB + Target Group)
 
 # Retrieve VPC and Subnets if needed
 # $VPC_ID = aws ec2 describe-vpcs --filters "Name=tag:Project,Values=project-14-capstone" --query "Vpcs[0].VpcId" --output text
@@ -1199,7 +1199,7 @@ Write-Host "ALB active: http://$ALB_DNS"
 
 ### 06-auto-scaling.ps1
 ```powershell
-# PART 6 â€” AUTO SCALING GROUP
+# PART 6 - AUTO SCALING GROUP
 
 # Retrieve LT, TG, App Subnets if needed
 # $LT_ID = aws ec2 describe-launch-templates --launch-template-names capstone-app-lt --query "LaunchTemplates[0].LaunchTemplateId" --output text
@@ -1234,14 +1234,14 @@ aws autoscaling put-scaling-policy `
     `"EstimatedInstanceWarmup`":180
   }"
 
-Write-Host "ASG created â€” instances launching..."
+Write-Host "ASG created - instances launching..."
 ```
 
 ### 07-monitoring.ps1
 ```powershell
-# PART 7 â€” MONITORING AND ALERTING
+# PART 7 - MONITORING AND ALERTING
 
-# Step 12 â€” Create SNS topic
+# Step 12 - Create SNS topic
 $SNS_ARN = aws sns create-topic `
   --name capstone-alerts `
   --attributes DisplayName="Capstone Monitoring" `
@@ -1252,7 +1252,7 @@ aws sns subscribe `
   --protocol email `
   --notification-endpoint "your-email@gmail.com"
 
-Write-Host "SNS topic created â€” confirm subscription email"
+Write-Host "SNS topic created - confirm subscription email"
 
 # Retrieve ALB_ARN and TG_ARN if needed
 # $ALB_ARN = aws elbv2 describe-load-balancers --names capstone-alb --query "LoadBalancers[0].LoadBalancerArn" --output text
@@ -1260,7 +1260,7 @@ Write-Host "SNS topic created â€” confirm subscription email"
 $ALB_ID = ($ALB_ARN -split '/')[-3..-1] -join '/'
 $TG_ID = ($TG_ARN -split ':')[-1]
 
-# Step 13 â€” Create CloudWatch alarms
+# Step 13 - Create CloudWatch alarms
 # ALB 5XX Error Rate alarm
 aws cloudwatch put-metric-alarm `
   --alarm-name "Capstone-ALB-5XX-High" `
@@ -1330,7 +1330,7 @@ aws cloudwatch put-metric-alarm `
 
 Write-Host "All 5 CloudWatch alarms created"
 
-# Step 14 â€” Create CloudWatch Dashboard
+# Step 14 - Create CloudWatch Dashboard
 $DASHBOARD = @"
 {
   "widgets": [
@@ -1400,14 +1400,14 @@ Write-Host "CloudWatch Dashboard created"
 
 ### 08-verify-stack.ps1
 ```powershell
-# PART 8 â€” VERIFY RDS IS AVAILABLE
+# PART 8 - VERIFY RDS IS AVAILABLE
 # Check RDS status
 aws rds describe-db-instances `
   --db-instance-identifier capstone-database `
   --query "DBInstances[0].{Status:DBInstanceStatus,MultiAZ:MultiAZ,Endpoint:Endpoint.Address,AZ:AvailabilityZone,SecondaryAZ:SecondaryAvailabilityZone}" `
   --output table
 
-# If still creating â€” wait
+# If still creating - wait
 aws rds wait db-instance-available --db-instance-identifier capstone-database
 Write-Host "RDS available"
 
@@ -1415,7 +1415,7 @@ Write-Host "RDS available"
 $RDS_ENDPOINT = aws rds describe-db-instances --db-instance-identifier capstone-database --query "DBInstances[0].Endpoint.Address" --output text
 Write-Host "RDS Endpoint: $RDS_ENDPOINT"
 
-# PART 9 â€” VERIFY FULL STACK
+# PART 9 - VERIFY FULL STACK
 Write-Host "=== FULL STACK VERIFICATION ==="
 
 # Needed variables
@@ -1464,7 +1464,7 @@ Start-Process "http://$ALB_DNS"
 Write-Host ""
 Write-Host "=== ALL SYSTEMS OPERATIONAL ==="
 Write-Host "Application URL: http://$ALB_DNS"
-Write-Host "Dashboard: CloudWatch â†’ Capstone-3Tier-Dashboard"
+Write-Host "Dashboard: CloudWatch -> Capstone-3Tier-Dashboard"
 ```
 
 </details>

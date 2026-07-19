@@ -2,9 +2,9 @@
 set -e
 set -u
 
-echo "=> PART 10 — FAILOVER AND RESILIENCE TESTING"
+echo "=> PART 10 - FAILOVER AND RESILIENCE TESTING"
 
-echo "=> Test 1 — Terminate an instance (self-healing test)"
+echo "=> Test 1 - Terminate an instance (self-healing test)"
 INSTANCES=$(aws autoscaling describe-auto-scaling-groups \
   --auto-scaling-group-names capstone-asg \
   --query "AutoScalingGroups[0].Instances[*].InstanceId" \
@@ -16,18 +16,18 @@ echo "Terminating instance: $TARGET_INSTANCE"
 aws ec2 terminate-instances --instance-ids "$TARGET_INSTANCE" > /dev/null
 
 echo "While this instance terminates:"
-echo "  - ALB health check detects it unhealthy → stops routing"
-echo "  - ASG detects instance count below desired → launches replacement"
-echo "  - New instance bootstraps → passes health check → receives traffic"
+echo "  - ALB health check detects it unhealthy -> stops routing"
+echo "  - ASG detects instance count below desired -> launches replacement"
+echo "  - New instance bootstraps -> passes health check -> receives traffic"
 echo "  - Full recovery in approximately 3-4 minutes"
 
-echo "=> Test 2 — RDS Multi-AZ failover test"
+echo "=> Test 2 - RDS Multi-AZ failover test"
 aws rds reboot-db-instance \
   --db-instance-identifier capstone-database \
   --force-failover > /dev/null
 
 echo "RDS failover initiated"
-echo "Primary AZ → Standby AZ promotion (~60-120 seconds)"
+echo "Primary AZ -> Standby AZ promotion (~60-120 seconds)"
 echo "During failover the RDS endpoint DNS updates automatically"
 echo "Application reconnects to new primary via same endpoint"
 
@@ -37,7 +37,7 @@ aws rds describe-db-instances \
   --query "DBInstances[0].{Status:DBInstanceStatus,AZ:AvailabilityZone}" \
   --output table
 
-echo "=> Test 3 — Load test (triggers scale-out)"
+echo "=> Test 3 - Load test (triggers scale-out)"
 STRESS_INSTANCE=$(echo "$INSTANCES" | awk '{print $2}')
 if [ -z "$STRESS_INSTANCE" ]; then
   STRESS_INSTANCE=$(echo "$INSTANCES" | awk '{print $1}')
@@ -53,6 +53,6 @@ while true; do
       --auto-scaling-group-names capstone-asg \
       --query "length(AutoScalingGroups[0].Instances)" \
       --output text)
-  echo "$(date +'%H:%M:%S') — Instance count: $COUNT"
+  echo "$(date +'%H:%M:%S') - Instance count: $COUNT"
   sleep 30
 done
