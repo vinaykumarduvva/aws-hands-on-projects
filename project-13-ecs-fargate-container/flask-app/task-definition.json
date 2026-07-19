@@ -1,7 +1,9 @@
 {
   "family": "flask-app-task",
   "networkMode": "awsvpc",
-  "requiresCompatibilities": ["FARGATE"],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
   "cpu": "512",
   "memory": "1024",
   "taskRoleArn": "arn:aws:iam::154426737407:role/ecs-task-role",
