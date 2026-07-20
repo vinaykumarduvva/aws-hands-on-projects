@@ -58,7 +58,7 @@
     </tr>
     <tr>
       <td align="center" style="padding: 16px 28px; font-size: 15px; color: #334155; background: #ffffff; border-right: 1px solid #f1f5f9;">
-        <span style="background: #f1f5f9; padding: 4px 16px; border-radius: 20px; font-weight: 500; display: inline-block;">🇮🇳 Hyderabad, India</span>
+        <span style="background: #f1f5f9; padding: 4px 16px; border-radius: 20px; font-weight: 500; display: inline-block;">Hyderabad, India</span>
       </td>
       <td align="center" style="padding: 16px 28px; font-size: 15px; background: #ffffff; border-right: 1px solid #f1f5f9;">
         <a href="https://www.linkedin.com/in/vinay-kumar-duvva/" style="background: #0a66c2; color: #ffffff; padding: 8px 24px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block; box-shadow: 0 3px 12px rgba(10,102,194,0.3); transition: all 0.2s;">✦ LinkedIn Profile</a>
