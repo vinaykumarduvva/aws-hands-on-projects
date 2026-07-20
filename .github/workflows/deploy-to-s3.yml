@@ -2,6 +2,8 @@ name: Deploy Websites to AWS S3
 
 on:
   push:
+    # REMOVE or comment out branch/path filters temporarily during troubleshooting
+    # This ensures the workflow actually triggers on whatever branch you push to
     branches:
       - main
     paths:
@@ -20,6 +22,18 @@ jobs:
         with:
           submodules: false
 
+      # NEW DEBUG STEP: This prints your workspace folder structure
+      - name: Debug Directory Structure
+        run: |
+          echo "=== Current Working Directory ==="
+          pwd
+          echo "=== Root Folder Contents ==="
+          ls -la
+          echo "=== Resources Folder Contents ==="
+          ls -la resources/ || echo "resources folder not found!"
+          echo "=== AWS Handy Book Contents ==="
+          ls -la resources/AWS_Handy_Book/ || echo "AWS_Handy_Book folder not found!"
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -34,9 +48,3 @@ jobs:
       - name: Deploy CloudShell Commands to S3
         run: |
           aws s3 sync resources/AWS_CloudShell_Commands/ s3://${{ secrets.CLOUDSHELL_S3_BUCKET }} --delete --exclude ".git/*"
-
-      # Optional: Invalidate CloudFront Distribution if you use one
-      # - name: Invalidate CloudFront
-      #   run: |
-      #     aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/*"
-# trigger workflow
