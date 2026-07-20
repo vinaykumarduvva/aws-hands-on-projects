@@ -11,15 +11,11 @@
     <img src="https://img.shields.io/badge/Build-Passing-success" alt="Build"/>
   </p>
 
-  <p>
-    <b>🌐 Live Demos:</b><br/><br/>
-    <a href="https://d2qfvpm2acd8sv.cloudfront.net/">
-      <img src="https://img.shields.io/badge/⚡_CloudFront_CDN-FF9900?style=for-the-badge&logoColor=white" alt="CloudFront CDN" />
-    </a>
-    <a href="https://aws-sample-webiste-2026.s3.ap-south-1.amazonaws.com/index.html#projects">
-      <img src="https://img.shields.io/badge/🪣_S3_Direct-232F3E?style=for-the-badge&logoColor=white" alt="S3 Direct URL" />
-    </a>
-  </p>
+  <div style="background: #f8fafc; padding: 1.2rem 2rem; border-radius: 12px; border: 1px solid #e2e8f0; display: inline-block; margin: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <b style="font-size: 1.2rem; color: #1e293b; display: block; margin-bottom: 0.8rem;">🌐 Live Demos</b>
+    <a href="https://d2qfvpm2acd8sv.cloudfront.net/" style="background: #FF9900; color: #ffffff; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 14px; margin-right: 8px; box-shadow: 0 2px 8px rgba(255,153,0,0.3);">⚡ CloudFront CDN</a>
+    <a href="https://aws-sample-webiste-2026.s3.ap-south-1.amazonaws.com/index.html#projects" style="background: #232F3E; color: #ffffff; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 14px; box-shadow: 0 2px 8px rgba(35,47,62,0.3);">🪣 S3 Direct</a>
+  </div>
 
   <p>
     <a href="#-infrastructure-specifications">Infrastructure</a> · 
