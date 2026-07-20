@@ -58,6 +58,24 @@
   <br/><br/>
 </div>
 
+---
+
+<details open>
+  <summary><h2>📑 Table of Contents (Click to collapse/expand)</h2></summary>
+
+  - [🚀 Live Interactive Projects](#-live-interactive-projects)
+  - [🗺️ Project Roadmap](#️-project-roadmap)
+    - [🎯 The 14-Step Curriculum](#-the-14-step-curriculum)
+  - [🛠️ Tech Stack & Services](#️-tech-stack--services)
+  - [💰 Cost Philosophy (The Free Tier Promise)](#-cost-philosophy-the-free-tier-promise)
+  - [📈 Skills & Certifications Progress](#-skills--certifications-progress)
+  - [🔖 Navigating This Repository](#-navigating-this-repository)
+  - [📫 Let's Connect](#-lets-connect)
+
+</details>
+
+---
+
 ## 🚀 Live Interactive Projects
 
 Explore the live static websites I've deployed on AWS S3 & CloudFront!

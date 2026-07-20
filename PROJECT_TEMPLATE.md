@@ -72,6 +72,14 @@ Must use a structured approach for errors rather than just a dump of commands:
 - Provide a `## 📋 Quick Reference Table` mapping Problem to Quick Fix.
 - Provide a `## 🔍 Debug Commands` section with useful CLI probing commands.
 
+### Troubleshooting & Gotchas (In `README.md`)
+To make the project documentation more engaging, highlight the hardest bug or a common gotcha directly in the `README.md`. Use GitHub alerts to make it stand out:
+> [!WARNING]
+> **Common Gotcha:** Ensure your security group allows inbound traffic on port 80 from the ALB. If instances fail health checks, this is usually the culprit!
+
+> [!TIP]
+> **Pro Tip:** Use the AWS CLI with `--query` to extract IDs directly into variables for faster scripting.
+
 ### Security Protocols (`docs/security-protocols.md`)
 Must address the security posture of the deployed architecture:
 - `## 🔐 IAM & Access Control` (Instance profiles, service-linked roles, resource policies)
